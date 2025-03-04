@@ -1,0 +1,209 @@
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, TextInput, ScrollView } from 'react-native'
+import React, { useState } from 'react'
+import { JambiteText, SecondJambiteText } from '../../assets/svg'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useRouter } from "expo-router";
+
+const signup = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [name, setName] = useState("");
+    const [number, setNumber] = useState("");
+    const [institution, setInstitution] = useState("");
+    const [isSignUp, setIsSignUp] = useState(true);
+    const router = useRouter();
+
+    return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: "#FFFFFF", }}>
+            <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                <View style={{ paddingHorizontal: 20, justifyContent: "center", flex: 1, }}>
+
+                    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+
+
+                        <View style={{ justifyContent: "center", alignItems: "center", flexDirection: "row" }}>
+                            <SecondJambiteText />
+                        </View>
+                        <View style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            flexDirection: "row",
+                            paddingHorizontal: 20,
+                            gap: 8,
+                            marginTop: 20
+                        }}>
+                            {/* <View style={styles.transitionButton}>
+                                <Text style={[styles.secondText, { color: "white" }]}>Sign up</Text>
+                            </View>
+                            <Text style={styles.secondText}>Sign In</Text> */}
+                            <TouchableOpacity
+                                style={[styles.transitionButton, isSignUp && { backgroundColor: "#FFFFFF" }]}
+                                onPress={() => { setIsSignUp(false); router.push("/signin") }}
+                            >
+                                <Text style={[styles.secondText, { color: !isSignUp ? "white" : "#0F065E" }]}>Sign In</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.transitionButton, !isSignUp && { backgroundColor: "#FFFFFF" }]}
+                                onPress={() => {setIsSignUp(true); router.push("/signup")}}
+                            >
+                                <Text style={[styles.secondText, { color: isSignUp ? "white" : "#0F065E" }]}>Sign up</Text>
+                            </TouchableOpacity>
+
+                        </View>
+                        <Text style={styles.firstText}>Get to know more about ITed Education Software</Text>
+
+                        <Text style={styles.fifthText}>FULL NAME</Text>
+                        <View style={styles.InputContainer}>
+                            <TextInput
+                                style={{ flex: 1, color: '#000000' }}
+                                placeholderTextColor='#000000'
+                                placeholder={'Full Name'}
+                                onChangeText={text => setName(text)}
+                                value={name}
+                            />
+                        </View>
+                        <Text style={styles.fifthText}>EMAIL ADDRESS</Text>
+                        <View style={styles.InputContainer}>
+                            <TextInput
+                                style={{ flex: 1, color: '#000000' }}
+                                placeholderTextColor='#000000'
+                                placeholder={'Email address'}
+                                onChangeText={text => setEmail(text)}
+                                value={email}
+                                keyboardType="email-address"
+                            />
+                        </View>
+                        <Text style={styles.fifthText}>PHONE NUMBER</Text>
+                        <View style={styles.InputContainer}>
+                            <TextInput
+                                style={{ flex: 1, color: '#000000' }}
+                                placeholderTextColor='#000000'
+                                placeholder={'Your Phone number'}
+                                onChangeText={text => setNumber(text)}
+                                value={number}
+                                keyboardType="numeric"
+                            />
+                        </View>
+                        <Text style={styles.fifthText}>PREFFERD INSTITUTION</Text>
+                        <View style={styles.InputContainer}>
+                            <TextInput
+                                style={{ flex: 1, color: '#000000' }}
+                                placeholderTextColor='#000000'
+                                placeholder={'Your Institution'}
+                                onChangeText={text => setInstitution(text)}
+                                value={institution}
+                            />
+                        </View>
+                        <Text style={styles.fifthText}>PASSWORD</Text>
+                        <View style={styles.InputContainer}>
+                            <TextInput
+                                style={{ flex: 1, color: '#000000' }}
+                                placeholderTextColor='#000000'
+                                placeholder={'Password'}
+                                onChangeText={text => setPassword(text)}
+                                value={password}
+                            />
+                        </View>
+                        <TouchableOpacity style={styles.button}
+                        onPress={() => router.push("/verification")}>
+                            <Text style={styles.thirdText}>SIGN UP</Text>
+                        </TouchableOpacity>
+                        <Text style={[styles.fourthText, { textAlign: "center" }]}>Powered by Ited Softwares</Text>
+                    </ScrollView>
+
+                </View>
+            </KeyboardAwareScrollView>
+        </SafeAreaView>
+    )
+}
+
+const styles = StyleSheet.create({
+    transitionButton: {
+        backgroundColor: "#0F065E",
+        height: 30,
+        width: 100,
+        borderRadius: 20,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+
+    },
+    button: {
+        backgroundColor: '#0F065E',
+        height: 40,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 20,
+        borderWidth: 1,
+        marginBottom: 10,
+        marginTop: 40,
+        marginHorizontal: 50
+
+
+
+
+    },
+    InputContainer: {
+        // borderWidth: 1,
+        // borderColor: "#00000040",
+        height: 50,
+        borderRadius: 26,
+        marginTop: 10,
+        paddingHorizontal: 10,
+        elevation: 5,
+        shadowColor: '#00000040',             
+        shadowOffset: { width: 0, height: 4 }, 
+        shadowOpacity: 0.5,    
+
+    },
+    container: {
+marginTop: 80
+    },
+    roundedContainer: {
+        height: 200,
+        width: 200,
+        borderRadius: 100,
+        backgroundColor: "#D9D9D9"
+    },
+    firstText: {
+        fontSize: 10,
+        color: "#B5B2B2",
+        fontWeight: "600",
+        marginBottom: 10,
+        marginTop: 10,
+        textAlign: "center"
+
+    },
+    secondText: {
+        fontSize: 16,
+        color: "#0F065E",
+        fontWeight: "900",
+        textAlign: "center"
+
+    },
+    thirdText: {
+        fontSize: 10,
+        color: "#FFFFFF",
+        fontWeight: "900",
+        textAlign: "center"
+
+    },
+    fourthText: {
+        fontSize: 9,
+        color: "#000000",
+        fontWeight: "500",
+        textAlign: "right"
+
+    },
+    fifthText: {
+        fontSize: 10,
+        color: "#B5B2B2",
+        fontWeight: "900",
+        textAlign: "left",
+        marginTop: 15
+
+    }
+})
+
+export default signup
