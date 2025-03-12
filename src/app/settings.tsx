@@ -1,8 +1,25 @@
-import { View, Text, SafeAreaView, StyleSheet } from "react-native";
-import React from "react";
-import { BackButton, EditBioIcon, PenEditIcon } from "../../assets/svg";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
+import React, { useState } from "react";
+import {
+  BackButton,
+  EditBioIcon,
+  PenEditIcon,
+  PasswordReset,
+  AppActivation,
+  AboutUs,
+  DeleteIcon,
+  SignOutIcon,
+} from "../../assets/svg";
+import LogoutModal from "../components/modals/LogoutModal";
 
 const settings = () => {
+  const [modal, setModal] = useState(false);
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 70 }}
@@ -10,7 +27,7 @@ const settings = () => {
       <View
         style={{
           flexDirection: "row",
-          gap: 4,
+          gap: 8,
           marginHorizontal: 20,
           justifyContent: "flex-start",
           alignItems: "center",
@@ -45,14 +62,7 @@ const settings = () => {
         </View>
       </View>
       <View style={styles.secondContainer}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "flex-start",
-            gap: 2,
-            alignItems: "center",
-          }}
-        >
+        <View style={styles.thirdContainer}>
           <EditBioIcon />
           <View>
             <Text style={styles.thirdText}>Edit My Bio</Text>
@@ -63,14 +73,84 @@ const settings = () => {
             </Text>
           </View>
         </View>
+        <View style={styles.thirdContainer}>
+          <PasswordReset />
+          <View>
+            <Text style={styles.thirdText}>Password Reset</Text>
+            <Text
+              style={[styles.thirdText, { fontSize: 15, fontWeight: "500" }]}
+            >
+              Change your password
+            </Text>
+          </View>
+        </View>
+        <View style={styles.thirdContainer}>
+          <AppActivation />
+          <View>
+            <Text style={styles.thirdText}>App Activation</Text>
+            <Text
+              style={[styles.thirdText, { fontSize: 15, fontWeight: "500" }]}
+            >
+              Get activated to unlock full access
+            </Text>
+          </View>
+        </View>
+        <View style={styles.thirdContainer}>
+          <AppActivation />
+          <View>
+            <Text style={styles.thirdText}>Suggesti0ns/Complain</Text>
+            <Text
+              style={[styles.thirdText, { fontSize: 15, fontWeight: "500" }]}
+            >
+              Mission, Vision, Terms and Conditions
+            </Text>
+          </View>
+        </View>
+        <View style={styles.thirdContainer}>
+          <AboutUs />
+          <View>
+            <Text style={styles.thirdText}>About Us</Text>
+            <Text
+              style={[styles.thirdText, { fontSize: 15, fontWeight: "500" }]}
+            >
+              Mission, Vision, Terms and Conditions
+            </Text>
+          </View>
+        </View>
+        <View style={styles.thirdContainer}>
+          <DeleteIcon />
+          <View>
+            <Text style={styles.thirdText}>Delete Account</Text>
+            <Text
+              style={[styles.thirdText, { fontSize: 15, fontWeight: "500" }]}
+            >
+              Permanantely delete your account
+            </Text>
+          </View>
+        </View>
+        <TouchableOpacity
+          style={styles.thirdContainer}
+          onPress={() => setModal(true)}
+        >
+          <SignOutIcon />
+          <View>
+            <Text style={styles.thirdText}>Log out</Text>
+            <Text
+              style={[styles.thirdText, { fontSize: 15, fontWeight: "500" }]}
+            >
+              Sign out of your account
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
+      {modal && <LogoutModal modal={modal} setModal={setModal} />}
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   firstText: {
-    fontSize: 20,
+    fontSize: 24,
     color: "#181D27",
     fontWeight: "700",
   },
@@ -80,12 +160,12 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   thirdText: {
-    fontSize: 20,
+    fontSize: 15,
     color: "#00052D",
     fontWeight: "700",
   },
   firstContainer: {
-    height: 300,
+    height: 130,
     backgroundColor: "#0F065E",
     flexDirection: "row",
     justifyContent: "space-between",
@@ -107,6 +187,21 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 40,
     borderRadius: 15,
+    elevation: 10,
+    shadowOffset: {
+      height: 10,
+      width: 10,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 4,
+    shadowColor: "#333333",
+  },
+  thirdContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    gap: 3,
+    alignItems: "center",
+    marginTop: 10,
   },
 });
 
