@@ -43,6 +43,12 @@ const RootLayout = () => {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="notes"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
     </>
   );
