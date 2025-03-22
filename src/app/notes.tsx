@@ -6,12 +6,31 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  TextInput,
 } from "react-native";
 import React, { useState } from "react";
-import { BackArrow, M } from "../../assets/svg";
+import { B, BackArrow, M } from "../../assets/svg";
+import RNPickerSelect from "react-native-picker-select";
+import { MaterialIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 const notes = () => {
+  const router = useRouter();
   const [selectedText, setSelectedText] = useState("Subjects");
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [selectedTopic, setSelectedTopic] = useState("");
+  const subjects = [
+    { label: "Mathematics", value: "mathematics" },
+    { label: "Biology", value: "biology" },
+    { label: "Chemistry", value: "chemistry" },
+    { label: "Physics", value: "physics" },
+  ];
+  const topics = [
+    { label: "Number and Numeration", value: "number_and_numeration" },
+    { label: "Introduction to Algebra", value: "introduction_to_algebra" },
+    { label: "Calculus & Statistics", value: "calculus_statistics" },
+    { label: "Geometry/Trigonometry", value: "geometry_trigonometry" },
+  ];
   return (
     <SafeAreaView
       style={{
@@ -38,7 +57,7 @@ const notes = () => {
               style={{
                 fontSize: 15,
                 fontWeight: "600",
-                marginTop: 5,
+                marginTop: 15,
                 color: "#0F065E",
                 paddingLeft: 10,
               }}
@@ -95,18 +114,85 @@ const notes = () => {
               </View>
             </View>
           </View>
-          <View style={styles.secondContainer}>
-            <View style={styles.secondSmallContainer}>
-              <M />
-            </View>
-            <View style={{ width: "60%" }}>
-              <Text style={styles.secondText}>MATHEMATICS</Text>
-              <Text style={styles.thirdText}>Number and Numeration</Text>
-              <Text style={styles.thirdText}>Introduction to Algebra</Text>
-              <Text style={styles.thirdText}>Calculus & Statistics</Text>
-              <Text style={styles.thirdText}>Geometry/Trigonometry</Text>
-            </View>
-          </View>
+          {selectedText === "Subjects" && (
+            <>
+              <View style={styles.secondContainer}>
+                <View style={styles.secondSmallContainer}>
+                  <M />
+                </View>
+                <View style={{ width: "60%" }}>
+                  <Text style={styles.secondText}>MATHEMATICS</Text>
+                  <Text style={styles.thirdText}>Number and Numeration</Text>
+                  <Text style={styles.thirdText}>Introduction to Algebra</Text>
+                  <Text style={styles.thirdText}>Calculus & Statistics</Text>
+                  <Text style={styles.thirdText}>Geometry/Trigonometry</Text>
+                </View>
+              </View>
+              <View style={styles.secondContainer}>
+                <View style={styles.secondSmallContainer}>
+                  <B />
+                </View>
+                <View style={{ width: "60%" }}>
+                  <Text style={styles.secondText}>BIOLOGY</Text>
+                  <Text style={styles.thirdText}>Variety of Organisms</Text>
+                  <Text style={styles.thirdText}>Heredity and Variations</Text>
+                  <Text style={styles.thirdText}>Form and Functions</Text>
+                  <Text style={styles.thirdText}>Ecology</Text>
+                </View>
+              </View>
+            </>
+          )}
+          {selectedText === "Exercises" && (
+            <>
+              <Text style={styles.fourthText}>
+                Solve Word problem questions
+              </Text>
+              <Text style={styles.fifthText}>Solve Word problem questions</Text>
+              <View style={styles.thirdContainer}>
+                <RNPickerSelect
+                  onValueChange={(value) => setSelectedSubject(value)}
+                  items={subjects}
+                  placeholder={{ label: "Select Subject", value: null }}
+                  useNativeAndroidPickerStyle={false}
+                  style={pickerSelectStyles}
+                  value={selectedSubject}
+                  Icon={() => (
+                    <MaterialIcons
+                      name="keyboard-arrow-down"
+                      size={24}
+                      color="#0F065E"
+                      style={{ alignSelf: "center" }}
+                    />
+                  )}
+                />
+                <View style={{ marginTop: 20 }} />
+                <RNPickerSelect
+                  onValueChange={(value) => setSelectedTopic(value)}
+                  items={topics}
+                  placeholder={{ label: "Select Topic", value: null }}
+                  useNativeAndroidPickerStyle={false}
+                  style={pickerSelectStyles}
+                  value={selectedTopic}
+                  Icon={() => (
+                    <MaterialIcons
+                      name="keyboard-arrow-down"
+                      size={24}
+                      color="#0F065E"
+                      style={{ alignSelf: "center" }}
+                    />
+                  )}
+                />
+              </View>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  router.push("/exercise");
+                }}
+              >
+                <Text style={styles.sixthText}>Begin</Text>
+              </TouchableOpacity>
+            </>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -130,8 +216,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
-
     marginTop: 15,
+  },
+  thirdContainer: {
+    marginHorizontal: 30,
   },
   firstText: {
     fontSize: 12,
@@ -149,6 +237,20 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginTop: 5,
     textDecorationLine: "underline",
+  },
+  fourthText: {
+    fontSize: 20,
+    color: "#0F065E",
+    fontWeight: "800",
+    textAlign: "center",
+    marginTop: 30,
+  },
+  fifthText: {
+    fontSize: 12,
+    color: "#0F065E",
+    fontWeight: "700",
+    textAlign: "center",
+    marginBottom: 30,
   },
   smallContainer: {
     backgroundColor: "#0AA2D333",
@@ -178,6 +280,57 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.6,
     shadowRadius: 4,
     shadowColor: "#333333",
+  },
+  button: {
+    backgroundColor: "#0F065E",
+    height: 40,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 5,
+    borderWidth: 1,
+    marginBottom: 10,
+    marginTop: 40,
+    marginHorizontal: 60,
+  },
+  sixthText: {
+    fontSize: 14,
+    color: "#FFFFFF",
+    fontWeight: "900",
+    textAlign: "center",
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: "#0F065E",
+    color: "#000000",
+    paddingRight: 30,
+    alignSelf: "stretch",
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: "#0F065E",
+    color: "#000000",
+    paddingRight: 30,
+    alignSelf: "stretch",
+  },
+  dropDownContainer: {
+    borderColor: "#0F065E",
+  },
+  iconContainer: {
+    top: "50%",
+    right: 10,
+    transform: [{ translateY: -12 }],
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 export default notes;

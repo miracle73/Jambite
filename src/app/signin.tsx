@@ -109,9 +109,11 @@ const signin = () => {
               />
             </View>
             <View>
-              <Text style={[styles.fourthText, { marginTop: 10 }]}>
-                Forgot password
-              </Text>
+              <TouchableOpacity onPress={() => router.push("/forgotPassword")}>
+                <Text style={[styles.fourthText, { marginTop: 10 }]}>
+                  Forgot password
+                </Text>
+              </TouchableOpacity>
             </View>
             <TouchableOpacity
               style={styles.button}

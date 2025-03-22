@@ -49,6 +49,18 @@ const RootLayout = () => {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="exercise"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="forgotPassword"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
     </>
   );
