@@ -11,9 +11,10 @@ import { BackArrow, JambiteText, SecondJambiteText } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
 
-const forgotPassword = () => {
-  const [email, setEmail] = useState("");
+const resetPassword = () => {
   const [password, setPassword] = useState("");
+  const [cpassword, setCPassword] = useState("");
+  const [isSignIn, setIsSignIn] = useState(true);
   const router = useRouter();
 
   return (
@@ -35,17 +36,17 @@ const forgotPassword = () => {
             <BackArrow />
           </View>
           <View style={styles.container}>
-            <Text style={styles.secondText}>Forgot Password</Text>
+            <Text style={styles.secondText}>Reset Password</Text>
             <Text style={styles.firstText}>Change your password</Text>
             <View style={{ marginTop: 40 }} />
-            <Text style={styles.fourthText}>Email Address</Text>
+            <Text style={styles.fourthText}>New Password</Text>
             <View style={styles.secondContainer}>
               <TextInput
                 style={{ flex: 1, color: "#000000" }}
                 placeholderTextColor="#000000"
                 placeholder={""}
-                onChangeText={(text) => setEmail(text)}
-                value={email}
+                onChangeText={(text) => setPassword(text)}
+                value={password}
               />
             </View>
             <Text style={[styles.fourthText, { marginTop: 25 }]}>
@@ -56,15 +57,15 @@ const forgotPassword = () => {
                 style={{ flex: 1, color: "#000000" }}
                 placeholderTextColor="#000000"
                 placeholder={""}
-                onChangeText={(text) => setPassword(text)}
-                value={password}
+                onChangeText={(text) => setCPassword(text)}
+                value={cpassword}
               />
             </View>
 
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
-                router.push("/resetPassword");
+                router.push("/editProfile");
               }}
             >
               <Text style={styles.thirdText}>Save</Text>
@@ -149,4 +150,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default forgotPassword;
+export default resetPassword;

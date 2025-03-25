@@ -24,7 +24,7 @@ const exercise = () => {
         backgroundColor: "#FFFFFF",
       }}
     >
-      <ScrollView style={{}}>
+      <ScrollView style={{}} showsVerticalScrollIndicator={false}>
         <View
           style={{
             paddingBottom: 30,

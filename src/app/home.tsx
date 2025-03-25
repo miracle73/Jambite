@@ -9,11 +9,13 @@ import {
 } from "react-native";
 import React from "react";
 import {
+  Activation,
   Facebook,
   Instagram,
   LaptopWithCursor,
   OpenBookIcon,
   ProfileIcon,
+  Scholarship,
   SecondJambiteText,
   SmallerJambiteText,
   Telegram,
@@ -33,7 +35,7 @@ const home = () => {
         paddingTop: 50,
       }}
     >
-      <ScrollView style={{}}>
+      <ScrollView style={{}} showsVerticalScrollIndicator={false}>
         <View
           style={{
             marginHorizontal: 20,
@@ -146,6 +148,29 @@ const home = () => {
                   Go through past questions and prepare ahead
                 </Text>
               </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.smallContainer,
+                  { backgroundColor: "#041C42D1" },
+                ]}
+                onPress={() => {
+                  router.push("/activation");
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text style={styles.fifthText}>App Activation </Text>
+                  <Activation />
+                </View>
+                <Text style={styles.sixthText}>
+                  Activate your app to enjoy full version of the software
+                </Text>
+              </TouchableOpacity>
             </View>
             <View
               style={{
@@ -186,6 +211,26 @@ const home = () => {
                 </View>
                 <Text style={styles.sixthText}>
                   If you are proud of yourself give it a try.
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.smallContainer, { backgroundColor: "#0F065E" }]}
+                onPress={() => {
+                  router.push("/scholarship");
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text style={styles.fifthText}>Scholarship</Text>
+                  <Scholarship />
+                </View>
+                <Text style={styles.sixthText}>
+                  IRegister and Stand the chance to become our best student.
                 </Text>
               </TouchableOpacity>
             </View>

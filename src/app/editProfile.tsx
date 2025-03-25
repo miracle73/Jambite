@@ -11,9 +11,11 @@ import { BackArrow, JambiteText, SecondJambiteText } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
 
-const forgotPassword = () => {
+const editProfile = () => {
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [institution, setInstitution] = useState("");
   const router = useRouter();
 
   return (
@@ -31,14 +33,28 @@ const forgotPassword = () => {
             flex: 1,
           }}
         >
-          <View style={{ marginBottom: 100 }}>
+          <View style={{ marginBottom: 50 }}>
             <BackArrow />
           </View>
           <View style={styles.container}>
-            <Text style={styles.secondText}>Forgot Password</Text>
-            <Text style={styles.firstText}>Change your password</Text>
+            <Text style={styles.secondText}>Edit Profile</Text>
+            <Text style={styles.firstText}>
+              Update your details and get it saved
+            </Text>
             <View style={{ marginTop: 40 }} />
-            <Text style={styles.fourthText}>Email Address</Text>
+            <Text style={styles.fourthText}>FULL NAME</Text>
+            <View style={styles.secondContainer}>
+              <TextInput
+                style={{ flex: 1, color: "#000000" }}
+                placeholderTextColor="#000000"
+                placeholder={""}
+                onChangeText={(text) => setFullName(text)}
+                value={fullName}
+              />
+            </View>
+            <Text style={[styles.fourthText, { marginTop: 25 }]}>
+              EMAIL ADDRESS
+            </Text>
             <View style={styles.secondContainer}>
               <TextInput
                 style={{ flex: 1, color: "#000000" }}
@@ -48,23 +64,37 @@ const forgotPassword = () => {
                 value={email}
               />
             </View>
+
             <Text style={[styles.fourthText, { marginTop: 25 }]}>
-              Retype Password{" "}
+              PHONE NUMBER
             </Text>
             <View style={styles.secondContainer}>
               <TextInput
                 style={{ flex: 1, color: "#000000" }}
                 placeholderTextColor="#000000"
                 placeholder={""}
-                onChangeText={(text) => setPassword(text)}
-                value={password}
+                onChangeText={(text) => setPhoneNumber(text)}
+                value={phoneNumber}
+              />
+            </View>
+
+            <Text style={[styles.fourthText, { marginTop: 25 }]}>
+              PREFFERD INSTITUTION
+            </Text>
+            <View style={styles.secondContainer}>
+              <TextInput
+                style={{ flex: 1, color: "#000000" }}
+                placeholderTextColor="#000000"
+                placeholder={""}
+                onChangeText={(text) => setInstitution(text)}
+                value={institution}
               />
             </View>
 
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
-                router.push("/resetPassword");
+                router.push("/activation");
               }}
             >
               <Text style={styles.thirdText}>Save</Text>
@@ -149,4 +179,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default forgotPassword;
+export default editProfile;

@@ -713,3 +713,93 @@ export const B = (props: any) => (
     />
   </Svg>
 );
+export const Recta = (props: any) => (
+  <Svg
+    width={39}
+    height={7}
+    viewBox="0 0 39 7"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <Rect width={39} height={7} fill="#1758FF" />
+  </Svg>
+);
+export const MiniRecta = (props: any) => (
+  <Svg
+    width={22}
+    height={7}
+    viewBox="0 0 22 7"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <Rect width={22} height={7} fill="#1758FF" />
+  </Svg>
+);
+export const Scholarship = (props: any) => (
+  <Svg
+    width={45}
+    height={28}
+    viewBox="0 0 45 28"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlnsXlink="http://www.w3.org/1999/xlink"
+    {...props}
+  >
+    <Rect width={45} height={28} fill="url(#pattern0_79_416)" />
+    <Defs>
+      <Pattern
+        id="pattern0_79_416"
+        patternContentUnits="objectBoundingBox"
+        width={1}
+        height={1}
+      >
+        <Use
+          xlinkHref="#image0_79_416"
+          transform="matrix(0.00691358 0 0 0.0111111 0.188889 0)"
+        />
+      </Pattern>
+      <Image
+        id="image0_79_416"
+        width={90}
+        height={90}
+        preserveAspectRatio="none"
+        xlinkHref="data:image/png;base64,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"
+      />
+    </Defs>
+  </Svg>
+);
+export const Activation = (props: any) => (
+  <Svg
+    width={45}
+    height={28}
+    viewBox="0 0 45 28"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlnsXlink="http://www.w3.org/1999/xlink"
+    {...props}
+  >
+    <Rect width={45} height={28} fill="url(#pattern0_79_413)" />
+    <Defs>
+      <Pattern
+        id="pattern0_79_413"
+        patternContentUnits="objectBoundingBox"
+        width={1}
+        height={1}
+      >
+        <Use
+          xlinkHref="#image0_79_413"
+          transform="matrix(0.00691358 0 0 0.0111111 0.188889 0)"
+        />
+      </Pattern>
+      <Image
+        id="image0_79_413"
+        width={90}
+        height={90}
+        preserveAspectRatio="none"
+        xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEsElEQVR4nO2dy49VRRCHK4AC4iALFzAYH0GNa9S4UAMxajQxURdqIr4QdQNxRCLj0p2PuCBDTPwHdKmiC4yujPEZDAIu3PiMojjODEYTZxLwM5UpkxE5lzveqtPd5/aXzObmPH79y5nT3dXVdUQqlUqlUqlUKpVKpdIfwFLgamAb8ALwBnAY+AqYBubsb9p+O2zHPG/nXKXX6PN2wwVwAfAE8BbwG4NzHHgTGAPWyzADrATuB94FThLHCeAd4D5ghQwLwLn2pP1I+/wCPAOcJ10FOAt4CpgiPaphl2qSLgFcDxwhP74EbpTS0Xci8BLwF/mi2iaA5VIiwMXAx5TDZ8ClUhL67+g0TGsbHRbeICUA3An8SbnMAfdIzgCPBY+J20Lb8KjkCHCHTQ66wkngbskJfa8Bs3SPOeBmyQHgskI7vsV0kBtSm7zchkVd50DScbZNRqL5HtgL3AJcAawCzgEuBG4DXgSOtqBjIpXJm4JnfD8Aj/QTW7Y4yoPAT4F6tK3XtePuvxv2RWCj9gEj/0PXGotDR6GLDMtiXD19gzQKF8UEsGQAbUuAlwP17fR1s7khI4Ghzn2DmHzKcpheK4JJjan7uNm7EbsD38kjjjrPt0B/BLu8dPZafvo5SPy2MwwjH7do4B/2VL0HPNCrs7SQQARHQ5fFbI0vagi3tOGe64HPe5z7oXaCPeLhx4I0b4k0WhdSI9jb40nuZfI/fND0bgdeDdL8dmRKQFRk7taGe+rrol/ubbjGK0GaNYC2LsJozbuI4vKGe36yiGt8pzPGU85fG7wYvCPCaE1uiWKk4Z6/L/I67wPXAKuBzcAhYnnd22Qdl85EqZXm++bOjGv6meXChSHlGq1c6Wm0BnfCkLKN3upptGZ1hiFlG/2sp9FRcYMuGP2ap9GhvbeUbfRBT6O/CVr43A2Muglt1j8KjNs9vfnaU+ivAQLH3QT23w4125tJT4ERT8I6N4H9t0Nnit7MZm20JCJ3o93jBZKI3F8d33qrk0Tk3hm6D+8kEbkP79wnLJKI3Ccs7lNwSUTuU3DdkeqKJMK7HcBDWYdJJRHe7QA2Zh34l0RkHfg3ga45bZKIbDvCBQJ1W7EbkgjPNgDboyJgbntUJBFe+s2LtVEitUqAC5IIL/3A/iJSwiQRXvqbEna8RK7wKv8gifDQbjsLVpaShD4aKrQ5YdKDJ0tKRB8PF/tf7U876NaU4VVtCdaiIoMyZ0tLpa0ZjkXrXSh8WZ/ptF3jSOtVa3QrWOYFT7zRtm5q1eQFZusOqmFhTxKTF2Tk6/bdrvMpcHYyo83sDbYxvavMAJdIDljSd8lVZ5rQUcpNkhPA7R0sjHKX5IiWx+lIqZ8TmhMuOWMlf0p+jcxmV+LnDKV/jhfa8W2WkgAuAj6iHA4kL+kz4Dh7IvMZpGrbk3yc7DhdP0R+qKZrpUswH4jaaWHG1EzaYnN71WTahvniU2NWn6Ntjlmh7tUyLDC/LLZFqwQET3T02vt1jW+oSs+fDt1moRvYdW+1fY1iUKbtWtvDUgJKh/n0s43Aw8Bzmg2kOcj2KZCpBZ8HmbLfDtoxeuxWO7d+HqRSqVQqlUqlUqlUpE/+Bgysl5PqwM9KAAAAAElFTkSuQmCC"
+      />
+    </Defs>
+  </Svg>
+);

@@ -61,6 +61,30 @@ const RootLayout = () => {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="resetPassword"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="editProfile"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="activation"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="scholarship"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
     </>
   );
