@@ -18,7 +18,7 @@ const exercise = () => {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   return (
-    <SafeAreaView
+    <View
       style={{
         flex: 1,
         backgroundColor: "#FFFFFF",
@@ -72,7 +72,7 @@ const exercise = () => {
           )}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

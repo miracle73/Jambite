@@ -43,7 +43,7 @@ const notes = () => {
   ];
 
   return (
-    <SafeAreaView
+    <View
       style={{
         flex: 1,
         backgroundColor: "#FFFFFF",
@@ -221,7 +221,7 @@ const notes = () => {
           </>
         )}
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

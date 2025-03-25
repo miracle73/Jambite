@@ -65,7 +65,7 @@ const resetPassword = () => {
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
-                router.push("/editProfile");
+                router.push("/about");
               }}
             >
               <Text style={styles.thirdText}>Save</Text>

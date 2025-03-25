@@ -54,14 +54,12 @@ const about = () => {
               </Text>
             </TouchableOpacity>
           </View>
-          <Text style={[styles.firstText, { textAlign: "center" }]}>
-            About Us
-          </Text>
-          <Text style={[styles.secondText, { textAlign: "center" }]}>
+          <Text style={styles.firstText}>About Us</Text>
+          <Text style={styles.secondText}>
             Get to know more about ITed Education Software
           </Text>
 
-          <Text style={styles.thirdText}>The App</Text>
+          <Text style={[styles.thirdText, { marginTop: 10 }]}>The App</Text>
           <Text style={styles.fourthText}>
             Ited Educational Software offers interactive lessons, access to
             e-books, and quizzes to evaluate knowledge. It personalizes learning
@@ -128,6 +126,13 @@ const about = () => {
                 multiline={true}
               />
             </View>
+            <TouchableOpacity style={styles.fourthContainer}>
+              <Text
+                style={{ color: "#FFFFFF", fontSize: 15, fontWeight: "600" }}
+              >
+                Submit
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </KeyboardAwareScrollView>
@@ -157,6 +162,17 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingHorizontal: 20,
     borderRadius: 25,
+    marginBottom: 20,
+  },
+  fourthContainer: {
+    backgroundColor: "#0F065E",
+    borderRadius: 10,
+    height: 40,
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
+    marginHorizontal: 50,
+    marginTop: 20,
   },
   firstText: {
     fontSize: 40,
@@ -186,6 +202,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginBottom: 20,
     textDecorationLine: "underline",
+    textAlign: "center",
   },
 });
 

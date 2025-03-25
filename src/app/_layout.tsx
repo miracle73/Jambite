@@ -85,6 +85,48 @@ const RootLayout = () => {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="about"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="socials"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="pastQuestion"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="pastQuestion2"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="postUtme"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="cbt"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="subject"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
     </>
   );

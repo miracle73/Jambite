@@ -259,7 +259,12 @@ const home = () => {
                 <UniversityCampus />
               </View>
             </View>
-            <View style={styles.fourthContainer}>
+            <TouchableOpacity
+              style={styles.fourthContainer}
+              onPress={() => {
+                router.push("/socials");
+              }}
+            >
               <View style={{ width: "50%" }}>
                 <Text style={styles.seventhText}>Task/Refund</Text>
                 <Text style={styles.eighthText}>
@@ -279,7 +284,7 @@ const home = () => {
                 <Facebook />
                 <Tiktok />
               </View>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
