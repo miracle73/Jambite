@@ -1,0 +1,1 @@
+export const BaseUrl = "https://sbsapp.com.ng";
