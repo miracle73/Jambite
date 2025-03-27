@@ -1,99 +1,113 @@
-import { View, Text, Modal, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
-import React, { useState } from 'react';
-import { MaterialIcons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router'
-import TouchableOutside from './TouchableOutside';
+import {
+  View,
+  Text,
+  Modal,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
+import React, { useEffect } from "react";
+import { MaterialIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import TouchableOutside from "./TouchableOutside";
 
-const { width, height } = Dimensions.get('window')
+const { width, height } = Dimensions.get("window");
 interface VerificationModalProps {
-    setModal: (value: boolean) => void;
-    modal: boolean;
-
+  setModal: (value: boolean) => void;
+  modal: boolean;
 }
 const VerificationModal = ({ setModal, modal }: VerificationModalProps) => {
-    return (
-        <Modal
-            animationType="slide"
-            transparent={true}
-            style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
-            visible={modal}
-            onRequestClose={() => {
-                setModal(!modal);
+  const router = useRouter();
 
-            }}
-        >
-            <TouchableOutside onPress={() => setModal(false)}>
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <View style={{
-                            height: 5,
-                            width: 200,
-                            borderRadius: 10,
-                            backgroundColor: "#FFFFFF",
-                            marginBottom: 30
-                        }}></View>
+  useEffect(() => {
+    if (modal) {
+      const timeout = setTimeout(() => {
+        setModal(false); // Close the modal
+        router.push("/signin"); // Navigate to signin
+      }, 3000);
 
-                        <Text style={styles.firstText}>Verified!</Text>
+      return () => clearTimeout(timeout); // Cleanup timeout on unmount
+    }
+  }, [modal]);
 
+  return (
+    <Modal
+      animationType="slide"
+      transparent={true}
+      style={{
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+      visible={modal}
+      onRequestClose={() => {
+        setModal(!modal);
+      }}
+    >
+      <TouchableOutside onPress={() => setModal(false)}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <View
+              style={{
+                height: 5,
+                width: 200,
+                borderRadius: 10,
+                backgroundColor: "#FFFFFF",
+                marginBottom: 30,
+              }}
+            ></View>
 
-                        <Text style={styles.secondText}>Your account has been verified successfully</Text>
+            <Text style={styles.firstText}>Verified!</Text>
 
-
-
-
-                    </View>
-                </View>
-            </TouchableOutside>
-        </Modal>
-    )
-}
+            <Text style={styles.secondText}>
+              Your account has been verified successfully
+            </Text>
+          </View>
+        </View>
+      </TouchableOutside>
+    </Modal>
+  );
+};
 
 const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
 
+  modalContent: {
+    width: width,
+    position: "absolute",
+    bottom: 0,
+    backgroundColor: "#0F065E",
+    elevation: 10,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    alignItems: "center",
+    height: height * 0.3,
+    paddingHorizontal: 20,
+  },
+  firstText: {
+    fontSize: 24,
+    fontWeight: "600",
+    fontStyle: "normal",
+    color: "#FFFFFF",
+    textAlign: "center",
+  },
+  secondText: {
+    fontSize: 15,
+    fontWeight: "600",
+    fontStyle: "normal",
+    color: "#FFFFFF",
+    marginTop: 20,
+    textAlign: "center",
+  },
+  thirdText: {
+    fontSize: 12,
+    fontWeight: "500",
+    fontStyle: "normal",
+    color: "#FFFFFF",
+  },
+});
 
-    modalContainer: {
-        flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.5)',
-    },
-
-    modalContent: {
-        width: width,
-        position: 'absolute',
-        bottom: 0,
-        backgroundColor: '#0F065E',
-        elevation: 10,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-        alignItems: "center",
-        height: height * 0.30,
-        paddingHorizontal: 20,
-      
-    },
-    firstText: {
-        fontSize: 24,
-        fontWeight: "600",
-        fontStyle: "normal",
-        color: "#FFFFFF",
-        textAlign: "center"
-    },
-    secondText: {
-        fontSize: 15,
-        fontWeight: "600",
-        fontStyle: "normal",
-        color: "#FFFFFF",
-        marginTop: 20,
-        textAlign: "center"
-
-    },
-    thirdText: {
-        fontSize: 12,
-        fontWeight: "500",
-        fontStyle: "normal",
-        color: "#FFFFFF",
-    },
-
-})
-
-
-
-export default VerificationModal
+export default VerificationModal;

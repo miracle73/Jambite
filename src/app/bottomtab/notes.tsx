@@ -81,7 +81,7 @@ const notes = () => {
             Study your JAMB combinatioin subjects
           </Text>
           <View style={styles.firstContainer}>
-            <View
+            <TouchableOpacity
               style={
                 selectedText === "Subjects"
                   ? styles.smallContainer
@@ -91,12 +91,13 @@ const notes = () => {
                       paddingVertical: 10,
                     }
               }
+              onPress={() => setSelectedText("Subjects")}
             >
-              <TouchableOpacity onPress={() => setSelectedText("Subjects")}>
-                <Text style={styles.firstText}>Subjects</Text>
-              </TouchableOpacity>
-            </View>
-            <View
+              <Text style={styles.firstText}>Subjects</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => setSelectedText("Exercises")}
               style={
                 selectedText === "Exercises"
                   ? styles.smallContainer
@@ -107,11 +108,11 @@ const notes = () => {
                     }
               }
             >
-              <TouchableOpacity onPress={() => setSelectedText("Exercises")}>
-                <Text style={styles.firstText}>Exercises</Text>
-              </TouchableOpacity>
-            </View>
-            <View
+              <Text style={styles.firstText}>Exercises</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => setSelectedText("Past Questions")}
               style={
                 selectedText === "Past Questions"
                   ? styles.smallContainer
@@ -122,17 +123,16 @@ const notes = () => {
                     }
               }
             >
-              <TouchableOpacity
-                onPress={() => setSelectedText("Past Questions")}
-              >
-                <Text style={styles.firstText}>Past Questions</Text>
-              </TouchableOpacity>
-            </View>
+              <Text style={styles.firstText}>Past Questions</Text>
+            </TouchableOpacity>
           </View>
         </View>
         {selectedText === "Subjects" && (
           <>
-            <View style={styles.secondContainer}>
+            <TouchableOpacity
+              style={styles.secondContainer}
+              onPress={() => router.push("/subject")}
+            >
               <View style={styles.secondSmallContainer}>
                 <M />
               </View>
@@ -143,8 +143,11 @@ const notes = () => {
                 <Text style={styles.thirdText}>Calculus & Statistics</Text>
                 <Text style={styles.thirdText}>Geometry/Trigonometry</Text>
               </View>
-            </View>
-            <View style={styles.secondContainer}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.secondContainer}
+              onPress={() => router.push("/subject")}
+            >
               <View style={styles.secondSmallContainer}>
                 <B />
               </View>
@@ -155,7 +158,7 @@ const notes = () => {
                 <Text style={styles.thirdText}>Form and Functions</Text>
                 <Text style={styles.thirdText}>Ecology</Text>
               </View>
-            </View>
+            </TouchableOpacity>
           </>
         )}
         {selectedText === "Exercises" && (
@@ -200,7 +203,7 @@ const notes = () => {
           <>
             <ScrollView style={{}}>
               {pastQuestionSubjects.map((subject, index) => (
-                <View
+                <TouchableOpacity
                   key={index}
                   style={[
                     styles.fourthContainer,
@@ -208,9 +211,10 @@ const notes = () => {
                       marginBottom: 20,
                     },
                   ]}
+                  onPress={() => router.push("/pastQuestion2")}
                 >
                   <Text style={styles.seventhText}>{subject}</Text>
-                </View>
+                </TouchableOpacity>
               ))}
             </ScrollView>
           </>

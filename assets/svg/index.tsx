@@ -987,3 +987,35 @@ export const CBTIcon = (props: any) => (
     </Defs>
   </Svg>
 );
+export const PostUtmeIcon = (props: any) => (
+  <Svg
+    width={20}
+    height={20}
+    viewBox="0 0 20 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <Path
+      d="M4.45455 15H4.10869L3.83673 15.2137L1 17.4425V1H19V15H4.45455ZM5 6H4V7V9V10H5H7H8H9H11H12H13H15H16V9V7V6H15H13H12H11H9H8H7H5Z"
+      fill="#0F065E"
+      stroke="white"
+      strokeWidth={2}
+    />
+  </Svg>
+);
+export const Home = (props: any) => (
+  <Svg
+    width={24}
+    height={24}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <Path
+      d="M20 20C20 20.5523 19.5523 21 19 21H5C4.44772 21 4 20.5523 4 20V11H1L11.3273 1.6115C11.7087 1.26475 12.2913 1.26475 12.6727 1.6115L23 11H20V20ZM11 13V19H13V13H11Z"
+      fill="#FFF9F9"
+    />
+  </Svg>
+);

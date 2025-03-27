@@ -4,41 +4,48 @@ import {
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
+  TextInput,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import DropDownPicker from "react-native-dropdown-picker";
 import React, { useState } from "react";
-import { BackArrow } from "../../../assets/svg";
+import { BackArrow } from "../../../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
+import DropDownPicker from "react-native-dropdown-picker";
 
-const cbt = () => {
+const postUtme = () => {
   const router = useRouter();
-  const [selectedYear, setSelectedYear] = useState("");
-  const [selectedTime, setSelectedTime] = useState("");
-  const [selectedSubject, setSelectedSubject] = useState("");
   const [open, setOpen] = useState(false);
-  const [secondOpen, setSecondOpen] = useState(false);
-  const [thirdOpen, setThirdOpen] = useState(false);
-
+  const [open2, setOpen2] = useState(false);
+  const [open3, setOpen3] = useState(false);
+  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedUniversity, setSelectedUniversity] = useState("");
+  const [selectedFaculty, setSelectedFaculty] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
   const year = [
     { label: "2020", value: "2020" },
     { label: "2021", value: "2021" },
     { label: "2022", value: "2022" },
     { label: "2023", value: "2023" },
   ];
+
+  const university = [
+    { label: "University A", value: "university_a" },
+    { label: "University B", value: "university_b" },
+    { label: "University C", value: "university_c" },
+  ];
+
+  const faculty = [
+    { label: "Faculty of Science", value: "faculty_science" },
+    { label: "Faculty of Arts", value: "faculty_arts" },
+    { label: "Faculty of Engineering", value: "faculty_engineering" },
+  ];
   const time = [
     { label: "10 minutes", value: "10_minutes" },
     { label: "20 minutes", value: "20_minutes" },
     { label: "30 minutes", value: "30_minutes" },
     { label: "1 hour", value: "1_hour" },
-  ];
-  const subjects = [
-    { label: "Mathematics", value: "mathematics" },
-    { label: "Biology", value: "biology" },
-    { label: "Chemistry", value: "chemistry" },
-    { label: "Physics", value: "physics" },
   ];
   return (
     <SafeAreaView
@@ -65,48 +72,46 @@ const cbt = () => {
             </TouchableOpacity>
           </View>
           <Text style={[styles.firstText, { textAlign: "center" }]}>
-            CBT MODE
+            POST UTME
           </Text>
           <Text style={[styles.secondText, { textAlign: "center" }]}>
-            Select your 4 jamb subjects
+            Study and prepare ahead for
           </Text>
           <View style={styles.firstContainer}>
             <DropDownPicker
               open={open}
-              value={selectedYear}
-              items={year}
+              value={selectedUniversity}
+              items={university}
               setOpen={setOpen}
-              setValue={(value) => setSelectedYear(value)}
-              placeholder="Select Year"
+              setValue={(value) => setSelectedUniversity(value)}
+              placeholder="Select University"
               style={pickerSelectStyles.inputIOS}
               dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
             />
 
             <View style={[{ marginTop: 30 }, open && { zIndex: -20 }]}>
               <DropDownPicker
-                open={secondOpen}
-                value={selectedTime}
-                items={time}
-                setOpen={setSecondOpen}
-                setValue={(value) => setSelectedTime(value)}
-                placeholder="Select Time(Hours/Minutes)"
+                open={open2}
+                value={selectedFaculty}
+                items={faculty}
+                setOpen={setOpen2}
+                setValue={(value) => setSelectedFaculty(value)}
+                placeholder="Select Faculty"
                 style={pickerSelectStyles.inputIOS}
                 dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
               />
             </View>
+
             <View
-              style={[
-                { marginTop: 30 },
-                (secondOpen || open) && { zIndex: -20 },
-              ]}
+              style={[{ marginTop: 30 }, (open || open2) && { zIndex: -20 }]}
             >
               <DropDownPicker
-                open={thirdOpen}
-                value={selectedSubject}
-                items={subjects}
-                setOpen={setThirdOpen}
-                setValue={(value) => setSelectedSubject(value)}
-                placeholder="Select Subject"
+                open={open2}
+                value={selectedTime}
+                items={time}
+                setOpen={setOpen2}
+                setValue={(value) => setSelectedTime(value)}
+                placeholder="Select Time"
                 style={pickerSelectStyles.inputIOS}
                 dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
               />
@@ -194,4 +199,4 @@ const pickerSelectStyles = StyleSheet.create({
   },
 });
 
-export default cbt;
+export default postUtme;

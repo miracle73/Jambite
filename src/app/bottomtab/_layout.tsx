@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { View, StyleSheet } from "react-native";
 import {
   CBTIcon,
+  Home,
   NotesIcon,
   PostUtmeIcon,
   SettingsIcon,
@@ -12,16 +13,26 @@ import {
 const TabsLayout = () => {
   const router = useRouter();
   return (
-    <Tabs screenOptions={({ route }) => ({})}>
+    <Tabs
+      screenOptions={{
+        tabBarShowLabel: false, // Hides the tab titles
+        tabBarStyle: {
+          backgroundColor: "#0F065E", // Sets bottom navigation background color
+        },
+        tabBarActiveTintColor: "white", // Sets active icon color
+        tabBarInactiveTintColor: "gray", // Sets inactive icon color
+      }}
+    >
       <Tabs.Screen
-        name="settings"
+        name="pastQuestion"
         options={{
           //   title: "Home",
+
           headerShown: false,
-          tabBarIcon: ({ size, color }) => <SettingsIcon />,
+
+          tabBarIcon: ({ size, color }) => <Home />,
         }}
       />
-
       <Tabs.Screen
         name="notes"
         options={{
@@ -31,35 +42,22 @@ const TabsLayout = () => {
           tabBarIcon: ({ size, color }) => <NotesIcon />,
         }}
       />
-      <Tabs.Screen
-        name="pastQuestion"
-        options={{
-          //   title: "Edu",
 
-          //   headerTitleAlign: "center",
-          headerShown: false,
-
-          tabBarIcon: ({ size, color }) => (
-            <FontAwesome6 name="file-circle-question" color="white" size={15} />
-          ),
-        }}
-      />
       <Tabs.Screen
-        name="cbt"
+        name="exam"
         options={{
-          //   title: "Calculator",
+          //   title: "exam",
           headerShown: false,
 
           tabBarIcon: ({ size, color }) => <CBTIcon />,
         }}
       />
       <Tabs.Screen
-        name="postUtme"
+        name="settings"
         options={{
-          //   title: "More",
+          //   title: "Settings",
           headerShown: false,
-
-          tabBarIcon: ({ size, color }) => <PostUtmeIcon />,
+          tabBarIcon: ({ size, color }) => <SettingsIcon />,
         }}
       />
     </Tabs>

@@ -13,6 +13,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useRouter } from "expo-router";
 
 const pastQuestion = () => {
+  const router = useRouter();
   const pastQuestionSubjects = [
     "MATHEMATICS",
     "ENGLISH LANGUAGE",
@@ -25,7 +26,7 @@ const pastQuestion = () => {
   ];
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
+      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 50 }}
     >
       <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
@@ -39,7 +40,6 @@ const pastQuestion = () => {
         >
           <View
             style={{
-              marginBottom: 20,
               paddingHorizontal: 20,
               justifyContent: "flex-start",
               gap: 4,
@@ -66,7 +66,7 @@ const pastQuestion = () => {
 
           <ScrollView style={{}}>
             {pastQuestionSubjects.map((subject, index) => (
-              <View
+              <TouchableOpacity
                 key={index}
                 style={[
                   styles.fourthContainer,
@@ -74,9 +74,10 @@ const pastQuestion = () => {
                     marginBottom: 20,
                   },
                 ]}
+                onPress={() => router.push("/pastQuestion2")}
               >
                 <Text style={styles.thirdText}>{subject}</Text>
-              </View>
+              </TouchableOpacity>
             ))}
           </ScrollView>
         </View>

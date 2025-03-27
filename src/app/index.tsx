@@ -49,7 +49,7 @@ const index = () => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            router.push("/sigin");
+            router.push("/signin");
           }}
         >
           <Text style={styles.thirdText}>Next</Text>

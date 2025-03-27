@@ -38,7 +38,7 @@ const settings = () => {
         <TouchableOpacity onPress={() => router.back()}>
           <BackButton />
         </TouchableOpacity>
-        <BackButton />
+
         <Text style={styles.firstText}>Profile</Text>
       </View>
       <View style={styles.firstContainer}>

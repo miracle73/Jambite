@@ -115,7 +115,7 @@ const home = () => {
               <TouchableOpacity
                 style={styles.smallContainer}
                 onPress={() => {
-                  router.push("/notes");
+                  router.push("/bottomtab/notes");
                 }}
               >
                 <View
@@ -134,6 +134,9 @@ const home = () => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.smallContainer, { backgroundColor: "#EF0307" }]}
+                onPress={() => {
+                  router.push("/bottomtab/pastQuestion");
+                }}
               >
                 <View
                   style={{
@@ -182,6 +185,9 @@ const home = () => {
                   styles.smallContainer,
                   { backgroundColor: "#041C42B5" },
                 ]}
+                onPress={() => {
+                  router.push("/bottomtab/exam/postUtme");
+                }}
               >
                 <View
                   style={{
@@ -198,6 +204,9 @@ const home = () => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.smallContainer, { backgroundColor: "#1E1E1E" }]}
+                onPress={() => {
+                  router.push("/bottomtab/exam/cbt");
+                }}
               >
                 <View
                   style={{

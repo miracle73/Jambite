@@ -22,7 +22,7 @@ const activation = () => {
   const [code, setCode] = useState("");
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
+      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 50 }}
     >
       <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
@@ -115,7 +115,7 @@ const activation = () => {
           <Text style={[styles.thirdText, { marginTop: 0 }]}>
             Account Name: Ogbonnaya Daniel Kalu
           </Text>
-          <Text style={[styles.thirdText, { marginTop: 30 }]}>
+          <Text style={[styles.thirdText, { marginVertical: 30 }]}>
             After making the payment chat +234 8156604439 on whatsapp stating
             your Name and Screenshot of payment.
           </Text>

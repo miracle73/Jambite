@@ -25,7 +25,7 @@ const scholarship = () => {
   const [fullName, setFullName] = useState("");
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
+      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 50 }}
     >
       <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
@@ -38,7 +38,7 @@ const scholarship = () => {
             flex: 1,
           }}
         >
-          <View style={{ marginBottom: 30 }}>
+          <View style={{ marginBottom: 20 }}>
             <TouchableOpacity onPress={() => router.back()}>
               <BackArrow />
             </TouchableOpacity>
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginHorizontal: 50,
-    marginTop: 20,
+    marginVertical: 20,
   },
   thirdContainer: {
     backgroundColor: "#D9D9D9",
