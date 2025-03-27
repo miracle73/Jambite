@@ -89,7 +89,7 @@ const pastQuestion2 = () => {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              router.push("/exercise");
+              router.push("/subjectPastQuestion");
             }}
           >
             <Text style={styles.sixthText}>Begin</Text>

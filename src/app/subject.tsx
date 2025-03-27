@@ -68,7 +68,7 @@ const subject = () => {
 
           <ScrollView style={{}}>
             {topics.map((topic, index) => (
-              <View
+              <TouchableOpacity
                 key={index}
                 style={[
                   styles.fourthContainer,
@@ -76,9 +76,10 @@ const subject = () => {
                     marginBottom: 20,
                   },
                 ]}
+                onPress={() => router.push("/subjectNote")}
               >
                 <Text style={styles.thirdText}>{topic}</Text>
-              </View>
+              </TouchableOpacity>
             ))}
           </ScrollView>
         </View>

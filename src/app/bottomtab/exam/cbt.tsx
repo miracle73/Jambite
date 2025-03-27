@@ -115,7 +115,7 @@ const cbt = () => {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              router.push("/exercise");
+              router.push("/cbtQuestions");
             }}
           >
             <Text style={styles.sixthText}>Begin</Text>

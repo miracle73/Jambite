@@ -11,6 +11,7 @@ import React from "react";
 import {
   Activation,
   Facebook,
+  HomeSpecialIcon,
   Instagram,
   LaptopWithCursor,
   OpenBookIcon,
@@ -69,7 +70,61 @@ const home = () => {
               flexDirection: "row",
             }}
           >
-            <View></View>
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <View
+                style={{
+                  height: 40,
+                  width: 40,
+                  borderRadius: 30,
+                  borderWidth: 7,
+                  borderColor: "#0F065E",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  position: "relative",
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 15,
+                    color: "#0F065E",
+                    fontWeight: "800",
+                  }}
+                >
+                  18
+                </Text>
+              </View>
+              <View
+                style={{
+                  height: 11,
+                  width: 50,
+                  backgroundColor: "#0F065E",
+                  borderRadius: 10,
+                  position: "absolute",
+                  bottom: -5,
+                  left: -5,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 5,
+                    color: "#FFFFFF",
+                    fontWeight: "600",
+                    textAlign: "center",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  Before Examination
+                </Text>
+              </View>
+            </View>
             <View style={styles.firstContainer}>
               <View style={styles.innerContainer}>
                 <Text style={styles.firstText}>Study Progress</Text>

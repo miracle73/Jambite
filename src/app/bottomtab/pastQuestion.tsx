@@ -58,7 +58,7 @@ const pastQuestion = () => {
           <Text
             style={[
               styles.secondText,
-              { marginLeft: 10, paddingHorizontal: 20 },
+              { textAlign: "center", paddingHorizontal: 30, marginTop: 10 },
             ]}
           >
             Go through the previous questions to prepare fully for your exams

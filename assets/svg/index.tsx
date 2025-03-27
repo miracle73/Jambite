@@ -1019,3 +1019,15 @@ export const Home = (props: any) => (
     />
   </Svg>
 );
+export const HomeSpecialIcon = (props: any) => (
+  <Svg
+    width={59}
+    height={11}
+    viewBox="0 0 59 11"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <Rect width={59} height={11} rx={5.5} fill="#0F065E" />
+  </Svg>
+);

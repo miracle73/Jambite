@@ -144,6 +144,24 @@ const RootLayout = () => {
                 headerShown: false,
               }}
             />
+            <Stack.Screen
+              name="subjectNote"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="subjectPastQuestion"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="cbtQuestions"
+              options={{
+                headerShown: false,
+              }}
+            />
           </Stack>
           <Toast />
         </PersistGate>
