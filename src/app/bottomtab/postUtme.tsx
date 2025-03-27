@@ -5,16 +5,20 @@ import {
   TouchableOpacity,
   SafeAreaView,
   TextInput,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
-import RNPickerSelect from "react-native-picker-select";
 import React, { useState } from "react";
-import { BackArrow } from "../../assets/svg";
+import { BackArrow } from "../../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
-import { MaterialIcons } from "@expo/vector-icons";
+import DropDownPicker from "react-native-dropdown-picker";
 
 const postUtme = () => {
   const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [open2, setOpen2] = useState(false);
+  const [open3, setOpen3] = useState(false);
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedUniversity, setSelectedUniversity] = useState("");
   const [selectedFaculty, setSelectedFaculty] = useState("");
@@ -47,9 +51,13 @@ const postUtme = () => {
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
     >
-      <KeyboardAwareScrollView
+      {/* <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
+      > */}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <View
           style={{
@@ -59,7 +67,9 @@ const postUtme = () => {
           }}
         >
           <View style={{ marginBottom: 70 }}>
-            <BackArrow />
+            <TouchableOpacity onPress={() => router.back()}>
+              <BackArrow />
+            </TouchableOpacity>
           </View>
           <Text style={[styles.firstText, { textAlign: "center" }]}>
             POST UTME
@@ -68,56 +78,44 @@ const postUtme = () => {
             Study and prepare ahead for
           </Text>
           <View style={styles.firstContainer}>
-            <RNPickerSelect
-              onValueChange={(value) => setSelectedUniversity(value)}
-              items={university}
-              placeholder={{ label: "Select University", value: null }}
-              useNativeAndroidPickerStyle={false}
-              style={pickerSelectStyles}
+            <DropDownPicker
+              open={open}
               value={selectedUniversity}
-              Icon={() => (
-                <MaterialIcons
-                  name="keyboard-arrow-down"
-                  size={24}
-                  color="#0F065E"
-                  style={{ alignSelf: "center" }}
-                />
-              )}
+              items={university}
+              setOpen={setOpen}
+              setValue={(value) => setSelectedUniversity(value)}
+              placeholder="Select University"
+              style={pickerSelectStyles.inputIOS}
+              dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
             />
-            <View style={{ marginTop: 20 }} />
-            <RNPickerSelect
-              onValueChange={(value) => setSelectedFaculty(value)}
-              items={faculty}
-              placeholder={{ label: "Select Faculty", value: null }}
-              useNativeAndroidPickerStyle={false}
-              style={pickerSelectStyles}
-              value={selectedFaculty}
-              Icon={() => (
-                <MaterialIcons
-                  name="keyboard-arrow-down"
-                  size={24}
-                  color="#0F065E"
-                  style={{ alignSelf: "center" }}
-                />
-              )}
-            />
-            <View style={{ marginTop: 20 }} />
-            <RNPickerSelect
-              onValueChange={(value) => setSelectedTime(value)}
-              items={time}
-              placeholder={{ label: "Select Time", value: null }}
-              useNativeAndroidPickerStyle={false}
-              style={pickerSelectStyles}
-              value={selectedTime}
-              Icon={() => (
-                <MaterialIcons
-                  name="keyboard-arrow-down"
-                  size={24}
-                  color="#0F065E"
-                  style={{ alignSelf: "center" }}
-                />
-              )}
-            />
+
+            <View style={[{ marginTop: 30 }, open && { zIndex: -20 }]}>
+              <DropDownPicker
+                open={open2}
+                value={selectedFaculty}
+                items={faculty}
+                setOpen={setOpen2}
+                setValue={(value) => setSelectedFaculty(value)}
+                placeholder="Select Faculty"
+                style={pickerSelectStyles.inputIOS}
+                dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
+              />
+            </View>
+
+            <View
+              style={[{ marginTop: 30 }, (open || open2) && { zIndex: -20 }]}
+            >
+              <DropDownPicker
+                open={open2}
+                value={selectedTime}
+                items={time}
+                setOpen={setOpen2}
+                setValue={(value) => setSelectedTime(value)}
+                placeholder="Select Time"
+                style={pickerSelectStyles.inputIOS}
+                dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
+              />
+            </View>
           </View>
           <TouchableOpacity
             style={styles.button}
@@ -128,7 +126,7 @@ const postUtme = () => {
             <Text style={styles.sixthText}>Begin</Text>
           </TouchableOpacity>
         </View>
-      </KeyboardAwareScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

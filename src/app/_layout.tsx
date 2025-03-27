@@ -71,23 +71,12 @@ const RootLayout = () => {
               }}
             />
             <Stack.Screen
-              name="settings"
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
               name="home"
               options={{
                 headerShown: false,
               }}
             />
-            <Stack.Screen
-              name="notes"
-              options={{
-                headerShown: false,
-              }}
-            />
+
             <Stack.Screen
               name="exercise"
               options={{
@@ -136,12 +125,7 @@ const RootLayout = () => {
                 headerShown: false,
               }}
             />
-            <Stack.Screen
-              name="pastQuestion"
-              options={{
-                headerShown: false,
-              }}
-            />
+
             <Stack.Screen
               name="pastQuestion2"
               options={{
@@ -149,19 +133,13 @@ const RootLayout = () => {
               }}
             />
             <Stack.Screen
-              name="postUtme"
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="cbt"
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
               name="subject"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="bottomtab"
               options={{
                 headerShown: false,
               }}

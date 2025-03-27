@@ -924,3 +924,66 @@ export const TelegramSocials = (props: any) => (
     </Defs>
   </Svg>
 );
+export const SettingsIcon = (props: any) => (
+  <Svg
+    width={24}
+    height={23}
+    viewBox="0 0 24 23"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <Rect width={24} height={23} fill="#0F065E" />
+    <Path
+      d="M5 21V20C5 17.7909 6.79087 16 9 16H15C17.2091 16 19 17.7909 19 20V21H5ZM12 12C9.23858 12 7 9.76142 7 7C7 4.23857 9.23857 2 12 2C14.7614 2 17 4.23858 17 7C17 9.76141 14.7614 12 12 12Z"
+      fill="white"
+      stroke="white"
+      strokeWidth={2}
+    />
+  </Svg>
+);
+export const NotesIcon = (props: any) => (
+  <Svg
+    width={24}
+    height={24}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <Path
+      d="M21 21H13V6C13 4.34315 14.3431 3 16 3H21C21.5523 3 22 3.44772 22 4V20C22 20.5523 21.5523 21 21 21ZM11 21H3C2.44772 21 2 20.5523 2 20V4C2 3.44772 2.44772 3 3 3H8C9.65685 3 11 4.34315 11 6V21ZM11 21H13V23H11V21Z"
+      fill="#FFF9F9"
+    />
+  </Svg>
+);
+export const CBTIcon = (props: any) => (
+  <Svg
+    width={24}
+    height={24}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlnsXlink="http://www.w3.org/1999/xlink"
+    {...props}
+  >
+    <Rect width={24} height={24} fill="url(#pattern0_692_265)" />
+    <Defs>
+      <Pattern
+        id="pattern0_692_265"
+        patternContentUnits="objectBoundingBox"
+        width={1}
+        height={1}
+      >
+        <Use xlinkHref="#image0_692_265" transform="scale(0.01)" />
+      </Pattern>
+      <Image
+        id="image0_692_265"
+        width={100}
+        height={100}
+        preserveAspectRatio="none"
+        xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAC4klEQVR4nO3dPWsUQQDG8QNttBUFwa8gaqW1sZNYma/gS5tPICqmUrD0pVcCYicqCFYptUgES0Vib2GaXPzLminO6O3M7s7dPjv3/OHKzNzO7ybJ5MLtaOScc84555xzggEngevAQ+A5sO4HKWvwLKzZtWoNc0CcAJ4CY1zXdoHHwPG2GKeBr52fhjvYl2pt23yL+vbPUC5X34FTTUBeZpvaTetFKsbZqUO4nP0CzqSA3M06ravrdgrI69ohXM5epYB8jAzyyWcQUs9h1VrV9SEFZCsyyK3oIO5P1VpF1nJrFMsg+TKIWAYRyyBiGUQsg4hlkJYBd4DzMxjXv/Y2DbgXzgQ/gAuZxzZISwxmgWKQbhjZUQzSHSMrikHyYGRDMUgkYI30fgIXO87nH+oqGGFOg6hghHkNooIR5jaICkaY3yAqGMWBAMc6fO39vjGKAgGuhnPApTnsjKXZXEUhIOxjVP+YXLXTBEUJowgQ/sagCYoaxuBBpmAkoShiDBokglGLoooxWBDgXALGfxcUeIDAb1NFgbR4le9UO0V5ZwwepMWrfay8M4oACXOvkbdedkYxIJlResUoBiQTSu8YRYF0RJHAKA6kJYoMRpEgDVGkMIoFSUSRwygaJIIiiVE8yBQUWYyFADmAIo2xMCATKL38OaRJCwMylAwilkHEMohYBhHLIGIZRCyDiGUQsQxSKMhmZJDqk9JW/CBlDaq1qmszBeR9ZBCXr3cpIE8yTujqe5QCciUyiMvXcgrIoYRP03Td+wwcjoIElCXfEWGm7TZ+Pwe4CezN9nktZHvAjUYYEyjLwHbfV1BQ1R0nLrfCmEA5GnbL24Djm7ukNw5r9qbaFcCRUQmxf8jq2krf11FMGEQrDKIVBtEKg2iFQbTCIFphkLkv+Grk1kEbGc4hG5E5Vud82bolvLM2j9b7XgeZDCKWQcQyiFgGEcsgYhlkeOeQ9Tk8fA5xzjnnnHPOjRax3/xtoNmEkwNoAAAAAElFTkSuQmCC"
+      />
+    </Defs>
+  </Svg>
+);

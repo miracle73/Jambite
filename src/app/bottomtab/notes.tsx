@@ -9,14 +9,18 @@ import {
   TextInput,
 } from "react-native";
 import React, { useState } from "react";
-import { B, BackArrow, M } from "../../assets/svg";
+import { B, BackArrow, M } from "../../../assets/svg";
 import RNPickerSelect from "react-native-picker-select";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import DropDownPicker from "react-native-dropdown-picker";
 
 const notes = () => {
   const router = useRouter();
   const [selectedText, setSelectedText] = useState("Subjects");
+  const [open, setOpen] = useState(false);
+  const [open2, setOpen2] = useState(false);
+  const [open3, setOpen3] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedTopic, setSelectedTopic] = useState("");
   const subjects = [
@@ -62,7 +66,9 @@ const notes = () => {
             paddingBottom: 20,
           }}
         >
-          <BackArrow />
+          <TouchableOpacity onPress={() => router.back()}>
+            <BackArrow />
+          </TouchableOpacity>
           <Text
             style={{
               fontSize: 15,
@@ -157,39 +163,28 @@ const notes = () => {
             <Text style={styles.fourthText}>Solve Word problem questions</Text>
             <Text style={styles.fifthText}>Solve Word problem questions</Text>
             <View style={styles.thirdContainer}>
-              <RNPickerSelect
-                onValueChange={(value) => setSelectedSubject(value)}
-                items={subjects}
-                placeholder={{ label: "Select Subject", value: null }}
-                useNativeAndroidPickerStyle={false}
-                style={pickerSelectStyles}
+              <DropDownPicker
+                open={open}
                 value={selectedSubject}
-                Icon={() => (
-                  <MaterialIcons
-                    name="keyboard-arrow-down"
-                    size={24}
-                    color="#0F065E"
-                    style={{ alignSelf: "center" }}
-                  />
-                )}
+                items={subjects}
+                setOpen={setOpen}
+                setValue={(value) => setSelectedSubject(value)}
+                placeholder="Select Subject"
+                style={pickerSelectStyles.inputIOS}
+                dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
               />
-              <View style={{ marginTop: 20 }} />
-              <RNPickerSelect
-                onValueChange={(value) => setSelectedTopic(value)}
-                items={topics}
-                placeholder={{ label: "Select Topic", value: null }}
-                useNativeAndroidPickerStyle={false}
-                style={pickerSelectStyles}
-                value={selectedTopic}
-                Icon={() => (
-                  <MaterialIcons
-                    name="keyboard-arrow-down"
-                    size={24}
-                    color="#0F065E"
-                    style={{ alignSelf: "center" }}
-                  />
-                )}
-              />
+              <View style={[{ marginTop: 30 }, open && { zIndex: -20 }]}>
+                <DropDownPicker
+                  open={open2}
+                  value={selectedTopic}
+                  items={topics}
+                  setOpen={setOpen2}
+                  setValue={(value) => setSelectedTopic(value)}
+                  placeholder="Select Topic"
+                  style={pickerSelectStyles.inputIOS}
+                  dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
+                />
+              </View>
             </View>
             <TouchableOpacity
               style={styles.button}

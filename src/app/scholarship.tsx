@@ -18,6 +18,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useRouter } from "expo-router";
 
 const scholarship = () => {
+  const router = useRouter();
   const [regNumber, setRegNumber] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
@@ -38,7 +39,9 @@ const scholarship = () => {
           }}
         >
           <View style={{ marginBottom: 30 }}>
-            <BackArrow />
+            <TouchableOpacity onPress={() => router.back()}>
+              <BackArrow />
+            </TouchableOpacity>
           </View>
           <Text style={[styles.firstText, { textAlign: "center" }]}>
             Jambite Scholarship

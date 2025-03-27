@@ -8,7 +8,7 @@ import {
   TextInput,
 } from "react-native";
 import React, { useState } from "react";
-import { BackArrow } from "../../assets/svg";
+import { BackArrow } from "../../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
 
@@ -47,7 +47,9 @@ const pastQuestion = () => {
               flexDirection: "row",
             }}
           >
-            <BackArrow />
+            <TouchableOpacity onPress={() => router.back()}>
+              <BackArrow />
+            </TouchableOpacity>
             <Text style={[styles.firstText, { textAlign: "center" }]}>
               PAST QUESTIONS
             </Text>

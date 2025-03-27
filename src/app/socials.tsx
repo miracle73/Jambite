@@ -18,6 +18,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useRouter } from "expo-router";
 
 const socials = () => {
+  const router = useRouter();
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
@@ -34,7 +35,9 @@ const socials = () => {
           }}
         >
           <View style={{ marginBottom: 70 }}>
-            <BackArrow />
+            <TouchableOpacity onPress={() => router.back()}>
+              <BackArrow />
+            </TouchableOpacity>
           </View>
           <Text style={[styles.firstText, { textAlign: "center" }]}>
             Our Socials

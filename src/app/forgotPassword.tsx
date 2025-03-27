@@ -32,7 +32,9 @@ const forgotPassword = () => {
           }}
         >
           <View style={{ marginBottom: 100 }}>
-            <BackArrow />
+            <TouchableOpacity onPress={() => router.back()}>
+              <BackArrow />
+            </TouchableOpacity>
           </View>
           <View style={styles.container}>
             <Text style={styles.secondText}>Forgot Password</Text>

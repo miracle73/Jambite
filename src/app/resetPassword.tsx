@@ -33,7 +33,9 @@ const resetPassword = () => {
           }}
         >
           <View style={{ marginBottom: 100 }}>
-            <BackArrow />
+            <TouchableOpacity onPress={() => router.back()}>
+              <BackArrow />
+            </TouchableOpacity>
           </View>
           <View style={styles.container}>
             <Text style={styles.secondText}>Reset Password</Text>

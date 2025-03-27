@@ -13,6 +13,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useRouter } from "expo-router";
 
 const subject = () => {
+  const router = useRouter();
   const topics = [
     "ALGEBRA",
     "GEOMETRY",
@@ -47,7 +48,10 @@ const subject = () => {
               flexDirection: "row",
             }}
           >
-            <BackArrow />
+            <TouchableOpacity onPress={() => router.back()}>
+              <BackArrow />
+            </TouchableOpacity>
+
             <Text style={[styles.firstText, { textAlign: "center" }]}>
               MATHEMATICS
             </Text>

@@ -34,7 +34,9 @@ const editProfile = () => {
           }}
         >
           <View style={{ marginBottom: 50 }}>
-            <BackArrow />
+            <TouchableOpacity onPress={() => router.back()}>
+              <BackArrow />
+            </TouchableOpacity>
           </View>
           <View style={styles.container}>
             <Text style={styles.secondText}>Edit Profile</Text>

@@ -18,6 +18,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useRouter } from "expo-router";
 
 const about = () => {
+  const router = useRouter();
   const [message, setMessage] = useState("");
   const [topic, setTopic] = useState("");
   const [email, setEmail] = useState("");
@@ -45,7 +46,10 @@ const about = () => {
               alignItems: "center",
             }}
           >
-            <BackArrow />
+            <TouchableOpacity onPress={() => router.back()}>
+              <BackArrow />
+            </TouchableOpacity>
+
             <TouchableOpacity style={styles.secondContainer}>
               <Text
                 style={{ color: "#FFFFFF", fontSize: 15, fontWeight: "600" }}

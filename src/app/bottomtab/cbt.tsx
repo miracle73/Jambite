@@ -4,20 +4,24 @@ import {
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
-  TextInput,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
-import RNPickerSelect from "react-native-picker-select";
+import DropDownPicker from "react-native-dropdown-picker";
 import React, { useState } from "react";
-import { BackArrow } from "../../assets/svg";
+import { BackArrow } from "../../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
-import { MaterialIcons } from "@expo/vector-icons";
 
 const cbt = () => {
   const router = useRouter();
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
+  const [open, setOpen] = useState(false);
+  const [secondOpen, setSecondOpen] = useState(false);
+  const [thirdOpen, setThirdOpen] = useState(false);
+
   const year = [
     { label: "2020", value: "2020" },
     { label: "2021", value: "2021" },
@@ -40,9 +44,13 @@ const cbt = () => {
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
     >
-      <KeyboardAwareScrollView
+      {/* <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
+      > */}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <View
           style={{
@@ -52,7 +60,9 @@ const cbt = () => {
           }}
         >
           <View style={{ marginBottom: 70 }}>
-            <BackArrow />
+            <TouchableOpacity onPress={() => router.back()}>
+              <BackArrow />
+            </TouchableOpacity>
           </View>
           <Text style={[styles.firstText, { textAlign: "center" }]}>
             CBT MODE
@@ -61,56 +71,46 @@ const cbt = () => {
             Select your 4 jamb subjects
           </Text>
           <View style={styles.firstContainer}>
-            <RNPickerSelect
-              onValueChange={(value) => setSelectedYear(value)}
-              items={year}
-              placeholder={{ label: "Select Year", value: null }}
-              useNativeAndroidPickerStyle={false}
-              style={pickerSelectStyles}
+            <DropDownPicker
+              open={open}
               value={selectedYear}
-              Icon={() => (
-                <MaterialIcons
-                  name="keyboard-arrow-down"
-                  size={24}
-                  color="#0F065E"
-                  style={{ alignSelf: "center" }}
-                />
-              )}
+              items={year}
+              setOpen={setOpen}
+              setValue={(value) => setSelectedYear(value)}
+              placeholder="Select Year"
+              style={pickerSelectStyles.inputIOS}
+              dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
             />
-            <View style={{ marginTop: 20 }} />
-            <RNPickerSelect
-              onValueChange={(value) => setSelectedTime(value)}
-              items={time}
-              placeholder={{ label: "Select Time(Hours/Minutes)", value: null }}
-              useNativeAndroidPickerStyle={false}
-              style={pickerSelectStyles}
-              value={selectedTime}
-              Icon={() => (
-                <MaterialIcons
-                  name="keyboard-arrow-down"
-                  size={24}
-                  color="#0F065E"
-                  style={{ alignSelf: "center" }}
-                />
-              )}
-            />
-            <View style={{ marginTop: 20 }} />
-            <RNPickerSelect
-              onValueChange={(value) => setSelectedSubject(value)}
-              items={subjects}
-              placeholder={{ label: "Select Subject", value: null }}
-              useNativeAndroidPickerStyle={false}
-              style={pickerSelectStyles}
-              value={selectedSubject}
-              Icon={() => (
-                <MaterialIcons
-                  name="keyboard-arrow-down"
-                  size={24}
-                  color="#0F065E"
-                  style={{ alignSelf: "center" }}
-                />
-              )}
-            />
+
+            <View style={[{ marginTop: 30 }, open && { zIndex: -20 }]}>
+              <DropDownPicker
+                open={secondOpen}
+                value={selectedTime}
+                items={time}
+                setOpen={setSecondOpen}
+                setValue={(value) => setSelectedTime(value)}
+                placeholder="Select Time(Hours/Minutes)"
+                style={pickerSelectStyles.inputIOS}
+                dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
+              />
+            </View>
+            <View
+              style={[
+                { marginTop: 30 },
+                (secondOpen || open) && { zIndex: -20 },
+              ]}
+            >
+              <DropDownPicker
+                open={thirdOpen}
+                value={selectedSubject}
+                items={subjects}
+                setOpen={setThirdOpen}
+                setValue={(value) => setSelectedSubject(value)}
+                placeholder="Select Subject"
+                style={pickerSelectStyles.inputIOS}
+                dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
+              />
+            </View>
           </View>
           <TouchableOpacity
             style={styles.button}
@@ -121,7 +121,7 @@ const cbt = () => {
             <Text style={styles.sixthText}>Begin</Text>
           </TouchableOpacity>
         </View>
-      </KeyboardAwareScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

@@ -18,6 +18,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useRouter } from "expo-router";
 
 const activation = () => {
+  const router = useRouter();
   const [code, setCode] = useState("");
   return (
     <SafeAreaView
@@ -35,7 +36,9 @@ const activation = () => {
           }}
         >
           <View style={{ marginBottom: 30 }}>
-            <BackArrow />
+            <TouchableOpacity onPress={() => router.back()}>
+              <BackArrow />
+            </TouchableOpacity>
           </View>
           <Text style={[styles.firstText, { marginRight: 5 }]}>
             Activate App

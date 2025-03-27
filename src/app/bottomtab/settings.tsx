@@ -15,10 +15,12 @@ import {
   AboutUs,
   DeleteIcon,
   SignOutIcon,
-} from "../../assets/svg";
-import LogoutModal from "../components/modals/LogoutModal";
+} from "../../../assets/svg";
+import LogoutModal from "../../components/modals/LogoutModal";
+import { useRouter } from "expo-router";
 
 const settings = () => {
+  const router = useRouter();
   const [modal, setModal] = useState(false);
   return (
     <SafeAreaView
@@ -33,6 +35,9 @@ const settings = () => {
           alignItems: "center",
         }}
       >
+        <TouchableOpacity onPress={() => router.back()}>
+          <BackButton />
+        </TouchableOpacity>
         <BackButton />
         <Text style={styles.firstText}>Profile</Text>
       </View>

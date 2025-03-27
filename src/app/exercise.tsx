@@ -38,7 +38,10 @@ const exercise = () => {
               paddingBottom: 20,
             }}
           >
-            <BackArrow />
+            <TouchableOpacity onPress={() => router.back()}>
+              <BackArrow />
+            </TouchableOpacity>
+
             <Text
               style={{
                 fontSize: 15,
