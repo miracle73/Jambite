@@ -22,12 +22,16 @@ interface LoginRequestBody {
   username: string;
   grant_type: string;
   password: string;
+  scope: string;
+  client_id: string;
+  client_secret: string;
 }
 
 interface LoginResponse {
   access_token: string;
   token_type: string;
   expires: string;
+  message: string;
 }
 
 interface InstitutionsResponse {

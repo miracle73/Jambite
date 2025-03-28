@@ -6,20 +6,81 @@ import {
   SafeAreaView,
   TextInput,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import { JambiteText, SecondJambiteText } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
+import {
+  useCreateUserMutation,
+  useRequestOtpMutation,
+} from "../components/services/userService";
+import { setUserInfo } from "../components/redux/slices/userSlice";
+import { useAppDispatch, useAppSelector } from "../components/redux/store";
+import Toast from "react-native-toast-message";
 
 const signup = () => {
   const [email, setEmail] = useState("");
+  const dispatch = useAppDispatch();
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
   const [institution, setInstitution] = useState("");
   const [isSignUp, setIsSignUp] = useState(true);
   const router = useRouter();
+  const [createUser] = useCreateUserMutation();
+  const [requestOtp] = useRequestOtpMutation();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSignUp = async () => {
+    setIsLoading(true);
+    try {
+      const createUserResponse = await createUser({
+        email,
+        full_name: name,
+        institution_id: institution,
+        password,
+        phone_number: number,
+        role: "user",
+      }).unwrap();
+
+      dispatch(
+        setUserInfo({
+          full_name: name,
+          email,
+          phone_number: number,
+          password,
+        })
+      );
+
+      console.log(createUserResponse);
+      if (createUserResponse.access_token) {
+        const requestOtpResponse = await requestOtp({ email }).unwrap();
+        console.log("OTP Request Success:", requestOtpResponse);
+        Toast.show({
+          type: "success",
+          text1: "Success",
+          text2: requestOtpResponse.message,
+        });
+        router.push("/verification");
+      }
+    } catch (error) {
+      console.error("Error during sign up:", error);
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Error during sign up",
+      });
+    } finally {
+      setIsLoading(false);
+      setEmail("");
+      setName("");
+      setInstitution("");
+      setNumber("");
+      setPassword(" ");
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
@@ -148,11 +209,12 @@ const signup = () => {
                 value={password}
               />
             </View>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => router.push("/verification")}
-            >
-              <Text style={styles.thirdText}>SIGN UP</Text>
+            <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+              {isLoading ? (
+                <ActivityIndicator color="#FFFFFF" size={14} />
+              ) : (
+                <Text style={styles.thirdText}>SIGN UP</Text>
+              )}
             </TouchableOpacity>
             <Text style={[styles.fourthText, { textAlign: "center" }]}>
               Powered by Ited Softwares

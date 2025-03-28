@@ -13,30 +13,60 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useRouter } from "expo-router";
 import FirstImage from "../../assets/images/OneTimePassword.png";
 import VerificationModal from "../components/modals/VerificationModal";
+import { useVerifyOtpMutation } from "../components/services/userService";
+import { RootState } from "../components/redux/store";
+import { useSelector } from "react-redux";
+import Toast from "react-native-toast-message";
 
 const Verification = () => {
   const [code, setCode] = useState(["", "", "", "", ""]);
   const router = useRouter();
   const [modal, setModal] = useState(false);
-
-  // Refs for TextInput components
+  const [verifyOtp] = useVerifyOtpMutation();
   const inputRefs = useRef<(TextInput | null)[]>([]);
+  const user = useSelector((state: RootState) => state.user.user);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (text: any, index: number) => {
     const newCode = [...code];
     newCode[index] = text;
     setCode(newCode);
 
-    // Move to next input box if current one is filled
     if (text.length === 1 && index < code.length - 1) {
       inputRefs.current[index + 1]?.focus();
     }
   };
 
-  const handleSubmit = () => {
-    // Handle the submission of the pin code
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    try {
+      const verificationResponse = verifyOtp({
+        email: user.email,
+        new_password: user.password,
+        otp_code: code.join(""),
+      });
+      console.log(verificationResponse);
+      if (verificationResponse.message) {
+        Toast.show({
+          type: "success",
+          text1: "Success",
+          text2: verificationResponse.message,
+        });
+        setModal(true);
+      }
+    } catch (error) {
+      console.error("Error verifying code:", error);
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Error verifying code",
+      });
+    } finally {
+      setCode(["", "", "", "", ""]);
+      setIsLoading(false);
+    }
+
     console.log("Submitted code:", code.join(""));
-    setModal(true);
   };
 
   return (

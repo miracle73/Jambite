@@ -5,17 +5,56 @@ import {
   TouchableOpacity,
   SafeAreaView,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import { JambiteText, SecondJambiteText } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
+import { useLoginMutation } from "../components/services/userService";
+import Toast from "react-native-toast-message";
 
 const signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSignIn, setIsSignIn] = useState(true);
   const router = useRouter();
+  const [login] = useLoginMutation();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSignIn = async () => {
+    setIsLoading(true);
+    try {
+      const LoginResponse = await login({
+        username: email,
+        grant_type: "password",
+        scope: "",
+        client_id: "string",
+        client_secret: "string",
+        password,
+      }).unwrap();
+      console.log(LoginResponse);
+      if (LoginResponse.access_token) {
+        Toast.show({
+          type: "success",
+          text1: "Success",
+          text2: LoginResponse.message,
+        });
+        router.push("/home");
+      }
+    } catch (error) {
+      console.error("Error during sign in:", error);
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Error during sign in",
+      });
+    } finally {
+      setIsLoading(false);
+      setEmail("");
+      setPassword(" ");
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
@@ -118,13 +157,12 @@ const signin = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => {
-                router.push("/home");
-              }}
-            >
-              <Text style={styles.thirdText}>Login</Text>
+            <TouchableOpacity style={styles.button} onPress={handleSignIn}>
+              {isLoading ? (
+                <ActivityIndicator color="#FFFFFF" size={14} />
+              ) : (
+                <Text style={styles.thirdText}>Login</Text>
+              )}
             </TouchableOpacity>
             <Text style={[styles.fourthText, { textAlign: "center" }]}>
               Powered by Ited Softwares

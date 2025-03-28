@@ -22,11 +22,11 @@ const VerificationModal = ({ setModal, modal }: VerificationModalProps) => {
   useEffect(() => {
     if (modal) {
       const timeout = setTimeout(() => {
-        setModal(false); // Close the modal
-        router.push("/signin"); // Navigate to signin
+        setModal(false);
+        router.push("/signin");
       }, 3000);
 
-      return () => clearTimeout(timeout); // Cleanup timeout on unmount
+      return () => clearTimeout(timeout);
     }
   }, [modal]);
 
