@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   TextInput,
   ActivityIndicator,
+  Image,
 } from "react-native";
 import React, { useState } from "react";
 import { JambiteText, SecondJambiteText } from "../../assets/svg";
@@ -13,6 +14,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useRouter } from "expo-router";
 import { useLoginMutation } from "../components/services/userService";
 import Toast from "react-native-toast-message";
+import HidePassword from "../../assets/images/hidepassword.png";
+import VisiblePassword from "../../assets/images/visiblePassword.png";
 
 const signin = () => {
   const [email, setEmail] = useState("");
@@ -21,6 +24,7 @@ const signin = () => {
   const router = useRouter();
   const [login] = useLoginMutation();
   const [isLoading, setIsLoading] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const handleSignIn = async () => {
     setIsLoading(true);
@@ -51,8 +55,9 @@ const signin = () => {
       });
     } finally {
       setIsLoading(false);
+      setIsPasswordVisible(false);
       setEmail("");
-      setPassword(" ");
+      setPassword("");
     }
   };
 
@@ -147,8 +152,17 @@ const signin = () => {
                 placeholderTextColor="#000000"
                 placeholder={"Password"}
                 onChangeText={(text) => setPassword(text)}
+                secureTextEntry={!isPasswordVisible}
                 value={password}
               />
+              <TouchableOpacity
+                onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+                style={{ position: "absolute", right: 15, top: 15 }}
+              >
+                <Image
+                  source={isPasswordVisible ? VisiblePassword : HidePassword}
+                />
+              </TouchableOpacity>
             </View>
             <View>
               <TouchableOpacity onPress={() => router.push("/forgotPassword")}>

@@ -7,6 +7,9 @@ import {
   TextInput,
   ScrollView,
   ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  Image,
 } from "react-native";
 import React, { useState } from "react";
 import { JambiteText, SecondJambiteText } from "../../assets/svg";
@@ -19,6 +22,10 @@ import {
 import { setUserInfo } from "../components/redux/slices/userSlice";
 import { useAppDispatch, useAppSelector } from "../components/redux/store";
 import Toast from "react-native-toast-message";
+import DropDownPicker from "react-native-dropdown-picker";
+import { useGetAllInstitutionsQuery } from "../components/services/userService";
+import HidePassword from "../../assets/images/hidepassword.png";
+import VisiblePassword from "../../assets/images/visiblePassword.png";
 
 const signup = () => {
   const [email, setEmail] = useState("");
@@ -27,11 +34,25 @@ const signup = () => {
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
   const [institution, setInstitution] = useState("");
+  const [institutions, setInstitutions] = useState();
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isSignUp, setIsSignUp] = useState(true);
   const router = useRouter();
   const [createUser] = useCreateUserMutation();
   const [requestOtp] = useRequestOtpMutation();
   const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const { data: institutionsData, isLoading: isInstitutionsLoading } =
+    useGetAllInstitutionsQuery();
+
+  const year =
+    institutionsData?.levels?.map((institution: any) => ({
+      label: institution.name,
+      value: institution.id,
+    })) || [];
+
+  console.log(year, 678);
 
   const handleSignUp = async () => {
     setIsLoading(true);
@@ -39,7 +60,7 @@ const signup = () => {
       const createUserResponse = await createUser({
         email,
         full_name: name,
-        institution_id: institution,
+        institution_id: institution.toString(),
         password,
         phone_number: number,
         role: "user",
@@ -84,9 +105,9 @@ const signup = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
-      <KeyboardAwareScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        showsVerticalScrollIndicator={false}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <View
           style={{ paddingHorizontal: 20, justifyContent: "center", flex: 1 }}
@@ -190,24 +211,38 @@ const signup = () => {
               />
             </View>
             <Text style={styles.fifthText}>PREFFERD INSTITUTION</Text>
-            <View style={styles.secondContainer}>
-              <TextInput
-                style={{ flex: 1, color: "#000000" }}
-                placeholderTextColor="#000000"
-                placeholder={"Your Institution"}
-                onChangeText={(text) => setInstitution(text)}
+            <View style={styles.firstContainer}>
+              <DropDownPicker
+                open={open}
                 value={institution}
+                items={year}
+                setOpen={setOpen}
+                setValue={(value) => setInstitution(value)}
+                placeholder="Select Institution"
+                style={pickerSelectStyles.inputIOS}
+                dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
               />
             </View>
-            <Text style={styles.fifthText}>PASSWORD</Text>
-            <View style={styles.secondContainer}>
+            <Text style={[styles.fifthText, open && { zIndex: -20 }]}>
+              PASSWORD
+            </Text>
+            <View style={[styles.secondContainer, open && { zIndex: -20 }]}>
               <TextInput
                 style={{ flex: 1, color: "#000000" }}
                 placeholderTextColor="#000000"
                 placeholder={"Password"}
                 onChangeText={(text) => setPassword(text)}
                 value={password}
+                secureTextEntry={!isPasswordVisible}
               />
+              <TouchableOpacity
+                onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+                style={{ position: "absolute", right: 15, top: 15 }}
+              >
+                <Image
+                  source={isPasswordVisible ? VisiblePassword : HidePassword}
+                />
+              </TouchableOpacity>
             </View>
             <TouchableOpacity style={styles.button} onPress={handleSignUp}>
               {isLoading ? (
@@ -221,12 +256,13 @@ const signup = () => {
             </Text>
           </ScrollView>
         </View>
-      </KeyboardAwareScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  firstContainer: {},
   transitionButton: {
     backgroundColor: "#0F065E",
     height: 30,
@@ -305,6 +341,61 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     textAlign: "left",
     marginTop: 15,
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    borderWidth: 0,
+    borderColor: "#0F065E",
+    color: "#000000",
+
+    alignSelf: "stretch",
+    backgroundColor: "#FFFFFF",
+
+    marginTop: 10,
+    borderRadius: 25,
+    elevation: 7,
+    shadowOffset: {
+      height: 5,
+      width: 5,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 4,
+    shadowColor: "#333333",
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingVertical: 8,
+    borderWidth: 0,
+    borderColor: "#0F065E",
+    color: "#000000",
+
+    alignSelf: "stretch",
+    backgroundColor: "#FFFFFF",
+
+    marginTop: 10,
+    borderRadius: 25,
+    elevation: 7,
+    shadowOffset: {
+      height: 5,
+      width: 5,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 4,
+    shadowColor: "#333333",
+  },
+  dropDownContainer: {
+    borderColor: "#0F065E",
+  },
+  iconContainer: {
+    top: "50%",
+    right: 10,
+    transform: [{ translateY: -12 }],
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

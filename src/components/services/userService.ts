@@ -79,12 +79,28 @@ export const userApi = createApi({
         body,
       }),
     }),
+    // login: builder.mutation<LoginResponse, LoginRequestBody>({
+    //   query: (body) => ({
+    //     url: "auth/token",
+    //     method: "POST",
+    //     body,
+    //   }),
+    // }),
     login: builder.mutation<LoginResponse, LoginRequestBody>({
-      query: (body) => ({
-        url: "auth/token",
-        method: "POST",
-        body,
-      }),
+      query: (body) => {
+        const formData = new URLSearchParams();
+        Object.entries(body).forEach(([key, value]) => {
+          formData.append(key, value);
+        });
+        return {
+          url: "auth/token",
+          method: "POST",
+          body: formData,
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        };
+      },
     }),
     getAllInstitutions: builder.query<InstitutionsResponse, void>({
       query: () => ({

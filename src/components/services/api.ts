@@ -1,1 +1,1 @@
-export const BaseUrl = "https://sbsapp.com.ng";
+export const BaseUrl = "https://jambite.onrender.com";

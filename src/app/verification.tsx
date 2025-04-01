@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   TextInput,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useRef } from "react";
 import { JambiteText, SecondJambiteText } from "../../assets/svg";
@@ -13,7 +14,10 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useRouter } from "expo-router";
 import FirstImage from "../../assets/images/OneTimePassword.png";
 import VerificationModal from "../components/modals/VerificationModal";
-import { useVerifyOtpMutation } from "../components/services/userService";
+import {
+  useVerifyOtpMutation,
+  useRequestOtpMutation,
+} from "../components/services/userService";
 import { RootState } from "../components/redux/store";
 import { useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
@@ -26,6 +30,7 @@ const Verification = () => {
   const inputRefs = useRef<(TextInput | null)[]>([]);
   const user = useSelector((state: RootState) => state.user.user);
   const [isLoading, setIsLoading] = useState(false);
+  const [requestOtp] = useRequestOtpMutation();
 
   const handleChange = (text: any, index: number) => {
     const newCode = [...code];
@@ -37,16 +42,41 @@ const Verification = () => {
     }
   };
 
+  const handleResend = async () => {
+    setIsLoading(true);
+    try {
+      const requestOtpResponse = await requestOtp({
+        email: user.email,
+      }).unwrap();
+      console.log("OTP Request Success:", requestOtpResponse);
+      Toast.show({
+        type: "success",
+        text1: "Success",
+        text2: requestOtpResponse.message,
+      });
+      router.push("/verification");
+    } catch (error) {
+      console.error("Error sending otp", error);
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "There was an error sending otp",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      const verificationResponse = verifyOtp({
+      const verificationResponse = await verifyOtp({
         email: user.email,
         new_password: user.password,
         otp_code: code.join(""),
-      });
+      }).unwrap();
       console.log(verificationResponse);
-      if (verificationResponse.message) {
+      if (verificationResponse && verificationResponse.message) {
         Toast.show({
           type: "success",
           text1: "Success",
@@ -127,14 +157,22 @@ const Verification = () => {
           <View>
             <TouchableOpacity
               style={styles.secondButton}
-              onPress={handleSubmit}
+              onPress={handleResend}
             >
-              <Text style={[styles.thirdText, { color: "#B5B2B2" }]}>
-                Resend
-              </Text>
+              {isLoading ? (
+                <ActivityIndicator color="#FFFFFF" size={14} />
+              ) : (
+                <Text style={[styles.thirdText, { color: "#B5B2B2" }]}>
+                  Resend
+                </Text>
+              )}
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-              <Text style={styles.thirdText}>Submit</Text>
+              {isLoading ? (
+                <ActivityIndicator color="#FFFFFF" size={14} />
+              ) : (
+                <Text style={styles.thirdText}>Submit</Text>
+              )}
             </TouchableOpacity>
           </View>
         </View>
