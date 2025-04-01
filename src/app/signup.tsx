@@ -52,8 +52,6 @@ const signup = () => {
       value: institution.id,
     })) || [];
 
-  console.log(year, 678);
-
   const handleSignUp = async () => {
     setIsLoading(true);
     try {
