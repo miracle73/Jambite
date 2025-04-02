@@ -162,6 +162,12 @@ const RootLayout = () => {
                 headerShown: false,
               }}
             />
+            <Stack.Screen
+              name="forgotPasswordVerification"
+              options={{
+                headerShown: false,
+              }}
+            />
           </Stack>
           <Toast />
         </PersistGate>

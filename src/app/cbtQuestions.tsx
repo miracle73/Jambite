@@ -20,6 +20,39 @@ import { useRouter } from "expo-router";
 const cbtQuestion = () => {
   const router = useRouter();
 
+  const [currentQuestion, setCurrentQuestion] = useState(1);
+  const [selectedAnswers, setSelectedAnswers] = useState<
+    Record<number, string>
+  >({});
+  const [answeredQuestions, setAnsweredQuestions] = useState<Set<number>>(
+    new Set()
+  );
+
+  // Handle option selection
+  const handleOptionSelect = (option: string): void => {
+    setSelectedAnswers((prev: Record<number, string>) => ({
+      ...prev,
+      [currentQuestion]: option,
+    }));
+    setAnsweredQuestions(
+      (prev) => new Set([...(prev as Set<number>), currentQuestion])
+    );
+  };
+
+  // Navigation handlers
+  const handlePrevious = () => {
+    setCurrentQuestion((prev) => Math.max(1, prev - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentQuestion((prev) => Math.min(50, prev + 1));
+  };
+
+  // Question number click handler
+  const handleQuestionClick = (questionNumber: number): void => {
+    setCurrentQuestion(questionNumber);
+  };
+
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
@@ -65,7 +98,7 @@ const cbtQuestion = () => {
             </TouchableOpacity>
           </View>
           <View style={styles.firstContainer}>
-            <Text style={styles.secondText}>Question 1</Text>
+            <Text style={styles.secondText}>Question {currentQuestion}</Text>
             <Text style={styles.thirdText}>
               What is the main aim of Cyber Security Education to
               infrastructure?
@@ -77,7 +110,25 @@ const cbtQuestion = () => {
               paddingHorizontal: 10,
             }}
           >
-            <View style={styles.thirdContainer}>
+            {["A", "B", "C", "D"].map((option) => (
+              <TouchableOpacity
+                key={option}
+                style={styles.thirdContainer}
+                onPress={() => handleOptionSelect(option)}
+              >
+                <Text style={styles.fourthText}>{option}</Text>
+                <View
+                  style={[
+                    styles.fourthContainer,
+                    selectedAnswers[currentQuestion] === option
+                      ? styles.selectedOption
+                      : {},
+                  ]}
+                />
+                <Text style={styles.fourthText}>Important and Resillence</Text>
+              </TouchableOpacity>
+            ))}
+            {/* <View style={styles.thirdContainer}>
               <Text style={styles.fourthText}>A</Text>
               <View style={styles.fourthContainer}></View>
               <Text style={styles.fourthText}>Important and Resillence </Text>
@@ -96,13 +147,13 @@ const cbtQuestion = () => {
               <Text style={styles.fourthText}>D</Text>
               <View style={styles.fourthContainer}></View>
               <Text style={styles.fourthText}>Important and Resillence </Text>
-            </View>
+            </View> */}
           </View>
           <Text style={styles.fifthText}>
             fundatmentals of cyber security 2021
           </Text>
 
-          <Text style={styles.fourthText}>4/50</Text>
+          <Text style={styles.fourthText}>{currentQuestion}/50</Text>
           <View
             style={{
               height: 7,
@@ -116,11 +167,11 @@ const cbtQuestion = () => {
                 height: 7,
                 backgroundColor: "#0F065E",
                 borderRadius: 30,
-                width: "30%",
+                width: `${(currentQuestion / 50) * 100}%`,
               }}
-            ></View>
+            />
           </View>
-          <View
+          {/* <View
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
@@ -149,9 +200,77 @@ const cbtQuestion = () => {
                 Next
               </Text>
             </View>
+          </View> */}
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <TouchableOpacity
+              style={[
+                styles.firstButton,
+                currentQuestion === 1 ? styles.disabledButton : {},
+              ]}
+              onPress={handlePrevious}
+              disabled={currentQuestion === 1}
+            >
+              <Text
+                style={{
+                  fontSize: 20,
+                  color: currentQuestion === 1 ? "#D9D9D9" : "#0F065E",
+                  fontWeight: "700",
+                }}
+              >
+                Previous
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.secondButton,
+                currentQuestion === 50 ? styles.disabledButton : {},
+              ]}
+              onPress={handleNext}
+              disabled={currentQuestion === 50}
+            >
+              <Text
+                style={{
+                  fontSize: 20,
+                  color: "#FFFFFF",
+                  fontWeight: "700",
+                }}
+              >
+                Next
+              </Text>
+            </TouchableOpacity>
           </View>
           <Text style={styles.sixthText}>Attempted Questions</Text>
           <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              justifyContent: "flex-start",
+              gap: 2,
+              alignItems: "center",
+            }}
+          >
+            {Array.from({ length: 50 }, (_, i) => i + 1).map((number) => (
+              <TouchableOpacity
+                key={number}
+                style={
+                  answeredQuestions.has(number)
+                    ? styles.shadedRoundedContainer
+                    : styles.roundedContainer
+                }
+                onPress={() => handleQuestionClick(number)}
+              >
+                <Text style={styles.seventhText}>{number}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          {/* <View
             style={{
               flexDirection: "row",
               flexWrap: "wrap",
@@ -172,7 +291,7 @@ const cbtQuestion = () => {
                 <Text style={styles.seventhText}>{number}</Text>
               </View>
             ))}
-          </View>
+          </View> */}
         </View>
       </KeyboardAwareScrollView>
     </SafeAreaView>
@@ -180,6 +299,9 @@ const cbtQuestion = () => {
 };
 //
 const styles = StyleSheet.create({
+  selectedOption: {
+    backgroundColor: "#0F065E",
+  },
   roundedContainer: {
     borderWidth: 2,
     borderColor: "#0F065E",
@@ -189,6 +311,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "center",
+  },
+  disabledButton: {
+    opacity: 0.5,
   },
   shadedRoundedContainer: {
     backgroundColor: "#00052D9C",

@@ -5,11 +5,14 @@ import {
   TouchableOpacity,
   SafeAreaView,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import { BackArrow, JambiteText, SecondJambiteText } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
+import DropDownPicker from "react-native-dropdown-picker";
+import { useGetAllInstitutionsQuery } from "../components/services/userService";
 
 const editProfile = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -17,7 +20,27 @@ const editProfile = () => {
   const [fullName, setFullName] = useState("");
   const [institution, setInstitution] = useState("");
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
+  const handleSubmit = () => {
+    setLoading(true);
+    setFullName("");
+    setEmail("");
+    setInstitution("");
+    setLoading(false);
+  };
+
+  const { data: institutionsData, isLoading: isInstitutionsLoading } =
+    useGetAllInstitutionsQuery();
+
+  const year =
+    institutionsData?.levels?.map((institution: any) => ({
+      label: institution.name,
+      value: institution.id,
+    })) || [];
+
+  console.log(year, 5000);
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 50 }}
@@ -43,7 +66,7 @@ const editProfile = () => {
             <Text style={styles.firstText}>
               Update your details and get it saved
             </Text>
-            <View style={{ marginTop: 40 }} />
+            <View style={{ marginTop: 20 }} />
             <Text style={styles.fourthText}>FULL NAME</Text>
             <View style={styles.secondContainer}>
               <TextInput
@@ -83,23 +106,25 @@ const editProfile = () => {
             <Text style={[styles.fourthText, { marginTop: 25 }]}>
               PREFFERD INSTITUTION
             </Text>
-            <View style={styles.secondContainer}>
-              <TextInput
-                style={{ flex: 1, color: "#000000" }}
-                placeholderTextColor="#000000"
-                placeholder={""}
-                onChangeText={(text) => setInstitution(text)}
+            <View style={styles.firstContainer}>
+              <DropDownPicker
+                open={open}
                 value={institution}
+                items={year}
+                setOpen={setOpen}
+                setValue={(value) => setInstitution(value)}
+                placeholder="Select Institution"
+                style={pickerSelectStyles.inputIOS}
+                dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
               />
             </View>
 
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => {
-                router.push("/activation");
-              }}
-            >
-              <Text style={styles.thirdText}>Save</Text>
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+              {loading ? (
+                <ActivityIndicator color="#FFFFFF" size={14} />
+              ) : (
+                <Text style={styles.thirdText}>Save</Text>
+              )}
             </TouchableOpacity>
           </View>
         </View>
@@ -109,6 +134,7 @@ const editProfile = () => {
 };
 
 const styles = StyleSheet.create({
+  firstContainer: {},
   transitionButton: {
     backgroundColor: "#0F065E",
     height: 30,
@@ -178,6 +204,61 @@ const styles = StyleSheet.create({
     color: "#B5B2B2",
     fontWeight: "600",
     marginBottom: 10,
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    borderWidth: 0,
+    borderColor: "#0F065E",
+    color: "#000000",
+
+    alignSelf: "stretch",
+    backgroundColor: "#FFFFFF",
+
+    marginTop: 10,
+    borderRadius: 25,
+    elevation: 7,
+    shadowOffset: {
+      height: 5,
+      width: 5,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 4,
+    shadowColor: "#333333",
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingVertical: 8,
+    borderWidth: 0,
+    borderColor: "#0F065E",
+    color: "#000000",
+
+    alignSelf: "stretch",
+    backgroundColor: "#FFFFFF",
+
+    marginTop: 10,
+    borderRadius: 25,
+    elevation: 7,
+    shadowOffset: {
+      height: 5,
+      width: 5,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 4,
+    shadowColor: "#333333",
+  },
+  dropDownContainer: {
+    borderColor: "#0F065E",
+  },
+  iconContainer: {
+    top: "50%",
+    right: 10,
+    transform: [{ translateY: -12 }],
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

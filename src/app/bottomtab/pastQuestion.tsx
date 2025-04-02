@@ -7,23 +7,61 @@ import {
   ScrollView,
   TextInput,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BackArrow } from "../../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
+import {
+  useGetAllSubjectsQuery,
+  SubjectResponse1,
+} from "../../components/services/userService";
+import { RootState } from "../../components/redux/store";
+import { useSelector } from "react-redux";
+import Toast from "react-native-toast-message";
 
 const pastQuestion = () => {
   const router = useRouter();
-  const pastQuestionSubjects = [
-    "MATHEMATICS",
-    "ENGLISH LANGUAGE",
-    "CHEMISTRY",
-    "BIOLOGY",
-    "PHYSICS",
-    "LITERATURE IN ENGLISH",
-    "CIVIC EDUCATION",
-    "ECONOMICS",
-  ];
+  const token = useSelector((state: RootState) => state.auth.token);
+  const [pastQuestionSubjects, setPastQuestionSubjects] = useState<
+    SubjectResponse1[]
+  >([]);
+  const { data, isSuccess, isLoading, isError } = useGetAllSubjectsQuery({
+    token: token || "",
+  });
+
+  useEffect(() => {
+    if (!token) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Access token is invalid, go back and login again",
+      });
+      router.push("/signin");
+      return;
+    }
+
+    if (isSuccess && data) {
+      setPastQuestionSubjects(Array.isArray(data) ? data : [data]);
+    }
+
+    if (isError) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Failed to fetch topics.",
+      });
+    }
+  }, [token, isSuccess, data, isError, router]);
+  // const pastQuestionSubjects = [
+  //   "MATHEMATICS",
+  //   "ENGLISH LANGUAGE",
+  //   "CHEMISTRY",
+  //   "BIOLOGY",
+  //   "PHYSICS",
+  //   "LITERATURE IN ENGLISH",
+  //   "CIVIC EDUCATION",
+  //   "ECONOMICS",
+  // ];
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 50 }}
@@ -76,7 +114,7 @@ const pastQuestion = () => {
                 ]}
                 onPress={() => router.push("/pastQuestion2")}
               >
-                <Text style={styles.thirdText}>{subject}</Text>
+                <Text style={styles.thirdText}>{subject.name}</Text>
               </TouchableOpacity>
             ))}
           </ScrollView>

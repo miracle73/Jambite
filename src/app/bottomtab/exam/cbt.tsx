@@ -8,10 +8,16 @@ import {
   Platform,
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BackArrow } from "../../../../assets/svg";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
+import {
+  useGetAllSubjectsQuery,
+  SubjectResponse1,
+} from "../../../components/services/userService";
+import { RootState } from "../../../components/redux/store";
+import { useSelector } from "react-redux";
+import Toast from "react-native-toast-message";
 
 const cbt = () => {
   const router = useRouter();
@@ -21,7 +27,37 @@ const cbt = () => {
   const [open, setOpen] = useState(false);
   const [secondOpen, setSecondOpen] = useState(false);
   const [thirdOpen, setThirdOpen] = useState(false);
+  const [pastQuestionSubjects, setPastQuestionSubjects] = useState<
+    SubjectResponse1[]
+  >([]);
+  const token = useSelector((state: RootState) => state.auth.token);
+  const { data, isSuccess, isLoading, isError } = useGetAllSubjectsQuery({
+    token: token || "",
+  });
 
+  useEffect(() => {
+    if (!token) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Access token is invalid, go back and login again",
+      });
+      router.push("/signin");
+      return;
+    }
+
+    if (isSuccess && data) {
+      setPastQuestionSubjects(Array.isArray(data) ? data : [data]);
+    }
+
+    if (isError) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Failed to fetch topics.",
+      });
+    }
+  }, [token, isSuccess, data, isError, router]);
   const year = [
     { label: "2020", value: "2020" },
     { label: "2021", value: "2021" },
@@ -103,7 +139,10 @@ const cbt = () => {
               <DropDownPicker
                 open={thirdOpen}
                 value={selectedSubject}
-                items={subjects}
+                items={pastQuestionSubjects.map((subject) => ({
+                  label: subject.name,
+                  value: String(subject.id),
+                }))}
                 setOpen={setThirdOpen}
                 setValue={(value) => setSelectedSubject(value)}
                 placeholder="Select Subject"

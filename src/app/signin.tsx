@@ -16,6 +16,8 @@ import { useLoginMutation } from "../components/services/userService";
 import Toast from "react-native-toast-message";
 import HidePassword from "../../assets/images/hidepassword.png";
 import VisiblePassword from "../../assets/images/visiblePassword.png";
+import { loginUser } from "../components/redux/slices/authSlice";
+import { useAppDispatch } from "../components/redux/store";
 
 const signin = () => {
   const [email, setEmail] = useState("");
@@ -25,6 +27,7 @@ const signin = () => {
   const [login] = useLoginMutation();
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const dispatch = useAppDispatch();
 
   const handleSignIn = async () => {
     setIsLoading(true);
@@ -44,6 +47,7 @@ const signin = () => {
           text1: "Success",
           text2: LoginResponse.message,
         });
+        dispatch(loginUser(LoginResponse.access_token));
         router.push("/home");
       }
     } catch (error) {
@@ -171,7 +175,10 @@ const signin = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.button} onPress={handleSignIn}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => router.push("/bottomtab/settings")}
+            >
               {isLoading ? (
                 <ActivityIndicator color="#FFFFFF" size={14} />
               ) : (

@@ -5,15 +5,10 @@ import {
   TouchableOpacity,
   SafeAreaView,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
-import {
-  BackArrow,
-  JambiteText,
-  MiniRecta,
-  Recta,
-  SecondJambiteText,
-} from "../../assets/svg";
+import { BackArrow } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
 
@@ -23,9 +18,10 @@ const about = () => {
   const [topic, setTopic] = useState("");
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
+  const [loading, setLoading] = useState(false);
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
+      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 50 }}
     >
       <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
@@ -50,7 +46,10 @@ const about = () => {
               <BackArrow />
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.secondContainer}>
+            <TouchableOpacity
+              style={styles.secondContainer}
+              onPress={() => router.push("socials")}
+            >
               <Text
                 style={{ color: "#FFFFFF", fontSize: 15, fontWeight: "600" }}
               >
@@ -130,12 +129,26 @@ const about = () => {
                 multiline={true}
               />
             </View>
-            <TouchableOpacity style={styles.fourthContainer}>
-              <Text
-                style={{ color: "#FFFFFF", fontSize: 15, fontWeight: "600" }}
-              >
-                Submit
-              </Text>
+            <TouchableOpacity
+              style={styles.fourthContainer}
+              onPress={() => {
+                setLoading(true);
+                setFullName("");
+                setEmail("");
+                setTopic("");
+                setMessage("");
+                setLoading(false);
+              }}
+            >
+              {loading ? (
+                <ActivityIndicator color="#FFFFFF" size={14} />
+              ) : (
+                <Text
+                  style={{ color: "#FFFFFF", fontSize: 15, fontWeight: "600" }}
+                >
+                  Submit
+                </Text>
+              )}
             </TouchableOpacity>
           </View>
         </View>
@@ -150,6 +163,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#BDC1C84D",
     borderRadius: 27,
     padding: 20,
+    marginBottom: 50,
   },
   secondContainer: {
     backgroundColor: "#0F065E",

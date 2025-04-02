@@ -7,13 +7,22 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { B, BackArrow, M } from "../../../assets/svg";
-import RNPickerSelect from "react-native-picker-select";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import DropDownPicker from "react-native-dropdown-picker";
+import {
+  useGetAllSubjectsQuery,
+  SubjectResponse1,
+  SubjectResponse2,
+  useGetSubjectTopicQuery,
+} from "../../components/services/userService";
+import { RootState } from "../../components/redux/store";
+import { useSelector } from "react-redux";
+import Toast from "react-native-toast-message";
 
 const notes = () => {
   const router = useRouter();
@@ -23,6 +32,79 @@ const notes = () => {
   const [open3, setOpen3] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedTopic, setSelectedTopic] = useState("");
+  const token = useSelector((state: RootState) => state.auth.token);
+  const [Subjects, setSubjects] = useState<SubjectResponse1[]>([]);
+  const [subjectTopics, setSubjectTopics] = useState<
+    Record<string, SubjectResponse2[]>
+  >({});
+
+  const { data, isSuccess, isLoading, isError } = useGetAllSubjectsQuery({
+    token: token || "",
+  });
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      setSubjects(Array.isArray(data) ? data : [data]);
+
+      // Fetch topics for each subject
+      const fetchAllTopics = async () => {
+        const promises = data.map((subject) => {
+          return useGetSubjectTopicQuery({
+            subject_id: subject.id,
+            token: token || "",
+          });
+        });
+
+        try {
+          const results = await Promise.all(promises);
+          const topicsMap = results.reduce(
+            (acc: any, result: any, index: number) => {
+              if (result.data) {
+                acc[data[index].id.toString()] = result.data;
+              }
+              return acc;
+            },
+            {} as Record<string, SubjectResponse2>
+          );
+
+          setSubjectTopics(topicsMap);
+        } catch (error) {
+          console.error("Error fetching topics:", error);
+          Toast.show({
+            type: "error",
+            text1: "Error",
+            text2: "Failed to fetch topics for all subjects",
+          });
+        }
+      };
+
+      fetchAllTopics();
+    }
+  }, [token, isSuccess, data]);
+
+  useEffect(() => {
+    // if (!token) {
+    //   Toast.show({
+    //     type: "error",
+    //     text1: "Error",
+    //     text2: "Access token is invalid, go back and login again",
+    //   });
+    //   router.push("/signin");
+    //   return;
+    // }
+
+    if (isSuccess && data) {
+      setSubjects(Array.isArray(data) ? data : [data]);
+    }
+
+    if (isError) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Failed to fetch topics.",
+      });
+    }
+  }, [token, isSuccess, data, isError, router]);
   const subjects = [
     { label: "Mathematics", value: "mathematics" },
     { label: "Biology", value: "biology" },
@@ -35,29 +117,41 @@ const notes = () => {
     { label: "Calculus & Statistics", value: "calculus_statistics" },
     { label: "Geometry/Trigonometry", value: "geometry_trigonometry" },
   ];
-  const pastQuestionSubjects = [
-    "MATHEMATICS",
-    "ENGLISH LANGUAGE",
-    "CHEMISTRY",
-    "BIOLOGY",
-    "PHYSICS",
-    "LITERATURE IN ENGLISH",
-    "CIVIC EDUCATION",
-    "ECONOMICS",
-  ];
+  // const pastQuestionSubjects = [
+  //   "MATHEMATICS",
+  //   "ENGLISH LANGUAGE",
+  //   "CHEMISTRY",
+  //   "BIOLOGY",
+  //   "PHYSICS",
+  //   "LITERATURE IN ENGLISH",
+  //   "CIVIC EDUCATION",
+  //   "ECONOMICS",
+  // ];
+
+  if (isLoading) {
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 1,
+        }}
+      >
+        <ActivityIndicator color="#000000" size="large" />
+      </View>
+    );
+  }
 
   return (
-    <View
+    <ScrollView
       style={{
         flex: 1,
         backgroundColor: "#FFFFFF",
       }}
+      showsVerticalScrollIndicator={false}
     >
-      <View
-        style={{
-          paddingBottom: 30,
-        }}
-      >
+      <View style={{}}>
         <View
           style={{
             backgroundColor: "#0AA2D30F",
@@ -129,36 +223,42 @@ const notes = () => {
         </View>
         {selectedText === "Subjects" && (
           <>
-            <TouchableOpacity
-              style={styles.secondContainer}
-              onPress={() => router.push("/subject")}
-            >
-              <View style={styles.secondSmallContainer}>
-                <M />
-              </View>
-              <View style={{ width: "60%" }}>
-                <Text style={styles.secondText}>MATHEMATICS</Text>
-                <Text style={styles.thirdText}>Number and Numeration</Text>
-                <Text style={styles.thirdText}>Introduction to Algebra</Text>
-                <Text style={styles.thirdText}>Calculus & Statistics</Text>
-                <Text style={styles.thirdText}>Geometry/Trigonometry</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.secondContainer}
-              onPress={() => router.push("/subject")}
-            >
-              <View style={styles.secondSmallContainer}>
-                <B />
-              </View>
-              <View style={{ width: "60%" }}>
-                <Text style={styles.secondText}>BIOLOGY</Text>
-                <Text style={styles.thirdText}>Variety of Organisms</Text>
-                <Text style={styles.thirdText}>Heredity and Variations</Text>
-                <Text style={styles.thirdText}>Form and Functions</Text>
-                <Text style={styles.thirdText}>Ecology</Text>
-              </View>
-            </TouchableOpacity>
+            {Subjects.map((subject, index) => (
+              <>
+                <TouchableOpacity
+                  style={[
+                    styles.secondContainer,
+                    index === Subjects.length - 1 && { marginBottom: 30 },
+                  ]}
+                  onPress={() => router.push("/subject")}
+                  key={index}
+                >
+                  <View style={styles.secondSmallContainer}>
+                    <Text
+                      style={{
+                        fontSize: 24,
+                        fontWeight: "700",
+                        color: "white",
+                      }}
+                    >
+                      {subject.name.charAt(0)}
+                    </Text>
+                  </View>
+                  <View style={{ width: "60%" }}>
+                    <Text style={styles.secondText}>{subject.name}</Text>
+
+                    {subjectTopics &&
+                      subjectTopics[subject.id]?.map(
+                        (topic: SubjectResponse2, topicIndex: number) => (
+                          <Text key={topicIndex} style={styles.thirdText}>
+                            {topic.title}
+                          </Text>
+                        )
+                      )}
+                  </View>
+                </TouchableOpacity>
+              </>
+            ))}
           </>
         )}
         {selectedText === "Exercises" && (
@@ -169,7 +269,10 @@ const notes = () => {
               <DropDownPicker
                 open={open}
                 value={selectedSubject}
-                items={subjects}
+                items={Subjects.map((subject) => ({
+                  label: subject.name,
+                  value: subject.id.toString(),
+                }))}
                 setOpen={setOpen}
                 setValue={(value) => setSelectedSubject(value)}
                 placeholder="Select Subject"
@@ -180,7 +283,12 @@ const notes = () => {
                 <DropDownPicker
                   open={open2}
                   value={selectedTopic}
-                  items={topics}
+                  items={
+                    subjectTopics[selectedSubject]?.map((topic) => ({
+                      label: topic.title,
+                      value: topic.id.toString(),
+                    })) || []
+                  }
                   setOpen={setOpen2}
                   setValue={(value) => setSelectedTopic(value)}
                   placeholder="Select Topic"
@@ -202,25 +310,25 @@ const notes = () => {
         {selectedText === "Past Questions" && (
           <>
             <ScrollView style={{}}>
-              {pastQuestionSubjects.map((subject, index) => (
+              {Subjects.map((subject, index) => (
                 <TouchableOpacity
                   key={index}
                   style={[
                     styles.fourthContainer,
-                    index === pastQuestionSubjects.length - 1 && {
+                    index === Subjects.length - 1 && {
                       marginBottom: 20,
                     },
                   ]}
                   onPress={() => router.push("/pastQuestion2")}
                 >
-                  <Text style={styles.seventhText}>{subject}</Text>
+                  <Text style={styles.seventhText}>{subject.name}</Text>
                 </TouchableOpacity>
               ))}
             </ScrollView>
           </>
         )}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

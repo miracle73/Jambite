@@ -5,15 +5,10 @@ import {
   TouchableOpacity,
   SafeAreaView,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
-import {
-  BackArrow,
-  JambiteText,
-  MiniRecta,
-  Recta,
-  SecondJambiteText,
-} from "../../assets/svg";
+import { BackArrow } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
 
@@ -23,6 +18,16 @@ const scholarship = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = () => {
+    setIsLoading(true);
+    setEmail("");
+    setFullName("");
+    setPhoneNumber("");
+    setRegNumber("");
+    setIsLoading(false);
+  };
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 50 }}
@@ -112,12 +117,19 @@ const scholarship = () => {
             your Name and Screenshot of payment.
           </Text>
           <View>
-            <TouchableOpacity style={styles.secondContainer}>
-              <Text
-                style={{ color: "#FFFFFF", fontSize: 15, fontWeight: "600" }}
-              >
-                Apply Now !
-              </Text>
+            <TouchableOpacity
+              style={styles.secondContainer}
+              onPress={handleSubmit}
+            >
+              {isLoading ? (
+                <ActivityIndicator color="#FFFFFF" size={14} />
+              ) : (
+                <Text
+                  style={{ color: "#FFFFFF", fontSize: 15, fontWeight: "600" }}
+                >
+                  Apply Now !
+                </Text>
+              )}
             </TouchableOpacity>
           </View>
         </View>

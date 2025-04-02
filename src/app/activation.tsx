@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import {
@@ -16,10 +17,54 @@ import {
 } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
+import { useActivateAppMutation } from "../components/services/userService";
+import { RootState } from "../components/redux/store";
+import { useSelector } from "react-redux";
+import Toast from "react-native-toast-message";
 
 const activation = () => {
   const router = useRouter();
+  const token = useSelector((state: RootState) => state.auth.token);
   const [code, setCode] = useState("");
+  const [activateApp] = useActivateAppMutation();
+  const [loading, setLoading] = useState(false);
+
+  const handleActivate = async () => {
+    if (!token) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Token is missing. Please log in again.",
+      });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const activateResponse = await activateApp({
+        pin: code,
+        token: token,
+      });
+      if (activateResponse.data?.message) {
+        Toast.show({
+          type: "success",
+          text1: "Success",
+          text2: activateResponse.data?.message,
+        });
+        router.push("/home");
+      }
+    } catch (error) {
+      console.error("Error during sign in:", error);
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Error during sign in",
+      });
+    } finally {
+      setCode("");
+      setLoading(false);
+    }
+  };
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 50 }}
@@ -62,12 +107,19 @@ const activation = () => {
             />
           </View>
           <View>
-            <TouchableOpacity style={styles.secondContainer}>
-              <Text
-                style={{ color: "#FFFFFF", fontSize: 15, fontWeight: "600" }}
-              >
-                Activate
-              </Text>
+            <TouchableOpacity
+              style={styles.secondContainer}
+              onPress={handleActivate}
+            >
+              {loading ? (
+                <ActivityIndicator color="#FFFFFF" size={14} />
+              ) : (
+                <Text
+                  style={{ color: "#FFFFFF", fontSize: 15, fontWeight: "600" }}
+                >
+                  Activate
+                </Text>
+              )}
             </TouchableOpacity>
           </View>
           <Text style={styles.thirdText}>To get your activation pin .</Text>

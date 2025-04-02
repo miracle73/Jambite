@@ -5,16 +5,45 @@ import {
   TouchableOpacity,
   SafeAreaView,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import { BackArrow, JambiteText, SecondJambiteText } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
+import { useRequestOtpMutation } from "../components/services/userService";
+import Toast from "react-native-toast-message";
 
 const forgotPassword = () => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [requestOtp] = useRequestOtpMutation();
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const requestOtpResponse = await requestOtp({ email }).unwrap();
+      console.log("OTP Request Success:", requestOtpResponse);
+      Toast.show({
+        type: "success",
+        text1: "Success",
+        text2: requestOtpResponse.message,
+      });
+
+      router.push("forgotPasswordVerification");
+    } catch (error) {
+      console.error("Error during sign up:", error);
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Error during sign up",
+      });
+    } finally {
+      setLoading(false);
+      setEmail("");
+    }
+  };
 
   return (
     <SafeAreaView
@@ -50,26 +79,13 @@ const forgotPassword = () => {
                 value={email}
               />
             </View>
-            <Text style={[styles.fourthText, { marginTop: 25 }]}>
-              Retype Password{" "}
-            </Text>
-            <View style={styles.secondContainer}>
-              <TextInput
-                style={{ flex: 1, color: "#000000" }}
-                placeholderTextColor="#000000"
-                placeholder={""}
-                onChangeText={(text) => setPassword(text)}
-                value={password}
-              />
-            </View>
 
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => {
-                router.push("/resetPassword");
-              }}
-            >
-              <Text style={styles.thirdText}>Save</Text>
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+              {loading ? (
+                <ActivityIndicator color="#FFFFFF" size={14} />
+              ) : (
+                <Text style={styles.thirdText}>Save</Text>
+              )}
             </TouchableOpacity>
           </View>
         </View>

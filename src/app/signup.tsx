@@ -26,6 +26,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { useGetAllInstitutionsQuery } from "../components/services/userService";
 import HidePassword from "../../assets/images/hidepassword.png";
 import VisiblePassword from "../../assets/images/visiblePassword.png";
+import { loginUser } from "../components/redux/slices/authSlice";
 
 const signup = () => {
   const [email, setEmail] = useState("");
@@ -82,6 +83,7 @@ const signup = () => {
           text1: "Success",
           text2: requestOtpResponse.message,
         });
+        dispatch(loginUser(createUserResponse.access_token));
         router.push("/verification");
       }
     } catch (error) {

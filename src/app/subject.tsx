@@ -6,24 +6,70 @@ import {
   SafeAreaView,
   ScrollView,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BackArrow } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
+import {
+  useGetSubjectTopicQuery,
+  SubjectResponse2,
+} from "../components/services/userService";
+import { RootState } from "../components/redux/store";
+import { useSelector } from "react-redux";
+import Toast from "react-native-toast-message";
 
 const subject = () => {
   const router = useRouter();
-  const topics = [
-    "ALGEBRA",
-    "GEOMETRY",
-    "TRIGONOMETRY",
-    "CALCULUS",
-    "STATISTICS",
-    "PROBABILITY",
-    "NUMBER THEORY",
-    "LINEAR ALGEBRA",
-  ];
+
+  const token = useSelector((state: RootState) => state.auth.token);
+  const { data, isSuccess, isLoading, isError } = useGetSubjectTopicQuery({
+    subject_id: 1,
+    token: token || "",
+  });
+
+  const [topics, setTopics] = useState<SubjectResponse2[] | undefined>([]);
+
+  useEffect(() => {
+    if (!token) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Access token is invalid, go back and login again",
+      });
+      router.push("/signin");
+      return;
+    }
+
+    if (isSuccess && data) {
+      setTopics(data);
+    }
+
+    if (isError) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Failed to fetch topics.",
+      });
+    }
+  }, [token, isSuccess, data, isError, router]);
+
+  if (isLoading) {
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 1,
+        }}
+      >
+        <ActivityIndicator color="#000000" size="large" />
+      </View>
+    );
+  }
+
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
@@ -67,7 +113,7 @@ const subject = () => {
           </Text>
 
           <ScrollView style={{}}>
-            {topics.map((topic, index) => (
+            {topics?.map((topic, index) => (
               <TouchableOpacity
                 key={index}
                 style={[
@@ -78,7 +124,7 @@ const subject = () => {
                 ]}
                 onPress={() => router.push("/subjectNote")}
               >
-                <Text style={styles.thirdText}>{topic}</Text>
+                <Text style={styles.thirdText}>{topic.title}</Text>
               </TouchableOpacity>
             ))}
           </ScrollView>

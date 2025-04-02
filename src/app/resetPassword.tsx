@@ -5,17 +5,69 @@ import {
   TouchableOpacity,
   SafeAreaView,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import { BackArrow, JambiteText, SecondJambiteText } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
+import { useVerifyOtpMutation } from "../components/services/userService";
+import { RootState } from "../components/redux/store";
+import { useSelector } from "react-redux";
+import Toast from "react-native-toast-message";
+import { useLocalSearchParams } from "expo-router";
 
 const resetPassword = () => {
   const [password, setPassword] = useState("");
   const [cpassword, setCPassword] = useState("");
   const [isSignIn, setIsSignIn] = useState(true);
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [verifyOtp] = useVerifyOtpMutation();
+  const user = useSelector((state: RootState) => state.user.user);
+  const { verificationCode } = useLocalSearchParams();
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    if (password !== cpassword) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Passwords do not match",
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const verificationResponse = await verifyOtp({
+        email: user.email,
+        new_password: password,
+        otp_code: Array.isArray(verificationCode)
+          ? verificationCode[0]
+          : verificationCode,
+      }).unwrap();
+      console.log(verificationResponse);
+      if (verificationResponse && verificationResponse.message) {
+        Toast.show({
+          type: "success",
+          text1: "Success",
+          text2: verificationResponse.message,
+        });
+        router.push("/signin");
+      }
+    } catch (error) {
+      console.error("Error verifying code:", error);
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2:
+          typeof error === "string" ? error : "An unexpected error occurred",
+      });
+    } finally {
+      setPassword("");
+      setIsLoading(false);
+    }
+  };
 
   return (
     <SafeAreaView
@@ -64,13 +116,12 @@ const resetPassword = () => {
               />
             </View>
 
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => {
-                router.push("/signin");
-              }}
-            >
-              <Text style={styles.thirdText}>Save</Text>
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+              {isLoading ? (
+                <ActivityIndicator color="#FFFFFF" size={14} />
+              ) : (
+                <Text style={styles.thirdText}>Save</Text>
+              )}
             </TouchableOpacity>
           </View>
         </View>

@@ -25,9 +25,12 @@ import {
 } from "../../assets/svg";
 import FirstImage from "../../assets/images/Uninstalling Updates.png";
 import { useRouter } from "expo-router";
+import { useSelector } from "react-redux";
+import { RootState } from "../components/redux/store";
 
 const home = () => {
   const router = useRouter();
+  const user = useSelector((state: RootState) => state.user.user);
   return (
     <SafeAreaView
       style={{
@@ -60,7 +63,7 @@ const home = () => {
               }}
             >
               <ProfileIcon />
-              <Text style={styles.secondText}>Ogbonnaya Daniel Kalu</Text>
+              <Text style={styles.secondText}>{user.full_name}</Text>
             </View>
           </View>
           <View

@@ -62,6 +62,17 @@ interface SubjectResponse {
   [key: string]: string;
 }
 
+export interface SubjectResponse1 {
+  name: string;
+  id: number;
+}
+
+export interface SubjectResponse2 {
+  id: number;
+  title: string;
+  free: boolean;
+}
+
 interface ActivateAppResponse {
   message: string;
 }
@@ -122,7 +133,7 @@ export const userApi = createApi({
         body,
       }),
     }),
-    getAllSubjects: builder.query<SubjectResponse, { token: string }>({
+    getAllSubjects: builder.query<SubjectResponse1[], { token: string }>({
       query: ({ token }) => ({
         url: "notes/all-subjects",
         method: "GET",
@@ -132,7 +143,7 @@ export const userApi = createApi({
       }),
     }),
     getSubjectTopic: builder.query<
-      SubjectResponse,
+      SubjectResponse2[],
       { subject_id: number; token: string }
     >({
       query: ({ subject_id, token }) => ({
