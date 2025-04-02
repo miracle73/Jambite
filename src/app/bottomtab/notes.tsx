@@ -47,38 +47,39 @@ const notes = () => {
       setSubjects(Array.isArray(data) ? data : [data]);
 
       // Fetch topics for each subject
-      const fetchAllTopics = async () => {
-        const promises = data.map((subject) => {
-          return useGetSubjectTopicQuery({
-            subject_id: subject.id,
-            token: token || "",
-          });
-        });
+      // const fetchAllTopics = async () => {
+      //   const promises = data.map((subject) => {
+      //     return useGetSubjectTopicQuery({
+      //       subject_id: subject.id,
+      //       token: token || "",
+      //     });
+      //   });
+      //   console.log(44);
+      //   try {
+      //     const results = await Promise.all(promises);
+      //     console.log(results, 66);
+      //     const topicsMap = results.reduce(
+      //       (acc: any, result: any, index: number) => {
+      //         if (result.data) {
+      //           acc[data[index].id.toString()] = result.data;
+      //         }
+      //         return acc;
+      //       },
+      //       {} as Record<string, SubjectResponse2>
+      //     );
 
-        try {
-          const results = await Promise.all(promises);
-          const topicsMap = results.reduce(
-            (acc: any, result: any, index: number) => {
-              if (result.data) {
-                acc[data[index].id.toString()] = result.data;
-              }
-              return acc;
-            },
-            {} as Record<string, SubjectResponse2>
-          );
+      //     setSubjectTopics(topicsMap);
+      //   } catch (error) {
+      //     console.error("Error fetching topics:", error);
+      //     Toast.show({
+      //       type: "error",
+      //       text1: "Error",
+      //       text2: "Failed to fetch topics for all subjects",
+      //     });
+      //   }
+      // };
 
-          setSubjectTopics(topicsMap);
-        } catch (error) {
-          console.error("Error fetching topics:", error);
-          Toast.show({
-            type: "error",
-            text1: "Error",
-            text2: "Failed to fetch topics for all subjects",
-          });
-        }
-      };
-
-      fetchAllTopics();
+      // fetchAllTopics();
     }
   }, [token, isSuccess, data]);
 
@@ -127,7 +128,7 @@ const notes = () => {
   //   "CIVIC EDUCATION",
   //   "ECONOMICS",
   // ];
-
+  console.log(subjectTopics);
   if (isLoading) {
     return (
       <View
@@ -230,8 +231,13 @@ const notes = () => {
                     styles.secondContainer,
                     index === Subjects.length - 1 && { marginBottom: 30 },
                   ]}
-                  onPress={() => router.push("/subject")}
-                  key={index}
+                  onPress={() =>
+                    router.push({
+                      pathname: "/subject",
+                      params: { subjectName: subject.name },
+                    })
+                  }
+                  key={subject.id}
                 >
                   <View style={styles.secondSmallContainer}>
                     <Text
@@ -250,7 +256,7 @@ const notes = () => {
                     {subjectTopics &&
                       subjectTopics[subject.id]?.map(
                         (topic: SubjectResponse2, topicIndex: number) => (
-                          <Text key={topicIndex} style={styles.thirdText}>
+                          <Text key={topicIndex + 1} style={styles.thirdText}>
                             {topic.title}
                           </Text>
                         )

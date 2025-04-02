@@ -106,13 +106,14 @@ export const userApi = createApi({
         return {
           url: "auth/token",
           method: "POST",
-          body: formData,
+          body: formData.toString(), // important: stringify it
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },
         };
       },
     }),
+
     getAllInstitutions: builder.query<InstitutionsResponse, void>({
       query: () => ({
         url: "auth/get-instituions",

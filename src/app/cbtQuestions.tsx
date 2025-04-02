@@ -39,7 +39,6 @@ const cbtQuestion = () => {
     );
   };
 
-  // Navigation handlers
   const handlePrevious = () => {
     setCurrentQuestion((prev) => Math.max(1, prev - 1));
   };

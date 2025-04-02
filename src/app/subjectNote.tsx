@@ -7,19 +7,15 @@ import {
   TextInput,
 } from "react-native";
 import React, { useState } from "react";
-import {
-  BackArrow,
-  JambiteText,
-  MiniRecta,
-  Recta,
-  SecondJambiteText,
-} from "../../assets/svg";
+import { BackArrow } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 
 const subjectNote = () => {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
+  const { subjectName } = useLocalSearchParams();
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
@@ -46,7 +42,7 @@ const subjectNote = () => {
             <TouchableOpacity onPress={() => router.back()}>
               <BackArrow />
             </TouchableOpacity>
-            <Text style={styles.firstText}>Note On Mathematics</Text>
+            <Text style={styles.firstText}>Note On {subjectName}</Text>
 
             <TouchableOpacity
               style={styles.secondContainer}

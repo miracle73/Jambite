@@ -175,10 +175,7 @@ const signin = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => router.push("/bottomtab/settings")}
-            >
+            <TouchableOpacity style={styles.button} onPress={handleSignIn}>
               {isLoading ? (
                 <ActivityIndicator color="#FFFFFF" size={14} />
               ) : (

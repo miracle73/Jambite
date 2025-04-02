@@ -19,10 +19,17 @@ import {
 import { RootState } from "../components/redux/store";
 import { useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
+import { useLocalSearchParams } from "expo-router";
 
 const subject = () => {
   const router = useRouter();
-
+  const [subject, setSubject] = useState("");
+  const { subjectName } = useLocalSearchParams();
+  useEffect(() => {
+    if (subjectName) {
+      setSubject(Array.isArray(subjectName) ? subjectName[0] : subjectName);
+    }
+  }, [subjectName]);
   const token = useSelector((state: RootState) => state.auth.token);
   const { data, isSuccess, isLoading, isError } = useGetSubjectTopicQuery({
     subject_id: 1,
@@ -99,7 +106,7 @@ const subject = () => {
             </TouchableOpacity>
 
             <Text style={[styles.firstText, { textAlign: "center" }]}>
-              MATHEMATICS
+              {subjectName}
             </Text>
           </View>
 
@@ -122,7 +129,12 @@ const subject = () => {
                     marginBottom: 20,
                   },
                 ]}
-                onPress={() => router.push("/subjectNote")}
+                onPress={() =>
+                  router.push({
+                    pathname: "/subjectNote",
+                    params: { subjectName: subject },
+                  })
+                }
               >
                 <Text style={styles.thirdText}>{topic.title}</Text>
               </TouchableOpacity>
