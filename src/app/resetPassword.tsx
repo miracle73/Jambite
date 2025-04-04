@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   TextInput,
   ActivityIndicator,
+  Image,
 } from "react-native";
 import React, { useState } from "react";
 import { BackArrow, JambiteText, SecondJambiteText } from "../../assets/svg";
@@ -16,11 +17,15 @@ import { RootState } from "../components/redux/store";
 import { useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
 import { useLocalSearchParams } from "expo-router";
+import HidePassword from "../../assets/images/hidepassword.png";
+import VisiblePassword from "../../assets/images/visiblePassword.png";
 
 const resetPassword = () => {
   const [password, setPassword] = useState("");
   const [cpassword, setCPassword] = useState("");
   const [isSignIn, setIsSignIn] = useState(true);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isPasswordVisible2, setIsPasswordVisible2] = useState(false);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [verifyOtp] = useVerifyOtpMutation();
@@ -101,7 +106,16 @@ const resetPassword = () => {
                 placeholder={""}
                 onChangeText={(text) => setPassword(text)}
                 value={password}
+                secureTextEntry={!isPasswordVisible}
               />
+              <TouchableOpacity
+                onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+                style={{}}
+              >
+                <Image
+                  source={isPasswordVisible ? VisiblePassword : HidePassword}
+                />
+              </TouchableOpacity>
             </View>
             <Text style={[styles.fourthText, { marginTop: 25 }]}>
               Retype Password{" "}
@@ -113,7 +127,16 @@ const resetPassword = () => {
                 placeholder={""}
                 onChangeText={(text) => setCPassword(text)}
                 value={cpassword}
+                secureTextEntry={!isPasswordVisible2}
               />
+              <TouchableOpacity
+                onPress={() => setIsPasswordVisible2(!isPasswordVisible2)}
+                style={{}}
+              >
+                <Image
+                  source={isPasswordVisible2 ? VisiblePassword : HidePassword}
+                />
+              </TouchableOpacity>
             </View>
 
             <TouchableOpacity style={styles.button} onPress={handleSubmit}>
@@ -155,9 +178,11 @@ const styles = StyleSheet.create({
 
   secondContainer: {
     backgroundColor: "#FFFFFF",
-    padding: 5,
+    paddingVertical: 15,
     paddingHorizontal: 20,
-
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     borderRadius: 25,
     elevation: 20,
     shadowOffset: {

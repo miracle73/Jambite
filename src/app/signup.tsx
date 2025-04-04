@@ -226,7 +226,17 @@ const signup = () => {
             <Text style={[styles.fifthText, open && { zIndex: -20 }]}>
               PASSWORD
             </Text>
-            <View style={[styles.secondContainer, open && { zIndex: -20 }]}>
+            <View
+              style={[
+                styles.secondContainer,
+                {
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                },
+                open && { zIndex: -20 },
+              ]}
+            >
               <TextInput
                 style={{ flex: 1, color: "#000000" }}
                 placeholderTextColor="#000000"
@@ -237,7 +247,7 @@ const signup = () => {
               />
               <TouchableOpacity
                 onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-                style={{ position: "absolute", right: 15, top: 15 }}
+                style={{}}
               >
                 <Image
                   source={isPasswordVisible ? VisiblePassword : HidePassword}
@@ -287,7 +297,7 @@ const styles = StyleSheet.create({
 
   secondContainer: {
     backgroundColor: "#FFFFFF",
-    padding: 5,
+    paddingVertical: 15,
     paddingHorizontal: 20,
     marginTop: 10,
     borderRadius: 25,

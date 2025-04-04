@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
   },
   thirdContainer: {
     backgroundColor: "#FFFFFF",
-    padding: 5,
+    paddingVertical: 15,
     paddingHorizontal: 20,
     borderRadius: 25,
     marginBottom: 20,
