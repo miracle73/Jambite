@@ -150,7 +150,17 @@ const signin = () => {
                 value={email}
               />
             </View>
-            <View style={[styles.secondContainer, { marginTop: 25 }]}>
+            <View
+              style={[
+                styles.secondContainer,
+                {
+                  marginTop: 25,
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                },
+              ]}
+            >
               <TextInput
                 style={{ flex: 1, color: "#000000" }}
                 placeholderTextColor="#000000"
@@ -161,7 +171,7 @@ const signin = () => {
               />
               <TouchableOpacity
                 onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-                style={{ position: "absolute", right: 15, top: 15 }}
+                style={{}}
               >
                 <Image
                   source={isPasswordVisible ? VisiblePassword : HidePassword}
@@ -217,7 +227,8 @@ const styles = StyleSheet.create({
 
   secondContainer: {
     backgroundColor: "#FFFFFF",
-    padding: 5,
+
+    paddingVertical: 15,
     paddingHorizontal: 20,
     marginTop: 30,
     borderRadius: 25,

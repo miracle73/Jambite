@@ -30,6 +30,7 @@ const Verification = () => {
   const inputRefs = useRef<(TextInput | null)[]>([]);
   const user = useSelector((state: RootState) => state.user.user);
   const [isLoading, setIsLoading] = useState(false);
+  const [secondIsLoading, setSecondIsLoading] = useState(false);
   const [requestOtp] = useRequestOtpMutation();
 
   const handleChange = (text: any, index: number) => {
@@ -43,7 +44,7 @@ const Verification = () => {
   };
 
   const handleResend = async () => {
-    setIsLoading(true);
+    setSecondIsLoading(true);
     try {
       const requestOtpResponse = await requestOtp({
         email: user.email,
@@ -63,7 +64,7 @@ const Verification = () => {
         text2: "There was an error sending otp",
       });
     } finally {
-      setIsLoading(false);
+      setSecondIsLoading(false);
     }
   };
 
@@ -159,8 +160,8 @@ const Verification = () => {
               style={styles.secondButton}
               onPress={handleResend}
             >
-              {isLoading ? (
-                <ActivityIndicator color="#FFFFFF" size={14} />
+              {secondIsLoading ? (
+                <ActivityIndicator color="#0F065E" size={14} />
               ) : (
                 <Text style={[styles.thirdText, { color: "#B5B2B2" }]}>
                   Resend
