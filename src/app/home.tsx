@@ -10,6 +10,8 @@ import {
 import React from "react";
 import {
   Activation,
+  AddDocument,
+  AskQuestion,
   Facebook,
   HomeSpecialIcon,
   Instagram,
@@ -20,6 +22,7 @@ import {
   SecondJambiteText,
   SmallerJambiteText,
   Telegram,
+  ThirdJambiteText,
   Tiktok,
   UniversityCampus,
 } from "../../assets/svg";
@@ -151,10 +154,12 @@ const home = () => {
               style={{
                 justifyContent: "center",
                 alignItems: "flex-end",
+                paddingHorizontal: 10,
               }}
             >
               <Text style={styles.fourthText}>ITED</Text>
-              <SecondJambiteText />
+              {/* <SecondJambiteText /> */}
+              <ThirdJambiteText />
             </View>
           </View>
           <View
@@ -181,6 +186,7 @@ const home = () => {
                     flexDirection: "row",
                     justifyContent: "space-between",
                     alignItems: "center",
+                    width: "100%",
                   }}
                 >
                   <Text style={styles.fifthText}>Outline Notes</Text>
@@ -201,9 +207,11 @@ const home = () => {
                     flexDirection: "row",
                     justifyContent: "space-between",
                     alignItems: "center",
+                    width: "100%",
                   }}
                 >
                   <Text style={styles.fifthText}>Past Questions</Text>
+                  <AskQuestion />
                 </View>
                 <Text style={styles.sixthText}>
                   Go through past questions and prepare ahead
@@ -223,6 +231,7 @@ const home = () => {
                     flexDirection: "row",
                     justifyContent: "space-between",
                     alignItems: "center",
+                    width: "100%",
                   }}
                 >
                   <Text style={styles.fifthText}>App Activation </Text>
@@ -252,9 +261,11 @@ const home = () => {
                     flexDirection: "row",
                     justifyContent: "space-between",
                     alignItems: "center",
+                    width: "100%",
                   }}
                 >
                   <Text style={styles.fifthText}>POST UTME</Text>
+                  <AddDocument />
                 </View>
                 <Text style={styles.sixthText}>
                   Go through your prefferd instifution POST UTME questions
@@ -271,6 +282,7 @@ const home = () => {
                     flexDirection: "row",
                     justifyContent: "space-between",
                     alignItems: "center",
+                    width: "100%",
                   }}
                 >
                   <Text style={styles.fifthText}>CBT MODE</Text>
@@ -291,6 +303,7 @@ const home = () => {
                     flexDirection: "row",
                     justifyContent: "space-between",
                     alignItems: "center",
+                    width: "100%",
                   }}
                 >
                   <Text style={styles.fifthText}>Scholarship</Text>

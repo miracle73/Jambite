@@ -38,6 +38,10 @@ interface InstitutionsResponse {
   message: string;
   levels: string[];
 }
+interface AdmissionCutOffData {
+  id: number;
+  text: string;
+}
 
 interface RequestOtpRequestBody {
   email: string;
@@ -120,6 +124,12 @@ export const userApi = createApi({
         method: "GET",
       }),
     }),
+    cutOff: builder.query<AdmissionCutOffData, void>({
+      query: () => ({
+        url: "notes/cut-off-uni",
+        method: "GET",
+      }),
+    }),
     requestOtp: builder.mutation<RequestOtpResponse, RequestOtpRequestBody>({
       query: (body) => ({
         url: "auth/passw-reset-request",
@@ -137,6 +147,42 @@ export const userApi = createApi({
     getAllSubjects: builder.query<SubjectResponse1[], { token: string }>({
       query: ({ token }) => ({
         url: "notes/all-subjects",
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
+    getAQuestion: builder.query<
+      SubjectResponse[],
+      { token: string; q_id: number }
+    >({
+      query: ({ token, q_id }) => ({
+        url: `pq/get-a-question?q_id=${q_id}`,
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
+    getQuestionByTopic: builder.query<
+      SubjectResponse[],
+      { token: string; topic_id: number }
+    >({
+      query: ({ token, topic_id }) => ({
+        url: `pq/question-by-topic?topic_id=${topic_id}`,
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
+    getQuestionBySubject: builder.query<
+      SubjectResponse[],
+      { token: string; subject_id: number }
+    >({
+      query: ({ token, subject_id }) => ({
+        url: `pq/question-by-subject?subject_id=${subject_id}`,
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -192,4 +238,8 @@ export const {
   useGetSubjectTopicQuery,
   useGetTopicContentDetailsQuery,
   useActivateAppMutation,
+  useGetAQuestionQuery,
+  useGetQuestionByTopicQuery,
+  useGetQuestionBySubjectQuery,
+  useCutOffQuery,
 } = userApi;

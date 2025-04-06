@@ -161,7 +161,7 @@ const notes = () => {
             paddingBottom: 20,
           }}
         >
-          <TouchableOpacity onPress={() => router.back()}>
+          <TouchableOpacity onPress={() => router.push("/home")}>
             <BackArrow />
           </TouchableOpacity>
           <Text

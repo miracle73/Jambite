@@ -109,9 +109,7 @@ const signup = () => {
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
-        <View
-          style={{ paddingHorizontal: 20, justifyContent: "center", flex: 1 }}
-        >
+        <View style={{ justifyContent: "center", flex: 1 }}>
           <ScrollView
             style={styles.container}
             showsVerticalScrollIndicator={false}
@@ -261,7 +259,12 @@ const signup = () => {
                 <Text style={styles.thirdText}>SIGN UP</Text>
               )}
             </TouchableOpacity>
-            <Text style={[styles.fourthText, { textAlign: "center" }]}>
+            <Text
+              style={[
+                styles.fourthText,
+                { textAlign: "center", marginBottom: 30 },
+              ]}
+            >
               Powered by Ited Softwares
             </Text>
           </ScrollView>
@@ -272,7 +275,9 @@ const signup = () => {
 };
 
 const styles = StyleSheet.create({
-  firstContainer: {},
+  firstContainer: {
+    marginHorizontal: 20,
+  },
   transitionButton: {
     backgroundColor: "#0F065E",
     height: 30,
@@ -291,20 +296,21 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1,
     marginBottom: 10,
-    marginTop: 40,
     marginHorizontal: 50,
+    marginTop: 30,
   },
 
   secondContainer: {
     backgroundColor: "#FFFFFF",
+    marginHorizontal: 20,
     paddingVertical: 15,
     paddingHorizontal: 20,
     marginTop: 10,
     borderRadius: 25,
-    elevation: 7,
+    elevation: 20,
     shadowOffset: {
-      height: 5,
-      width: 5,
+      height: 20,
+      width: 20,
     },
     shadowOpacity: 0.6,
     shadowRadius: 4,
@@ -351,6 +357,7 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     textAlign: "left",
     marginTop: 15,
+    marginHorizontal: 20,
   },
 });
 

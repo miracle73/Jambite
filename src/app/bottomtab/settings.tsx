@@ -21,11 +21,13 @@ import LogoutModal from "../../components/modals/LogoutModal";
 import { useRouter } from "expo-router";
 import { RootState } from "../../components/redux/store";
 import { useSelector } from "react-redux";
+import DeleteModal from "../../components/modals/DeleteModal";
 
 const settings = () => {
   const router = useRouter();
   const [modal, setModal] = useState(false);
   const user = useSelector((state: RootState) => state.user.user);
+  const [secondModal, setSecondModel] = useState(false);
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 70 }}
@@ -115,17 +117,7 @@ const settings = () => {
               </Text>
             </View>
           </TouchableOpacity>
-          <View style={styles.thirdContainer}>
-            <AppActivation />
-            <View>
-              <Text style={styles.thirdText}>Suggesti0ns/Complain</Text>
-              <Text
-                style={[styles.thirdText, { fontSize: 15, fontWeight: "500" }]}
-              >
-                Mission, Vision, Terms and Conditions
-              </Text>
-            </View>
-          </View>
+
           <TouchableOpacity
             style={styles.thirdContainer}
             onPress={() => router.push("/about")}
@@ -142,7 +134,7 @@ const settings = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.thirdContainer}
-            onPress={() => router.push("/signin")}
+            onPress={() => setSecondModel(true)}
           >
             <DeleteIcon />
             <View>
@@ -171,6 +163,9 @@ const settings = () => {
         </View>
       </ScrollView>
       {modal && <LogoutModal modal={modal} setModal={setModal} />}
+      {secondModal && (
+        <DeleteModal modal={secondModal} setModal={setSecondModel} />
+      )}
     </SafeAreaView>
   );
 };
