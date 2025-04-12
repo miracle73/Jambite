@@ -4,18 +4,20 @@ import {
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
-  TextInput,
+  ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
-import {
-  BackArrow,
-  JambiteText,
-  MiniRecta,
-  Recta,
-  SecondJambiteText,
-} from "../../assets/svg";
+import React, { useState, useEffect } from "react";
+import { BackArrow } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
+import {
+  useGetQuestionBySubjectQuery,
+  Question,
+} from "../components/services/userService";
+import { RootState } from "../components/redux/store";
+import { useSelector } from "react-redux";
+import Toast from "react-native-toast-message";
+import { useLocalSearchParams } from "expo-router";
 
 const subjectPastQuestion = () => {
   const router = useRouter();
@@ -30,7 +32,8 @@ const subjectPastQuestion = () => {
   const [answeredQuestions, setAnsweredQuestions] = useState<Set<number>>(
     new Set()
   );
-
+  const { id, name } = useLocalSearchParams();
+  const token = useSelector((state: RootState) => state.auth.token);
   const handleOptionSelect = (option: string): void => {
     setSelectedAnswers((prev: Record<number, string>) => ({
       ...prev,
@@ -49,6 +52,51 @@ const subjectPastQuestion = () => {
     setCurrentQuestion((prev) => Math.min(50, prev + 1));
   };
 
+  const { data, isSuccess, isLoading, isError } = useGetQuestionBySubjectQuery({
+    subject_id: Number(id),
+    token: token || "",
+  });
+
+  const [questions, setQuestions] = useState<Question[] | undefined>([]);
+
+  useEffect(() => {
+    if (!token) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Access token is invalid, go back and login again",
+      });
+      router.push("/signin");
+      return;
+    }
+
+    if (isSuccess && data) {
+      setQuestions(data);
+    }
+
+    if (isError) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Failed to fetch topics.",
+      });
+    }
+  }, [token, isSuccess, data, isError, router]);
+
+  if (isLoading) {
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 1,
+        }}
+      >
+        <ActivityIndicator color="#000000" size="large" />
+      </View>
+    );
+  }
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
@@ -83,7 +131,7 @@ const subjectPastQuestion = () => {
               <TouchableOpacity onPress={() => router.back()}>
                 <BackArrow />
               </TouchableOpacity>
-              <Text style={styles.firstText}>MATHEMATICS </Text>
+              <Text style={styles.firstText}>{name} </Text>
             </View>
 
             <TouchableOpacity style={styles.secondContainer}>

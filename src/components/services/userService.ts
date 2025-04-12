@@ -27,6 +27,19 @@ interface LoginRequestBody {
   client_secret: string;
 }
 
+export interface Question {
+  question_text: string;
+  year: string;
+  b: string | null;
+  d: string | null;
+  correct_answer: string;
+  id: number;
+  a: string | null;
+  c: string | null;
+  e: string | null;
+  topic_id: number;
+}
+
 interface LoginResponse {
   access_token: string;
   token_type: string;
@@ -64,6 +77,17 @@ interface VerifyOtpResponse {
 
 interface SubjectResponse {
   [key: string]: string;
+}
+
+export interface TopicContent {
+  topic_content: {
+    id: number;
+    content: string;
+    subject_id: number;
+    title: string;
+    description: string;
+    free: boolean;
+  };
 }
 
 export interface SubjectResponse1 {
@@ -178,7 +202,7 @@ export const userApi = createApi({
       }),
     }),
     getQuestionBySubject: builder.query<
-      SubjectResponse[],
+      Question[],
       { token: string; subject_id: number }
     >({
       query: ({ token, subject_id }) => ({
@@ -202,7 +226,7 @@ export const userApi = createApi({
       }),
     }),
     getTopicContentDetails: builder.query<
-      SubjectResponse,
+      TopicContent,
       { topic_id: number; token: string }
     >({
       query: ({ topic_id, token }) => ({

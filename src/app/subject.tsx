@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import { BackArrow } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
+import { EvilIcons } from "@expo/vector-icons";
 import {
   useGetSubjectTopicQuery,
   SubjectResponse2,
@@ -129,14 +130,24 @@ const subject = () => {
                     marginBottom: 20,
                   },
                 ]}
-                onPress={() =>
-                  router.push({
-                    pathname: "/subjectNote",
-                    params: { subjectName: subject },
-                  })
-                }
+                onPress={() => {
+                  if (topic.free) {
+                    router.push({
+                      pathname: "/subjectNote",
+                      params: { subjectName: subject, id: topic.id },
+                    });
+                  } else {
+                    Toast.show({
+                      type: "error",
+                      text1: "Error",
+                      text2:
+                        "This topic is locked, please subscribe to unlock it.",
+                    });
+                  }
+                }}
               >
                 <Text style={styles.thirdText}>{topic.title}</Text>
+                {!topic.free && <EvilIcons name="lock" size={15} />}
               </TouchableOpacity>
             ))}
           </ScrollView>

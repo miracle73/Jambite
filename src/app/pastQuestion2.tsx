@@ -6,12 +6,15 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BackArrow } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
 import DropDownPicker from "react-native-dropdown-picker";
+import Toast from "react-native-toast-message";
+import { useLocalSearchParams } from "expo-router";
 
 const pastQuestion2 = () => {
   const [open, setOpen] = useState(false);
@@ -19,6 +22,19 @@ const pastQuestion2 = () => {
   const router = useRouter();
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
+  const { subjectName, id } = useLocalSearchParams();
+  const [subjectId, setSubjectId] = useState("");
+  const [subjectname, setSubjectname] = useState("");
+
+  useEffect(() => {
+    if (id) {
+      setSubjectId(Array.isArray(id) ? id[0] : id);
+    }
+    if (subjectName) {
+      setSubjectname(Array.isArray(subjectName) ? subjectName[0] : subjectName);
+    }
+  }, [id, subjectName]);
+
   const year = [
     { label: "2020", value: "2020" },
     { label: "2021", value: "2021" },
@@ -56,7 +72,7 @@ const pastQuestion2 = () => {
             </TouchableOpacity>
           </View>
           <Text style={[styles.firstText, { textAlign: "center" }]}>
-            Mathematics Past Questions
+            {subjectName} Past Questions
           </Text>
           <Text style={[styles.secondText, { textAlign: "center" }]}>
             Go through the previous questions to prepare fully for your exams
@@ -89,7 +105,10 @@ const pastQuestion2 = () => {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              router.push("/subjectPastQuestion");
+              router.push({
+                pathname: "/subjectPastQuestion",
+                params: { id: subjectId, name: subjectname },
+              });
             }}
           >
             <Text style={styles.sixthText}>Begin</Text>

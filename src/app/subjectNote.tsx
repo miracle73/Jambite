@@ -6,16 +6,56 @@ import {
   SafeAreaView,
   TextInput,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BackArrow } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
 import { useLocalSearchParams } from "expo-router";
+import {
+  useGetTopicContentDetailsQuery,
+  TopicContent,
+} from "../components/services/userService";
+import { RootState } from "../components/redux/store";
+import { useSelector } from "react-redux";
+import Toast from "react-native-toast-message";
 
 const subjectNote = () => {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
-  const { subjectName } = useLocalSearchParams();
+  const { subjectName, id } = useLocalSearchParams();
+  const token = useSelector((state: RootState) => state.auth.token);
+  const { data, isSuccess, isLoading, isError } =
+    useGetTopicContentDetailsQuery({
+      topic_id: Number(id),
+      token: token || "",
+    });
+
+  const [topic, setTopic] = useState<TopicContent | undefined>();
+
+  useEffect(() => {
+    if (!token) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Access token is invalid, go back and login again",
+      });
+      router.push("/signin");
+      return;
+    }
+
+    if (isSuccess && data) {
+      setTopic(data);
+    }
+
+    if (isError) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Failed to fetch topics.",
+      });
+    }
+  }, [token, isSuccess, data, isError, router]);
+
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
@@ -79,34 +119,12 @@ const subjectNote = () => {
             </View>
           )}
           <View>
-            <Text style={styles.secondText}>Scalars: A Detailed Overview</Text>
-            <Text style={styles.secondText}>Definition</Text>
+            <Text style={styles.secondText}>{topic?.topic_content.title}</Text>
             <Text style={styles.secondText}>
-              A scalar is a quantity that is fully characterized by a single
-              numerical value, often accompanied by a unit of measure, and it
-              does not have a directional component. Scalars are fundamental in
-              various disciplines, including physics, mathematics, engineering,
-              and computer science
-            </Text>
-            <Text style={styles.secondText}>Characteristics of Scalars</Text>
-            <Text style={styles.secondText}>
-              1. Only: Scalars are defined solely by their magnitude. Unlike
-              vectors, scalars do not involve direction.
+              {topic?.topic_content.description}
             </Text>
             <Text style={styles.secondText}>
-              2. Addition and Subtraction: Scalars can be added or subtracted by
-              simple arithmetic operations. For example, adding two temperatures
-              (20°C + 30°C = 50°C) or two masses (5 kg + 10 kg = 15 kg)
-            </Text>
-            <Text style={styles.secondText}>
-              2. Addition and Subtraction: Scalars can be added or subtracted by
-              simple arithmetic operations. For example, adding two temperatures
-              (20°C + 30°C = 50°C) or two masses (5 kg + 10 kg = 15 kg)
-            </Text>
-            <Text style={styles.secondText}>
-              Multiplication and Division: Scalars can be multiplied or divided,
-              yielding another scalar. For instance, dividing a distance by time
-              gives speed, a scalar quantity. Invariance under Coordinate
+              {topic?.topic_content.content}
             </Text>
           </View>
         </View>
