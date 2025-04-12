@@ -168,6 +168,12 @@ const RootLayout = () => {
                 headerShown: false,
               }}
             />
+            <Stack.Screen
+              name="cutoff"
+              options={{
+                headerShown: false,
+              }}
+            />
           </Stack>
           <Toast />
         </PersistGate>

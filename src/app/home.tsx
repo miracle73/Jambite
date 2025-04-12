@@ -327,7 +327,12 @@ const home = () => {
                 <Image source={FirstImage} />
               </View>
             </View>
-            <View style={styles.fourthContainer}>
+            <TouchableOpacity
+              style={styles.fourthContainer}
+              onPress={() => {
+                router.push("/cutoff");
+              }}
+            >
               <View style={{ width: "80%" }}>
                 <Text style={styles.seventhText}>University/Cut Off Mark </Text>
                 <Text style={styles.eighthText}>
@@ -338,7 +343,7 @@ const home = () => {
               <View style={{ width: "20%" }}>
                 <UniversityCampus />
               </View>
-            </View>
+            </TouchableOpacity>
             <TouchableOpacity
               style={styles.fourthContainer}
               onPress={() => {

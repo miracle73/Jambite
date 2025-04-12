@@ -102,7 +102,7 @@ export interface SubjectResponse2 {
 }
 
 interface ActivateAppResponse {
-  message: string;
+  success: boolean;
 }
 
 export const userApi = createApi({

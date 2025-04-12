@@ -154,7 +154,25 @@ const cbt = () => {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              router.push("/cbtQuestions");
+              const selected = pastQuestionSubjects.find(
+                (subject) => String(subject.id) === selectedSubject
+              );
+
+              if (selected) {
+                router.push({
+                  pathname: "/cbtQuestions",
+                  params: {
+                    name: selected.name,
+                    id: String(selected.id),
+                  },
+                });
+              } else {
+                Toast.show({
+                  type: "error",
+                  text1: "Invalid Selection",
+                  text2: "Please select a valid subject.",
+                });
+              }
             }}
           >
             <Text style={styles.sixthText}>Begin</Text>

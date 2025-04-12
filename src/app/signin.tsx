@@ -18,6 +18,7 @@ import HidePassword from "../../assets/images/hidepassword.png";
 import VisiblePassword from "../../assets/images/visiblePassword.png";
 import { loginUser } from "../components/redux/slices/authSlice";
 import { useAppDispatch } from "../components/redux/store";
+import { setUserInfo } from "../components/redux/slices/userSlice";
 
 const signin = () => {
   const [email, setEmail] = useState("");
@@ -48,6 +49,12 @@ const signin = () => {
           text2: LoginResponse.message,
         });
         dispatch(loginUser(LoginResponse.access_token));
+        dispatch(
+          setUserInfo({
+            email,
+            password,
+          })
+        );
         router.push("/home");
       }
     } catch (error) {

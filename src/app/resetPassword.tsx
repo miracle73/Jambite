@@ -42,7 +42,7 @@ const resetPassword = () => {
       setIsLoading(false);
       return;
     }
-
+    console.log(user.email, password, verificationCode, 5000);
     try {
       const verificationResponse = await verifyOtp({
         email: user.email,

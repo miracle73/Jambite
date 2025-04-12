@@ -112,7 +112,12 @@ const pastQuestion = () => {
                     marginBottom: 20,
                   },
                 ]}
-                onPress={() => router.push("/pastQuestion2")}
+                onPress={() => {
+                  router.push({
+                    pathname: "/pastQuestion2",
+                    params: { subjectName: subject.name, id: subject.id },
+                  });
+                }}
               >
                 <Text style={styles.thirdText}>{subject.name}</Text>
               </TouchableOpacity>

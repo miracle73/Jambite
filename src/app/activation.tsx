@@ -45,14 +45,14 @@ const activation = () => {
         pin: code,
         token: token,
       });
-      if (activateResponse.data?.message) {
-        Toast.show({
-          type: "success",
-          text1: "Success",
-          text2: activateResponse.data?.message,
-        });
-        router.push("/home");
-      }
+      // if (activateResponse.data && activateResponse.data.success === true) {
+      Toast.show({
+        type: "success",
+        text1: "Success",
+        text2: "Successful",
+      });
+      router.push("/home");
+      // }
     } catch (error) {
       console.error("Error during sign in:", error);
       Toast.show({

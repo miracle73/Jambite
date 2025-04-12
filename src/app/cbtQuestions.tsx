@@ -4,18 +4,20 @@ import {
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
-  TextInput,
+  ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
-import {
-  BackArrow,
-  JambiteText,
-  MiniRecta,
-  Recta,
-  SecondJambiteText,
-} from "../../assets/svg";
+import React, { useState, useEffect } from "react";
+import { BackArrow } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
+import {
+  useGetQuestionBySubjectQuery,
+  Question,
+} from "../components/services/userService";
+import { RootState } from "../components/redux/store";
+import { useSelector } from "react-redux";
+import Toast from "react-native-toast-message";
+import { useLocalSearchParams } from "expo-router";
 
 const cbtQuestion = () => {
   const router = useRouter();
@@ -27,7 +29,9 @@ const cbtQuestion = () => {
   const [answeredQuestions, setAnsweredQuestions] = useState<Set<number>>(
     new Set()
   );
+  const { id, name } = useLocalSearchParams();
 
+  const token = useSelector((state: RootState) => state.auth.token);
   // Handle option selection
   const handleOptionSelect = (option: string): void => {
     setSelectedAnswers((prev: Record<number, string>) => ({
@@ -52,6 +56,81 @@ const cbtQuestion = () => {
     setCurrentQuestion(questionNumber);
   };
 
+  const { data, isSuccess, isLoading, isError } = useGetQuestionBySubjectQuery({
+    subject_id: Number(id),
+    token: token || "",
+  });
+
+  const [questions, setQuestions] = useState<Question[]>([]);
+
+  useEffect(() => {
+    if (!token) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Access token is invalid, go back and login again",
+      });
+      router.push("/signin");
+      return;
+    }
+
+    if (isSuccess && data) {
+      setQuestions(data);
+    }
+
+    if (isError) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Failed to fetch questions.",
+      });
+    }
+  }, [token, isSuccess, data, isError, router]);
+
+  if (isLoading) {
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 1,
+        }}
+      >
+        <ActivityIndicator color="#000000" size="large" />
+      </View>
+    );
+  }
+
+  if (!isLoading && questions.length === 0) {
+    return (
+      <SafeAreaView
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#FFFFFF",
+        }}
+      >
+        <Text style={{ fontSize: 16, color: "#0F065E", fontWeight: "600" }}>
+          No questions available for this subject.
+        </Text>
+        <TouchableOpacity
+          style={{
+            marginTop: 20,
+            paddingHorizontal: 20,
+            paddingVertical: 10,
+            borderRadius: 10,
+            backgroundColor: "#0F065E",
+          }}
+          onPress={() => router.back()}
+        >
+          <Text style={{ color: "#FFFFFF", fontWeight: "700" }}>Go Back</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
@@ -67,36 +146,42 @@ const cbtQuestion = () => {
             flex: 1,
           }}
         >
-          <View
-            style={{
-              marginBottom: 30,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                gap: 2,
-                alignItems: "center",
-              }}
-            >
-              <TouchableOpacity onPress={() => router.back()}>
-                <BackArrow />
-              </TouchableOpacity>
-              <Text style={styles.firstText}>CYBER SECURITY</Text>
-            </View>
-            <TouchableOpacity style={styles.secondContainer}>
-              <Text
-                style={{ color: "#FFFFFF", fontSize: 15, fontWeight: "600" }}
+          {questions && questions.length >= currentQuestion && (
+            <>
+              <View
+                style={{
+                  marginBottom: 30,
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
               >
-                2024
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.firstContainer}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    gap: 2,
+                    alignItems: "center",
+                  }}
+                >
+                  <TouchableOpacity onPress={() => router.back()}>
+                    <BackArrow />
+                  </TouchableOpacity>
+                  <Text style={styles.firstText}>{name}</Text>
+                </View>
+                <TouchableOpacity style={styles.secondContainer}>
+                  <Text
+                    style={{
+                      color: "#FFFFFF",
+                      fontSize: 15,
+                      fontWeight: "600",
+                    }}
+                  >
+                    {questions[currentQuestion - 1]?.year}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              {/* <View style={styles.firstContainer}>
             <Text style={styles.secondText}>Question {currentQuestion}</Text>
             <Text style={styles.thirdText}>
               What is the main aim of Cyber Security Education to
@@ -127,80 +212,122 @@ const cbtQuestion = () => {
                 <Text style={styles.fourthText}>Important and Resillence</Text>
               </TouchableOpacity>
             ))}
-            {/* <View style={styles.thirdContainer}>
-              <Text style={styles.fourthText}>A</Text>
-              <View style={styles.fourthContainer}></View>
-              <Text style={styles.fourthText}>Important and Resillence </Text>
-            </View>
-            <View style={styles.thirdContainer}>
-              <Text style={styles.fourthText}>B</Text>
-              <View style={styles.fourthContainer}></View>
-              <Text style={styles.fourthText}>Important and Resillence </Text>
-            </View>
-            <View style={styles.thirdContainer}>
-              <Text style={styles.fourthText}>C</Text>
-              <View style={styles.fourthContainer}></View>
-              <Text style={styles.fourthText}>Important and Resillence </Text>
-            </View>
-            <View style={styles.thirdContainer}>
-              <Text style={styles.fourthText}>D</Text>
-              <View style={styles.fourthContainer}></View>
-              <Text style={styles.fourthText}>Important and Resillence </Text>
-            </View> */}
-          </View>
-          <Text style={styles.fifthText}>
-            fundatmentals of cyber security 2021
-          </Text>
-
-          <Text style={styles.fourthText}>{currentQuestion}/50</Text>
-          <View
-            style={{
-              height: 7,
-              backgroundColor: "#D9D9D9",
-              borderRadius: 30,
-              marginBottom: 20,
-            }}
-          >
-            <View
-              style={{
-                height: 7,
-                backgroundColor: "#0F065E",
-                borderRadius: 30,
-                width: `${(currentQuestion / 50) * 100}%`,
-              }}
-            />
-          </View>
-          {/* <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <View style={styles.firstButton}>
-              <Text
-                style={{
-                  fontSize: 20,
-                  color: "#0F065E",
-                  fontWeight: "700",
-                }}
-              >
-                Previous
-              </Text>
-            </View>
-            <View style={styles.secondButton}>
-              <Text
-                style={{
-                  fontSize: 20,
-                  color: "#FFFFFF",
-                  fontWeight: "700",
-                }}
-              >
-                Next
-              </Text>
-            </View>
+     
           </View> */}
-          <View
+              <View style={styles.firstContainer}>
+                <Text style={styles.secondText}>
+                  Question {currentQuestion}
+                </Text>
+                <Text style={styles.thirdText}>
+                  {questions[currentQuestion - 1]?.question_text}
+                </Text>
+              </View>
+
+              <View style={{ marginVertical: 20, paddingHorizontal: 10 }}>
+                {["a", "b", "c", "d", "e"].map((optionKey) => {
+                  const optionValue =
+                    questions[currentQuestion - 1]?.[
+                      optionKey as keyof Question
+                    ];
+                  if (!optionValue) return null;
+
+                  return (
+                    <TouchableOpacity
+                      key={optionKey}
+                      style={styles.thirdContainer}
+                      onPress={() =>
+                        handleOptionSelect(optionKey.toUpperCase())
+                      }
+                    >
+                      <Text style={styles.fourthText}>
+                        {optionKey.toUpperCase()}
+                      </Text>
+                      <View
+                        style={[
+                          styles.fourthContainer,
+                          selectedAnswers[currentQuestion] ===
+                          optionKey.toUpperCase()
+                            ? styles.selectedOption
+                            : {},
+                        ]}
+                      />
+                      <Text style={styles.fourthText}>{optionValue}</Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+              {/* <Text style={styles.fifthText}>
+            fundatmentals of cyber security 2021
+          </Text> */}
+
+              <Text style={styles.fourthText}>
+                {currentQuestion}/{questions.length}
+              </Text>
+              <View
+                style={{
+                  height: 7,
+                  backgroundColor: "#D9D9D9",
+                  borderRadius: 30,
+                  marginBottom: 20,
+                }}
+              >
+                <View
+                  style={{
+                    height: 7,
+                    backgroundColor: "#0F065E",
+                    borderRadius: 30,
+                    width: `${(currentQuestion / questions.length) * 100}%`,
+                  }}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <TouchableOpacity
+                  style={[
+                    styles.firstButton,
+                    currentQuestion === 1 ? styles.disabledButton : {},
+                  ]}
+                  onPress={handlePrevious}
+                  disabled={currentQuestion === 1}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      color: currentQuestion === 1 ? "#D9D9D9" : "#0F065E",
+                      fontWeight: "700",
+                    }}
+                  >
+                    Previous
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[
+                    styles.secondButton,
+                    currentQuestion === questions.length
+                      ? styles.disabledButton
+                      : {},
+                  ]}
+                  onPress={handleNext}
+                  disabled={currentQuestion === questions.length}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      color: "#FFFFFF",
+                      fontWeight: "700",
+                    }}
+                  >
+                    Next
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              {/* <View
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
@@ -244,32 +371,47 @@ const cbtQuestion = () => {
                 Next
               </Text>
             </TouchableOpacity>
-          </View>
-          <Text style={styles.sixthText}>Attempted Questions</Text>
-          <View
-            style={{
-              flexDirection: "row",
-              flexWrap: "wrap",
-              justifyContent: "flex-start",
-              gap: 2,
-              alignItems: "center",
-            }}
-          >
-            {Array.from({ length: 50 }, (_, i) => i + 1).map((number) => (
-              <TouchableOpacity
-                key={number}
-                style={
-                  answeredQuestions.has(number)
-                    ? styles.shadedRoundedContainer
-                    : styles.roundedContainer
-                }
-                onPress={() => handleQuestionClick(number)}
+          </View> */}
+              <Text style={styles.sixthText}>Attempted Questions</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  justifyContent: "flex-start",
+                  gap: 2,
+                  alignItems: "center",
+                }}
               >
-                <Text style={styles.seventhText}>{number}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-          {/* <View
+                {/* {Array.from({ length: 50 }, (_, i) => i + 1).map((number) => (
+                  <TouchableOpacity
+                    key={number}
+                    style={
+                      answeredQuestions.has(number)
+                        ? styles.shadedRoundedContainer
+                        : styles.roundedContainer
+                    }
+                    onPress={() => handleQuestionClick(number)}
+                  >
+                    <Text style={styles.seventhText}>{number}</Text>
+                  </TouchableOpacity>
+                ))} */}
+                {Array.from({ length: questions.length }, (_, i) => i + 1).map(
+                  (number) => (
+                    <TouchableOpacity
+                      key={number}
+                      style={
+                        answeredQuestions.has(number)
+                          ? styles.shadedRoundedContainer
+                          : styles.roundedContainer
+                      }
+                      onPress={() => handleQuestionClick(number)}
+                    >
+                      <Text style={styles.seventhText}>{number}</Text>
+                    </TouchableOpacity>
+                  )
+                )}
+              </View>
+              {/* <View
             style={{
               flexDirection: "row",
               flexWrap: "wrap",
@@ -291,6 +433,8 @@ const cbtQuestion = () => {
               </View>
             ))}
           </View> */}
+            </>
+          )}
         </View>
       </KeyboardAwareScrollView>
     </SafeAreaView>
