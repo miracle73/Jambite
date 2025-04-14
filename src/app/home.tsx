@@ -65,7 +65,12 @@ const home = () => {
                 flexDirection: "row",
               }}
             >
-              <ProfileIcon />
+              <TouchableOpacity
+                onPress={() => router.push("/bottomtab/settings")}
+              >
+                <ProfileIcon />
+              </TouchableOpacity>
+
               <Text style={styles.secondText}>{user.full_name}</Text>
             </View>
           </View>

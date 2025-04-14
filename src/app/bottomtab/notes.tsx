@@ -242,7 +242,7 @@ const notes = () => {
                   <View style={styles.secondSmallContainer}>
                     <Text
                       style={{
-                        fontSize: 24,
+                        fontSize: 84,
                         fontWeight: "700",
                         color: "white",
                       }}
