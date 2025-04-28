@@ -21,7 +21,6 @@ import { useLocalSearchParams } from "expo-router";
 
 const cbtQuestion = () => {
   const router = useRouter();
-
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const [selectedAnswers, setSelectedAnswers] = useState<
     Record<number, string>
@@ -32,6 +31,7 @@ const cbtQuestion = () => {
   const { id, name } = useLocalSearchParams();
 
   const token = useSelector((state: RootState) => state.auth.token);
+  const user = useSelector((state: RootState) => state.user.user);
   // Handle option selection
   const handleOptionSelect = (option: string): void => {
     setSelectedAnswers((prev: Record<number, string>) => ({
@@ -131,6 +131,34 @@ const cbtQuestion = () => {
     );
   }
 
+  if (!user?.activated) {
+    return (
+      <SafeAreaView
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#FFFFFF",
+        }}
+      >
+        <Text style={{ fontSize: 16, color: "#0F065E", fontWeight: "600" }}>
+          Activate your account to access this resource.
+        </Text>
+        <TouchableOpacity
+          style={{
+            marginTop: 20,
+            paddingHorizontal: 20,
+            paddingVertical: 10,
+            borderRadius: 10,
+            backgroundColor: "#0F065E",
+          }}
+          onPress={() => router.push("/activate")}
+        >
+          <Text style={{ color: "#FFFFFF", fontWeight: "700" }}>activate</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    );
+  }
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}

@@ -27,6 +27,7 @@ const editProfile = () => {
     setLoading(true);
     setFullName("");
     setEmail("");
+    setPhoneNumber("");
     setInstitution("");
     setLoading(false);
   };

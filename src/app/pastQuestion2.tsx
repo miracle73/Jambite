@@ -105,6 +105,14 @@ const pastQuestion2 = () => {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
+              if (!selectedYear || !selectedTime) {
+                Toast.show({
+                  type: "error",
+                  text1: "Error",
+                  text2: "Please select a year and time.",
+                });
+                return;
+              }
               router.push({
                 pathname: "/subjectPastQuestion",
                 params: { id: subjectId, name: subjectname },

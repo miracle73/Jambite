@@ -8,26 +8,28 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
-import {
-  BackArrow,
-  JambiteText,
-  MiniRecta,
-  Recta,
-  SecondJambiteText,
-} from "../../assets/svg";
+import { BackArrow, MiniRecta, Recta } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
-import { useActivateAppMutation } from "../components/services/userService";
+import {
+  useActivateAppMutation,
+  useGetUserInfoMutation,
+} from "../components/services/userService";
 import { RootState } from "../components/redux/store";
 import { useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
+import { useAppDispatch } from "../components/redux/store";
+import { setUserInfo } from "../components/redux/slices/userSlice";
 
 const activation = () => {
   const router = useRouter();
   const token = useSelector((state: RootState) => state.auth.token);
+  const user = useSelector((state: RootState) => state.user.user);
   const [code, setCode] = useState("");
   const [activateApp] = useActivateAppMutation();
   const [loading, setLoading] = useState(false);
+  const [getUserInfo] = useGetUserInfoMutation();
+  const dispatch = useAppDispatch();
 
   const handleActivate = async () => {
     if (!token) {
@@ -45,14 +47,25 @@ const activation = () => {
         pin: code,
         token: token,
       });
-      // if (activateResponse.data && activateResponse.data.success === true) {
-      Toast.show({
-        type: "success",
-        text1: "Success",
-        text2: "Successful",
-      });
-      router.push("/home");
-      // }
+      if (activateResponse.data) {
+        Toast.show({
+          type: "success",
+          text1: "Success",
+          text2: "Successful",
+        });
+        const userInfoResponse = await getUserInfo({
+          token: token,
+        }).unwrap();
+        dispatch(
+          setUserInfo({
+            email: userInfoResponse.email,
+            full_name: userInfoResponse.full_name,
+            phone_number: userInfoResponse.phone_number ?? "",
+            activated: userInfoResponse.activated,
+          })
+        );
+        router.push("/home");
+      }
     } catch (error) {
       console.error("Error during sign in:", error);
       Toast.show({
@@ -89,40 +102,52 @@ const activation = () => {
             Activate App
           </Text>
           <Text style={[styles.secondText, { marginRight: 5 }]}>
-            Access full app features
+            {user?.activated
+              ? `Your account has been activated`
+              : `Access full app features`}
           </Text>
+          {!user?.activated && (
+            <>
+              <Text style={styles.thirdText}>
+                Enter your 15 digit activation code to access full app features{" "}
+              </Text>
+
+              <Text style={[styles.fourthText]}>Activation Code</Text>
+              <View style={styles.firstContainer}>
+                <TextInput
+                  style={{ flex: 1, color: "#000000" }}
+                  placeholderTextColor="#000000"
+                  placeholder={""}
+                  onChangeText={(text) => setCode(text)}
+                  value={code}
+                />
+              </View>
+              <View>
+                <TouchableOpacity
+                  style={styles.secondContainer}
+                  onPress={handleActivate}
+                >
+                  {loading ? (
+                    <ActivityIndicator color="#FFFFFF" size={14} />
+                  ) : (
+                    <Text
+                      style={{
+                        color: "#FFFFFF",
+                        fontSize: 15,
+                        fontWeight: "600",
+                      }}
+                    >
+                      Activate
+                    </Text>
+                  )}
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
 
           <Text style={styles.thirdText}>
-            Enter your 15 digit activation code to access full app features{" "}
+            How to purchase an activation pin .
           </Text>
-
-          <Text style={[styles.fourthText]}>Activation Code</Text>
-          <View style={styles.firstContainer}>
-            <TextInput
-              style={{ flex: 1, color: "#000000" }}
-              placeholderTextColor="#000000"
-              placeholder={""}
-              onChangeText={(text) => setCode(text)}
-              value={code}
-            />
-          </View>
-          <View>
-            <TouchableOpacity
-              style={styles.secondContainer}
-              onPress={handleActivate}
-            >
-              {loading ? (
-                <ActivityIndicator color="#FFFFFF" size={14} />
-              ) : (
-                <Text
-                  style={{ color: "#FFFFFF", fontSize: 15, fontWeight: "600" }}
-                >
-                  Activate
-                </Text>
-              )}
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.thirdText}>To get your activation pin .</Text>
           <View style={styles.thirdContainer}>
             <View style={{ gap: 2 }}>
               <Recta />

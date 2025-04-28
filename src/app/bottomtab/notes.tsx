@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { B, BackArrow, M } from "../../../assets/svg";
-import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import DropDownPicker from "react-native-dropdown-picker";
 import {
@@ -234,7 +233,10 @@ const notes = () => {
                   onPress={() =>
                     router.push({
                       pathname: "/subject",
-                      params: { subjectName: subject.name },
+                      params: {
+                        subjectName: subject.name,
+                        subjectId: subject.id,
+                      },
                     })
                   }
                   key={subject.id}
@@ -285,28 +287,22 @@ const notes = () => {
                 style={pickerSelectStyles.inputIOS}
                 dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
               />
-              <View style={[{ marginTop: 30 }, open && { zIndex: -20 }]}>
-                <DropDownPicker
-                  open={open2}
-                  value={selectedTopic}
-                  items={
-                    subjectTopics[selectedSubject]?.map((topic) => ({
-                      label: topic.title,
-                      value: topic.id.toString(),
-                    })) || []
-                  }
-                  setOpen={setOpen2}
-                  setValue={(value) => setSelectedTopic(value)}
-                  placeholder="Select Topic"
-                  style={pickerSelectStyles.inputIOS}
-                  dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
-                />
-              </View>
             </View>
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
-                router.push("/exercise");
+                const selected = Subjects.find(
+                  (subject) => String(subject.id) === selectedSubject
+                );
+                if (selected) {
+                  router.push({
+                    pathname: "/exerciseTopics",
+                    params: {
+                      name: selected.name,
+                      id: String(selected.id),
+                    },
+                  });
+                }
               }}
             >
               <Text style={styles.sixthText}>Begin</Text>

@@ -84,6 +84,12 @@ const RootLayout = () => {
               }}
             />
             <Stack.Screen
+              name="exerciseTopics"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
               name="forgotPassword"
               options={{
                 headerShown: false,
@@ -158,6 +164,12 @@ const RootLayout = () => {
             />
             <Stack.Screen
               name="cbtQuestions"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="cbtQuestions2"
               options={{
                 headerShown: false,
               }}

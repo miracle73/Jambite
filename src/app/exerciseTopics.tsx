@@ -4,29 +4,69 @@ import {
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
-  TextInput,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
-import { BackArrow } from "../../../../assets/svg";
+import React, { useState, useEffect } from "react";
+import { BackArrow } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
 import DropDownPicker from "react-native-dropdown-picker";
-import { useGetAllInstitutionsQuery } from "../../../components/services/userService";
 import Toast from "react-native-toast-message";
+import { useLocalSearchParams } from "expo-router";
+import {
+  useGetSubjectTopicQuery,
+  SubjectResponse2,
+} from "../components/services/userService";
+import { RootState } from "../components/redux/store";
+import { useSelector } from "react-redux";
 
-const postUtme = () => {
-  const router = useRouter();
+const exerciseTopics = () => {
   const [open, setOpen] = useState(false);
-  const [open2, setOpen2] = useState(false);
-  const [open3, setOpen3] = useState(false);
+  const [topics, setTopics] = useState<SubjectResponse2[]>([]);
+  const router = useRouter();
   const [selectedYear, setSelectedYear] = useState("");
-  const [selectedUniversity, setSelectedUniversity] = useState("");
-  const [selectedFaculty, setSelectedFaculty] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
-  const { data: institutionsData, isLoading: isInstitutionsLoading } =
-    useGetAllInstitutionsQuery();
+  const { name, id } = useLocalSearchParams();
+  const [subjectId, setSubjectId] = useState("");
+  const [subjectname, setSubjectname] = useState("");
+  const token = useSelector((state: RootState) => state.auth.token);
+  useEffect(() => {
+    if (id) {
+      setSubjectId(Array.isArray(id) ? id[0] : id);
+    }
+    if (name) {
+      setSubjectname(Array.isArray(name) ? name[0] : name);
+    }
+  }, [id, name]);
+  const { data, isSuccess, isLoading, isError } = useGetSubjectTopicQuery({
+    token: token || "",
+    subject_id: Number(id),
+  });
+  useEffect(() => {
+    if (!token) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Access token is invalid, go back and login again",
+      });
+      router.push("/signin");
+      return;
+    }
+
+    if (isSuccess && data) {
+      setTopics(Array.isArray(data) ? data : [data]);
+    }
+
+    if (isError) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Failed to fetch topics.",
+      });
+    }
+  }, [token, isSuccess, data, isError, router]);
 
   const year = [
     { label: "2020", value: "2020" },
@@ -35,21 +75,6 @@ const postUtme = () => {
     { label: "2023", value: "2023" },
   ];
 
-  const university =
-    institutionsData?.levels?.map((institution: any) => ({
-      label: institution.name,
-      value: institution.id,
-    })) || [];
-
-  const faculty = [
-    { label: "Faculty of Science", value: "faculty_science" },
-    { label: "Faculty of Arts", value: "faculty_arts" },
-    { label: "Faculty of Engineering", value: "faculty_engineering" },
-  ];
-  const time = Array.from({ length: 50 }, (_, i) => ({
-    label: `${i + 1}`,
-    value: `${i + 1}`,
-  }));
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
@@ -70,79 +95,54 @@ const postUtme = () => {
           }}
         >
           <View style={{ marginBottom: 70 }}>
-            <TouchableOpacity onPress={() => router.push("/home")}>
+            <TouchableOpacity onPress={() => router.back()}>
               <BackArrow />
             </TouchableOpacity>
           </View>
           <Text style={[styles.firstText, { textAlign: "center" }]}>
-            POST UTME
+            {name} Topics
           </Text>
-          <Text style={[styles.secondText, { textAlign: "center" }]}>
-            Study and prepare ahead for
-          </Text>
+
           <View style={styles.firstContainer}>
             <DropDownPicker
               open={open}
-              value={selectedUniversity}
-              items={university}
+              value={selectedYear}
+              items={topics.map((topic) => ({
+                label: topic.title,
+                value: String(topic.id),
+              }))}
               setOpen={setOpen}
-              setValue={(value) => setSelectedUniversity(value)}
-              placeholder="Select University"
+              setValue={(value) => setSelectedYear(value)}
+              placeholder="Select Topic"
               style={pickerSelectStyles.inputIOS}
               dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
             />
-
-            {/* <View style={[{ marginTop: 30 }, open && { zIndex: -20 }]}>
-              <DropDownPicker
-                open={open2}
-                value={selectedFaculty}
-                items={faculty}
-                setOpen={setOpen2}
-                setValue={(value) => setSelectedFaculty(value)}
-                placeholder="Select Faculty"
-                style={pickerSelectStyles.inputIOS}
-                dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
-              />
-            </View> */}
-
-            <View style={[{ marginTop: 30 }, open && { zIndex: -20 }]}>
-              <DropDownPicker
-                open={open2}
-                value={selectedTime}
-                items={time}
-                setOpen={setOpen2}
-                setValue={(value) => setSelectedTime(value)}
-                placeholder="Select Question Number"
-                style={pickerSelectStyles.inputIOS}
-                dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
-              />
-            </View>
           </View>
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              if (!selectedUniversity) {
+              if (!selectedYear) {
                 Toast.show({
                   type: "error",
                   text1: "Error",
-                  text2: "Please select a school",
+                  text2: "Please select a topic.",
                 });
-
                 return;
               }
-              if (!selectedTime) {
-                Toast.show({
-                  type: "error",
-                  text1: "Error",
-                  text2: "Please select a question number",
+              const selected = topics.find(
+                (topic) => String(topic.id) === selectedYear
+              );
+              if (selected) {
+                router.push({
+                  pathname: "/exercise",
+                  params: {
+                    id: subjectId,
+                    name: subjectname,
+                    topicId: String(selected?.id),
+                    topicName: selected?.title,
+                  },
                 });
-
-                return;
               }
-              router.push({
-                pathname: "/cbtQuestions2",
-                params: { id: selectedTime },
-              });
             }}
           >
             <Text style={styles.sixthText}>Begin</Text>
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
   },
   firstContainer: {
     marginHorizontal: 10,
-    marginTop: 40,
+    marginTop: 30,
   },
   button: {
     backgroundColor: "#0F065E",
@@ -221,4 +221,4 @@ const pickerSelectStyles = StyleSheet.create({
   },
 });
 
-export default postUtme;
+export default exerciseTopics;

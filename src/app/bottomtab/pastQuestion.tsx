@@ -85,7 +85,7 @@ const pastQuestion = () => {
               flexDirection: "row",
             }}
           >
-            <TouchableOpacity onPress={() => router.back()}>
+            <TouchableOpacity onPress={() => router.push("/home")}>
               <BackArrow />
             </TouchableOpacity>
             <Text style={[styles.firstText, { textAlign: "center" }]}>

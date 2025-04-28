@@ -96,7 +96,7 @@ const cbt = () => {
           }}
         >
           <View style={{ marginBottom: 70 }}>
-            <TouchableOpacity onPress={() => router.back()}>
+            <TouchableOpacity onPress={() => router.push("/home")}>
               <BackArrow />
             </TouchableOpacity>
           </View>
@@ -104,7 +104,7 @@ const cbt = () => {
             CBT MODE
           </Text>
           <Text style={[styles.secondText, { textAlign: "center" }]}>
-            Select your 4 jamb subjects
+            Select your jamb subject
           </Text>
           <View style={styles.firstContainer}>
             <DropDownPicker
@@ -154,6 +154,14 @@ const cbt = () => {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
+              if (!selectedYear || !selectedTime || !selectedSubject) {
+                Toast.show({
+                  type: "error",
+                  text1: "Error",
+                  text2: "Please select all fields.",
+                });
+                return;
+              }
               const selected = pastQuestionSubjects.find(
                 (subject) => String(subject.id) === selectedSubject
               );

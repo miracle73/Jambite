@@ -12,7 +12,10 @@ import React, { useState } from "react";
 import { JambiteText, SecondJambiteText } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
-import { useLoginMutation } from "../components/services/userService";
+import {
+  useLoginMutation,
+  useGetUserInfoMutation,
+} from "../components/services/userService";
 import Toast from "react-native-toast-message";
 import HidePassword from "../../assets/images/hidepassword.png";
 import VisiblePassword from "../../assets/images/visiblePassword.png";
@@ -26,6 +29,7 @@ const signin = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const router = useRouter();
   const [login] = useLoginMutation();
+  const [getUserInfo] = useGetUserInfoMutation();
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const dispatch = useAppDispatch();
@@ -46,13 +50,19 @@ const signin = () => {
         Toast.show({
           type: "success",
           text1: "Success",
-          text2: LoginResponse.message,
+          text2: "Login successful",
         });
+        const userInfoResponse = await getUserInfo({
+          token: LoginResponse.access_token,
+        }).unwrap();
+
         dispatch(loginUser(LoginResponse.access_token));
         dispatch(
           setUserInfo({
-            email,
-            password,
+            email: userInfoResponse.email,
+            full_name: userInfoResponse.full_name,
+            phone_number: userInfoResponse.phone_number ?? "",
+            activated: userInfoResponse.activated,
           })
         );
         router.push("/home");
@@ -62,7 +72,7 @@ const signin = () => {
       Toast.show({
         type: "error",
         text1: "Error",
-        text2: "Error during sign in",
+        text2: error.detail,
       });
     } finally {
       setIsLoading(false);

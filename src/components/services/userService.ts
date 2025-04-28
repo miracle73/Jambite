@@ -47,6 +47,20 @@ interface LoginResponse {
   message: string;
 }
 
+export interface GetAQuestion {
+  year: string;
+  a: string;
+  id: number;
+  b: string;
+  d: string;
+  correct_answer: string;
+  question_text: string;
+  c: string;
+  e: string;
+  topic_id: number;
+  detail?: string;
+}
+
 interface InstitutionsResponse {
   message: string;
   levels: string[];
@@ -75,8 +89,17 @@ interface VerifyOtpResponse {
   message: string;
 }
 
-interface SubjectResponse {
-  [key: string]: string;
+export interface SubjectResponse {
+  year: string;
+  a: string;
+  id: number;
+  b: string;
+  d: string;
+  correct_answer: string;
+  question_text: string;
+  c: string;
+  e: string | null;
+  topic_id: number;
 }
 
 export interface TopicContent {
@@ -88,6 +111,17 @@ export interface TopicContent {
     description: string;
     free: boolean;
   };
+}
+
+export interface UserDetails {
+  id: number;
+  email: string;
+  phone_number: string | null;
+  role: string;
+  full_name: string;
+  hashed_password: string;
+  int_id: number;
+  activated: boolean;
 }
 
 export interface SubjectResponse1 {
@@ -177,10 +211,7 @@ export const userApi = createApi({
         },
       }),
     }),
-    getAQuestion: builder.query<
-      SubjectResponse[],
-      { token: string; q_id: number }
-    >({
+    getAQuestion: builder.query<GetAQuestion, { token: string; q_id: number }>({
       query: ({ token, q_id }) => ({
         url: `pq/get-a-question?q_id=${q_id}`,
         method: "GET",
@@ -237,6 +268,15 @@ export const userApi = createApi({
         },
       }),
     }),
+    getUserInfo: builder.mutation<UserDetails, { token: string }>({
+      query: ({ token }) => ({
+        url: `user/info`,
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
     activateApp: builder.mutation<
       ActivateAppResponse,
       { pin: string; token: string }
@@ -266,4 +306,5 @@ export const {
   useGetQuestionByTopicQuery,
   useGetQuestionBySubjectQuery,
   useCutOffQuery,
+  useGetUserInfoMutation,
 } = userApi;

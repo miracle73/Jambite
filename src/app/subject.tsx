@@ -25,15 +25,20 @@ import { useLocalSearchParams } from "expo-router";
 const subject = () => {
   const router = useRouter();
   const [subject, setSubject] = useState("");
-  const { subjectName } = useLocalSearchParams();
+  const [subjectid, setSubectid] = useState("");
+  const { subjectName, subjectId } = useLocalSearchParams();
   useEffect(() => {
     if (subjectName) {
       setSubject(Array.isArray(subjectName) ? subjectName[0] : subjectName);
     }
-  }, [subjectName]);
+    if (subjectId) {
+      setSubectid(Array.isArray(subjectId) ? subjectId[0] : subjectId);
+    }
+  }, [subjectName, subjectId]);
   const token = useSelector((state: RootState) => state.auth.token);
+  const user = useSelector((state: RootState) => state.user.user);
   const { data, isSuccess, isLoading, isError } = useGetSubjectTopicQuery({
-    subject_id: 1,
+    subject_id: Number(subjectid),
     token: token || "",
   });
 
@@ -137,12 +142,19 @@ const subject = () => {
                       params: { subjectName: subject, id: topic.id },
                     });
                   } else {
-                    Toast.show({
-                      type: "error",
-                      text1: "Error",
-                      text2:
-                        "This topic is locked, please subscribe to unlock it.",
-                    });
+                    if (user?.activated) {
+                      router.push({
+                        pathname: "/subjectNote",
+                        params: { subjectName: subject, id: topic.id },
+                      });
+                    } else {
+                      Toast.show({
+                        type: "error",
+                        text1: "Error",
+                        text2:
+                          "This topic is locked, please subscribe to unlock it.",
+                      });
+                    }
                   }
                 }}
               >
@@ -172,6 +184,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.6,
     shadowRadius: 4,
     shadowColor: "#333333",
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   firstText: {
     fontSize: 20,
@@ -184,7 +199,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   thirdText: {
-    fontSize: 20,
+    fontSize: 14,
     color: "#0F065E",
     fontWeight: "800",
   },

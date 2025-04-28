@@ -42,7 +42,7 @@ const settings = () => {
             alignItems: "center",
           }}
         >
-          <TouchableOpacity onPress={() => router.back()}>
+          <TouchableOpacity onPress={() => router.push("/home")}>
             <BackButton />
           </TouchableOpacity>
 

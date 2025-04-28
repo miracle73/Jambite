@@ -8,6 +8,7 @@ interface User {
   password: string;
   full_name: string;
   phone_number: string;
+  activated: boolean;
 }
 
 interface UserState {
@@ -23,6 +24,7 @@ const initialState: UserState = {
     password: "",
     full_name: "",
     phone_number: "",
+    activated: false,
   },
 };
 

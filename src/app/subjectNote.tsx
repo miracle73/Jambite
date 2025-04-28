@@ -113,23 +113,7 @@ const subjectNote = () => {
           {showModal && (
             <View style={styles.firstContainer}>
               <Text style={[styles.fourthText, { marginBottom: 5 }]}>
-                By the end of this topic, you should be able to:
-              </Text>
-              <Text style={styles.fourthText}>
-                1. Identify different types of numbers and their properties.
-              </Text>
-              <Text style={styles.fourthText}>
-                2. Convert numbers between different bases.
-              </Text>
-              <Text style={styles.fourthText}>
-                3. Perform operations with indices, surds, and logarithms.
-              </Text>
-              <Text style={styles.fourthText}>
-                4. Apply the laws of indices and logarithms in problem-solving.
-              </Text>
-              <Text style={styles.fourthText}>
-                5.Understand sequences and series, including arithmetic and
-                geometric progressions.
+                {/* By the end of this topic, you should be able to: */}
               </Text>
             </View>
           )}

@@ -49,12 +49,14 @@ const socials = () => {
           <View style={[styles.fourthContainer, { marginTop: 50 }]}>
             <FacebookSocials />
             <Text style={styles.thirdText}>
-              itededucationalsoftwares@facebook.com
+              https://www.facebook.com/profile.php?id=61566071536017
             </Text>
           </View>
           <View style={styles.fourthContainer}>
             <InstagramSocials />
-            <Text style={styles.thirdText}>itedsoftwares@instagram.com</Text>
+            <Text style={styles.thirdText}>
+              https://www.instagram.com/itedsoftwares/{" "}
+            </Text>
           </View>
           <View style={styles.fourthContainer}>
             <TiktokSocials />
@@ -62,7 +64,7 @@ const socials = () => {
           </View>
           <View style={styles.fourthContainer}>
             <TelegramSocials />
-            <Text style={styles.thirdText}>itedsoftwares@telegtram.com</Text>
+            <Text style={styles.thirdText}>https://t.me/itedsoftwares </Text>
           </View>
         </View>
       </KeyboardAwareScrollView>

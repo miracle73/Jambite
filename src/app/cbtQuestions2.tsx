@@ -12,28 +12,31 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useRouter } from "expo-router";
 import {
   useGetQuestionBySubjectQuery,
-  Question,
+  useGetAQuestionQuery,
+  GetAQuestion,
 } from "../components/services/userService";
 import { RootState } from "../components/redux/store";
 import { useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
 import { useLocalSearchParams } from "expo-router";
 
-const subjectPastQuestion = () => {
+const cbtQuestion2 = () => {
   const router = useRouter();
+  const [showModal, setShowModal] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(1);
 
-  const [showModal, setShowModal] = useState(false);
   const [selectedAnswers, setSelectedAnswers] = useState<
     Record<number, string>
   >({});
+
   const [answeredQuestions, setAnsweredQuestions] = useState<Set<number>>(
     new Set()
   );
-
   const { id, name } = useLocalSearchParams();
+
   const token = useSelector((state: RootState) => state.auth.token);
-  const user = useSelector((state: RootState) => state.user.user);
+
+  // Handle option selection
   const handleOptionSelect = (option: string): void => {
     setSelectedAnswers((prev: Record<number, string>) => ({
       ...prev,
@@ -44,20 +47,12 @@ const subjectPastQuestion = () => {
     );
   };
 
-  const handlePrevious = () => {
-    setCurrentQuestion((prev) => Math.max(1, prev - 1));
-  };
-
-  const handleNext = () => {
-    setCurrentQuestion((prev) => Math.min(50, prev + 1));
-  };
-
-  const { data, isSuccess, isLoading, isError } = useGetQuestionBySubjectQuery({
-    subject_id: Number(id),
+  const { data, isSuccess, isLoading, isError } = useGetAQuestionQuery({
+    q_id: Number(id),
     token: token || "",
   });
-
-  const [questions, setQuestions] = useState<Question[]>([]);
+  console.log(data, 6788);
+  const [questions, setQuestions] = useState<GetAQuestion | null>(null);
 
   useEffect(() => {
     if (!token) {
@@ -78,7 +73,7 @@ const subjectPastQuestion = () => {
       Toast.show({
         type: "error",
         text1: "Error",
-        text2: "Failed to fetch topics.",
+        text2: "Failed to fetch questions.",
       });
     }
   }, [token, isSuccess, data, isError, router]);
@@ -98,63 +93,6 @@ const subjectPastQuestion = () => {
     );
   }
 
-  if (!isLoading && questions.length === 0) {
-    return (
-      <SafeAreaView
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "#FFFFFF",
-        }}
-      >
-        <Text style={{ fontSize: 16, color: "#0F065E", fontWeight: "600" }}>
-          No questions available for this subject.
-        </Text>
-        <TouchableOpacity
-          style={{
-            marginTop: 20,
-            paddingHorizontal: 20,
-            paddingVertical: 10,
-            borderRadius: 10,
-            backgroundColor: "#0F065E",
-          }}
-          onPress={() => router.back()}
-        >
-          <Text style={{ color: "#FFFFFF", fontWeight: "700" }}>Go Back</Text>
-        </TouchableOpacity>
-      </SafeAreaView>
-    );
-  }
-
-  if (!user?.activated) {
-    return (
-      <SafeAreaView
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "#FFFFFF",
-        }}
-      >
-        <Text style={{ fontSize: 16, color: "#0F065E", fontWeight: "600" }}>
-          Activate your account to access this resource.
-        </Text>
-        <TouchableOpacity
-          style={{
-            marginTop: 20,
-            paddingHorizontal: 20,
-            paddingVertical: 10,
-            borderRadius: 10,
-            backgroundColor: "#0F065E",
-          }}
-          onPress={() => router.push("/activate")}
-        >
-          <Text style={{ color: "#FFFFFF", fontWeight: "700" }}>activate</Text>
-        </TouchableOpacity>
-      </SafeAreaView>
-    );
-  }
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
@@ -170,7 +108,7 @@ const subjectPastQuestion = () => {
             flex: 1,
           }}
         >
-          {questions && questions.length >= currentQuestion && (
+          {questions && (
             <>
               <View
                 style={{
@@ -191,10 +129,12 @@ const subjectPastQuestion = () => {
                   <TouchableOpacity onPress={() => router.back()}>
                     <BackArrow />
                   </TouchableOpacity>
-                  <Text style={styles.firstText}>{name} </Text>
+                  <Text style={styles.firstText}>{name}</Text>
                 </View>
-
-                <TouchableOpacity style={styles.secondContainer}>
+                <TouchableOpacity
+                  style={styles.secondContainer}
+                  onPress={() => router.back()}
+                >
                   <Text
                     style={{
                       color: "#FFFFFF",
@@ -202,58 +142,23 @@ const subjectPastQuestion = () => {
                       fontWeight: "600",
                     }}
                   >
-                    {questions[currentQuestion - 1]?.year}
+                    {/* {questions?.year} */}
+                    Done
                   </Text>
                 </TouchableOpacity>
               </View>
-              {/* <View style={styles.firstContainer}>
-            <Text style={styles.secondText}>Question {currentQuestion}</Text>
-            <Text style={styles.thirdText}>
-              What is the main aim of Cyber Security Education to
-              infrastructure?
-            </Text>
-          </View> */}
-              {/* <View
-            style={{
-              marginVertical: 20,
-              paddingHorizontal: 10,
-            }}
-          >
-            {["A", "B", "C", "D"].map((option) => (
-              <TouchableOpacity
-                key={option}
-                style={styles.thirdContainer}
-                onPress={() => handleOptionSelect(option)}
-              >
-                <Text style={styles.fourthText}>{option}</Text>
-                <View
-                  style={[
-                    styles.fourthContainer,
-                    selectedAnswers[currentQuestion] === option
-                      ? styles.selectedOption
-                      : {},
-                  ]}
-                />
-                <Text style={styles.fourthText}>Important and Resillence</Text>
-              </TouchableOpacity>
-            ))}
-          </View> */}
 
               <View style={styles.firstContainer}>
                 <Text style={styles.secondText}>
                   Question {currentQuestion}
                 </Text>
-                <Text style={styles.thirdText}>
-                  {questions[currentQuestion - 1]?.question_text}
-                </Text>
+                <Text style={styles.thirdText}>{questions?.question_text}</Text>
               </View>
 
               <View style={{ marginVertical: 20, paddingHorizontal: 10 }}>
                 {["a", "b", "c", "d", "e"].map((optionKey) => {
                   const optionValue =
-                    questions[currentQuestion - 1]?.[
-                      optionKey as keyof Question
-                    ];
+                    questions?.[optionKey as keyof GetAQuestion];
                   if (!optionValue) return null;
 
                   return (
@@ -281,65 +186,18 @@ const subjectPastQuestion = () => {
                   );
                 })}
               </View>
+
               <TouchableOpacity onPress={() => setShowModal(!showModal)}>
-                <Text style={styles.fifthText}>Show solutions</Text>
+                <Text style={styles.eighthText}>Show solutions</Text>
               </TouchableOpacity>
 
               {showModal && (
                 <View style={styles.fifthContainer}>
-                  <Text style={[styles.sixthText, { marginBottom: 5 }]}>
-                    {questions[currentQuestion - 1]?.correct_answer}
+                  <Text style={[styles.ninthText, { marginBottom: 5 }]}>
+                    {questions?.correct_answer}
                   </Text>
                 </View>
               )}
-
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <TouchableOpacity
-                  style={[
-                    styles.firstButton,
-                    currentQuestion === 1 ? styles.disabledButton : {},
-                  ]}
-                  onPress={handlePrevious}
-                  disabled={currentQuestion === 1}
-                >
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      color: currentQuestion === 1 ? "#D9D9D9" : "#0F065E",
-                      fontWeight: "700",
-                    }}
-                  >
-                    Previous
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={[
-                    styles.secondButton,
-                    currentQuestion === questions.length
-                      ? styles.disabledButton
-                      : {},
-                  ]}
-                  onPress={handleNext}
-                  disabled={currentQuestion === questions.length}
-                >
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      color: "#FFFFFF",
-                      fontWeight: "700",
-                    }}
-                  >
-                    Next
-                  </Text>
-                </TouchableOpacity>
-              </View>
             </>
           )}
         </View>
@@ -352,8 +210,29 @@ const styles = StyleSheet.create({
   selectedOption: {
     backgroundColor: "#0F065E",
   },
+  roundedContainer: {
+    borderWidth: 2,
+    borderColor: "#0F065E",
+    height: 26,
+    width: 26,
+    borderRadius: 15,
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
+  },
   disabledButton: {
     opacity: 0.5,
+  },
+  shadedRoundedContainer: {
+    backgroundColor: "#00052D9C",
+    borderWidth: 2,
+    borderColor: "#0F065E",
+    height: 26,
+    width: 26,
+    borderRadius: 15,
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
   },
   firstButton: {
     borderColor: "#0F065E",
@@ -438,7 +317,7 @@ const styles = StyleSheet.create({
   },
 
   fourthText: {
-    fontSize: 14,
+    fontSize: 17,
     color: "#0F065E",
     fontWeight: "700",
   },
@@ -448,13 +327,33 @@ const styles = StyleSheet.create({
     color: "#000000",
     fontWeight: "700",
     textAlign: "right",
-    marginBottom: 10,
+    marginBottom: 30,
   },
   sixthText: {
+    fontSize: 12,
+    color: "#000000",
+    fontWeight: "700",
+    textAlign: "center",
+    marginVertical: 10,
+  },
+  seventhText: {
+    fontSize: 12,
+    color: "#000000",
+    fontWeight: "700",
+    textAlign: "center",
+  },
+  eighthText: {
+    fontSize: 10,
+    color: "#000000",
+    fontWeight: "700",
+    textAlign: "right",
+    marginBottom: 10,
+  },
+  ninthText: {
     fontSize: 9,
     color: "#000000",
     fontWeight: "600",
   },
 });
 
-export default subjectPastQuestion;
+export default cbtQuestion2;
