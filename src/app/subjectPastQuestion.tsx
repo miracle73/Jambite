@@ -206,38 +206,6 @@ const subjectPastQuestion = () => {
                   </Text>
                 </TouchableOpacity>
               </View>
-              {/* <View style={styles.firstContainer}>
-            <Text style={styles.secondText}>Question {currentQuestion}</Text>
-            <Text style={styles.thirdText}>
-              What is the main aim of Cyber Security Education to
-              infrastructure?
-            </Text>
-          </View> */}
-              {/* <View
-            style={{
-              marginVertical: 20,
-              paddingHorizontal: 10,
-            }}
-          >
-            {["A", "B", "C", "D"].map((option) => (
-              <TouchableOpacity
-                key={option}
-                style={styles.thirdContainer}
-                onPress={() => handleOptionSelect(option)}
-              >
-                <Text style={styles.fourthText}>{option}</Text>
-                <View
-                  style={[
-                    styles.fourthContainer,
-                    selectedAnswers[currentQuestion] === option
-                      ? styles.selectedOption
-                      : {},
-                  ]}
-                />
-                <Text style={styles.fourthText}>Important and Resillence</Text>
-              </TouchableOpacity>
-            ))}
-          </View> */}
 
               <View style={styles.firstContainer}>
                 <Text style={styles.secondText}>
