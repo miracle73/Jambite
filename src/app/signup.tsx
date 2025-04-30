@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
   secondContainer: {
     backgroundColor: "#FFFFFF",
     marginHorizontal: 20,
-    paddingVertical: 13,
+    paddingVertical: 15,
     paddingHorizontal: 20,
     marginTop: 10,
     borderRadius: 25,
