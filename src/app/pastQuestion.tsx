@@ -8,14 +8,14 @@ import {
   TextInput,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { BackArrow } from "../../../assets/svg";
+import { BackArrow } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
 import {
   useGetAllSubjectsQuery,
   SubjectResponse1,
-} from "../../components/services/userService";
-import { RootState } from "../../components/redux/store";
+} from "../components/services/userService";
+import { RootState } from "../components/redux/store";
 import { useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
 
@@ -85,7 +85,7 @@ const pastQuestion = () => {
               flexDirection: "row",
             }}
           >
-            <TouchableOpacity onPress={() => router.push("/home")}>
+            <TouchableOpacity onPress={() => router.push("/bottomtab/home")}>
               <BackArrow />
             </TouchableOpacity>
             <Text style={[styles.firstText, { textAlign: "center" }]}>

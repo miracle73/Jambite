@@ -70,7 +70,7 @@ const postUtme = () => {
           }}
         >
           <View style={{ marginBottom: 70 }}>
-            <TouchableOpacity onPress={() => router.push("/home")}>
+            <TouchableOpacity onPress={() => router.push("/bottomtab/home")}>
               <BackArrow />
             </TouchableOpacity>
           </View>

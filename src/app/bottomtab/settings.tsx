@@ -30,9 +30,9 @@ const settings = () => {
   const [secondModal, setSecondModel] = useState(false);
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 70 }}
+      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 50 }}
     >
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} style={{}}>
         <View
           style={{
             flexDirection: "row",
@@ -42,7 +42,7 @@ const settings = () => {
             alignItems: "center",
           }}
         >
-          <TouchableOpacity onPress={() => router.push("/home")}>
+          <TouchableOpacity onPress={() => router.push("/bottomtab/home")}>
             <BackButton />
           </TouchableOpacity>
 
@@ -60,7 +60,7 @@ const settings = () => {
             <View style={styles.circularContainer}></View>
             <View>
               <Text style={styles.secondText}>{user.full_name}</Text>
-              <Text style={styles.secondText}>{user.phone_number}</Text>
+              <Text style={styles.secondText}>{user.email}</Text>
             </View>
           </View>
           <TouchableOpacity
@@ -177,12 +177,12 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   secondText: {
-    fontSize: 15,
+    fontSize: 12,
     color: "#FFFFFF",
     fontWeight: "700",
   },
   thirdText: {
-    fontSize: 15,
+    fontSize: 13,
     color: "#00052D",
     fontWeight: "700",
   },
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
-    marginTop: 40,
+    marginTop: 20,
   },
   circularContainer: {
     backgroundColor: "#FFFFFF",
@@ -222,9 +222,9 @@ const styles = StyleSheet.create({
   thirdContainer: {
     flexDirection: "row",
     justifyContent: "flex-start",
-    gap: 3,
+    gap: 10,
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 15,
   },
 });
 

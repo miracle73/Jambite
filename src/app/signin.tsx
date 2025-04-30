@@ -19,7 +19,7 @@ import {
 import Toast from "react-native-toast-message";
 import HidePassword from "../../assets/images/hidepassword.png";
 import VisiblePassword from "../../assets/images/visiblePassword.png";
-import { loginUser } from "../components/redux/slices/authSlice";
+import { loginUser, updateExpires } from "../components/redux/slices/authSlice";
 import { useAppDispatch } from "../components/redux/store";
 import { setUserInfo } from "../components/redux/slices/userSlice";
 
@@ -57,6 +57,7 @@ const signin = () => {
         }).unwrap();
 
         dispatch(loginUser(LoginResponse.access_token));
+        dispatch(updateExpires(LoginResponse.expires));
         dispatch(
           setUserInfo({
             email: userInfoResponse.email,
@@ -65,14 +66,14 @@ const signin = () => {
             activated: userInfoResponse.activated,
           })
         );
-        router.push("/home");
+        router.push("/bottomtab/home");
       }
     } catch (error) {
       console.error("Error during sign in:", error);
       Toast.show({
         type: "error",
         text1: "Error",
-        text2: error.detail,
+        text2: "Invalid email or password",
       });
     } finally {
       setIsLoading(false);

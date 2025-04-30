@@ -5,11 +5,15 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface AuthState {
   isAuthenticated: boolean;
   token: string | null;
+  lastActivity: number;
+  expires: string | null;
 }
 
 const initialState: AuthState = {
   isAuthenticated: false,
   token: null,
+  lastActivity: Date.now(),
+  expires: null,
 };
 
 const authSlice = createSlice({
@@ -24,8 +28,15 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.token = null;
     },
+    updateExpires: (state, action: PayloadAction<string | null>) => {
+      state.expires = action.payload;
+    },
+    updateLastActivity: (state) => {
+      state.lastActivity = Date.now();
+    },
   },
 });
 
-export const { loginUser, logoutUser } = authSlice.actions;
+export const { loginUser, logoutUser, updateLastActivity, updateExpires } =
+  authSlice.actions;
 export default authSlice.reducer;

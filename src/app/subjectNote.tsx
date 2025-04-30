@@ -73,7 +73,7 @@ const subjectNote = () => {
   }
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
+      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 50 }}
     >
       <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
@@ -104,7 +104,7 @@ const subjectNote = () => {
               onPress={() => setShowModal(!showModal)}
             >
               <Text
-                style={{ color: "#00052D", fontSize: 15, fontWeight: "600" }}
+                style={{ color: "#00052D", fontSize: 12, fontWeight: "600" }}
               >
                 Study Objectives
               </Text>
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   firstText: {
-    fontSize: 15,
+    fontSize: 12,
     color: "#0F065E",
     fontWeight: "800",
   },

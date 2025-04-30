@@ -5,11 +5,11 @@
     "scheme": "jambite",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/Jambite-2.jpg",
+    "icon": "./assets/Jambite-2.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/Jambite-3.jpg",
+      "image": "./assets/Jambite-3.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

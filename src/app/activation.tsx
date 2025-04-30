@@ -64,7 +64,7 @@ const activation = () => {
             activated: userInfoResponse.activated,
           })
         );
-        router.push("/home");
+        router.push("/bottomtab/home");
       }
     } catch (error) {
       console.error("Error during sign in:", error);

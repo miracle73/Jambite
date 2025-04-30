@@ -144,12 +144,12 @@ const notes = () => {
   }
 
   return (
-    <ScrollView
+    <View
       style={{
         flex: 1,
         backgroundColor: "#FFFFFF",
+        paddingBottom: 50,
       }}
-      showsVerticalScrollIndicator={false}
     >
       <View style={{}}>
         <View
@@ -160,7 +160,7 @@ const notes = () => {
             paddingBottom: 20,
           }}
         >
-          <TouchableOpacity onPress={() => router.push("/home")}>
+          <TouchableOpacity onPress={() => router.push("/bottomtab/home")}>
             <BackArrow />
           </TouchableOpacity>
           <Text
@@ -222,52 +222,50 @@ const notes = () => {
           </View>
         </View>
         {selectedText === "Subjects" && (
-          <>
+          <ScrollView showsVerticalScrollIndicator={false} style={{}}>
             {Subjects.map((subject, index) => (
-              <>
-                <TouchableOpacity
-                  style={[
-                    styles.secondContainer,
-                    index === Subjects.length - 1 && { marginBottom: 30 },
-                  ]}
-                  onPress={() =>
-                    router.push({
-                      pathname: "/subject",
-                      params: {
-                        subjectName: subject.name,
-                        subjectId: subject.id,
-                      },
-                    })
-                  }
-                  key={subject.id}
-                >
-                  <View style={styles.secondSmallContainer}>
-                    <Text
-                      style={{
-                        fontSize: 84,
-                        fontWeight: "700",
-                        color: "white",
-                      }}
-                    >
-                      {subject.name.charAt(0)}
-                    </Text>
-                  </View>
-                  <View style={{ width: "60%" }}>
-                    <Text style={styles.secondText}>{subject.name}</Text>
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.secondContainer,
+                  index === Subjects.length - 1 && { marginBottom: 170 },
+                ]}
+                onPress={() =>
+                  router.push({
+                    pathname: "/subject",
+                    params: {
+                      subjectName: subject.name,
+                      subjectId: subject.id,
+                    },
+                  })
+                }
+              >
+                <View style={styles.secondSmallContainer}>
+                  <Text
+                    style={{
+                      fontSize: 84,
+                      fontWeight: "700",
+                      color: "white",
+                    }}
+                  >
+                    {subject.name.charAt(0)}
+                  </Text>
+                </View>
+                <View style={{ width: "60%" }}>
+                  <Text style={styles.secondText}>{subject.name}</Text>
 
-                    {subjectTopics &&
-                      subjectTopics[subject.id]?.map(
-                        (topic: SubjectResponse2, topicIndex: number) => (
-                          <Text key={topicIndex + 1} style={styles.thirdText}>
-                            {topic.title}
-                          </Text>
-                        )
-                      )}
-                  </View>
-                </TouchableOpacity>
-              </>
+                  {subjectTopics &&
+                    subjectTopics[subject.id]?.map(
+                      (topic: SubjectResponse2, topicIndex: number) => (
+                        <Text key={topicIndex + 1} style={styles.thirdText}>
+                          {topic.title}
+                        </Text>
+                      )
+                    )}
+                </View>
+              </TouchableOpacity>
             ))}
-          </>
+          </ScrollView>
         )}
         {selectedText === "Exercises" && (
           <>
@@ -311,14 +309,14 @@ const notes = () => {
         )}
         {selectedText === "Past Questions" && (
           <>
-            <ScrollView style={{}}>
+            <ScrollView style={{}} showsVerticalScrollIndicator={false}>
               {Subjects.map((subject, index) => (
                 <TouchableOpacity
                   key={index}
                   style={[
                     styles.fourthContainer,
                     index === Subjects.length - 1 && {
-                      marginBottom: 20,
+                      marginBottom: 170,
                     },
                   ]}
                   onPress={() => {
@@ -335,7 +333,7 @@ const notes = () => {
           </>
         )}
       </View>
-    </ScrollView>
+    </View>
   );
 };
 

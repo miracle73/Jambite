@@ -24,7 +24,7 @@ const TabsLayout = () => {
       }}
     >
       <Tabs.Screen
-        name="pastQuestion"
+        name="home"
         options={{
           //   title: "Home",
 

@@ -13,7 +13,6 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { JambiteText, SecondJambiteText } from "../../assets/svg";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
 import {
   useCreateUserMutation,
@@ -26,7 +25,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { useGetAllInstitutionsQuery } from "../components/services/userService";
 import HidePassword from "../../assets/images/hidepassword.png";
 import VisiblePassword from "../../assets/images/visiblePassword.png";
-import { loginUser } from "../components/redux/slices/authSlice";
+import { loginUser, updateExpires } from "../components/redux/slices/authSlice";
 
 const signup = () => {
   const [email, setEmail] = useState("");
@@ -84,6 +83,7 @@ const signup = () => {
           text2: requestOtpResponse.message,
         });
         dispatch(loginUser(createUserResponse.access_token));
+        dispatch(updateExpires(createUserResponse.token_expires));
         router.push("/verification");
       }
     } catch (error) {
@@ -104,172 +104,171 @@ const signup = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
-      <KeyboardAvoidingView
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 70 }}
+    >
+      {/* <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
-      >
-        <View style={{ justifyContent: "center", flex: 1 }}>
-          <ScrollView
+      > */}
+      <View style={{ justifyContent: "center", flex: 1 }}>
+        {/* <ScrollView
             style={styles.container}
             showsVerticalScrollIndicator={false}
+          > */}
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "row",
+          }}
+        >
+          <SecondJambiteText />
+        </View>
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "row",
+            paddingHorizontal: 20,
+            gap: 8,
+            marginTop: 10,
+          }}
+        >
+          <TouchableOpacity
+            style={[
+              styles.transitionButton,
+              isSignUp && { backgroundColor: "#FFFFFF" },
+            ]}
+            onPress={() => {
+              setIsSignUp(false);
+              router.push("/signin");
+            }}
           >
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "row",
-              }}
-            >
-              <SecondJambiteText />
-            </View>
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "row",
-                paddingHorizontal: 20,
-                gap: 8,
-                marginTop: 20,
-              }}
-            >
-              <TouchableOpacity
-                style={[
-                  styles.transitionButton,
-                  isSignUp && { backgroundColor: "#FFFFFF" },
-                ]}
-                onPress={() => {
-                  setIsSignUp(false);
-                  router.push("/signin");
-                }}
-              >
-                <Text
-                  style={[
-                    styles.secondText,
-                    { color: !isSignUp ? "white" : "#0F065E" },
-                  ]}
-                >
-                  Sign In
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.transitionButton,
-                  !isSignUp && { backgroundColor: "#FFFFFF" },
-                ]}
-                onPress={() => {
-                  setIsSignUp(true);
-                  router.push("/signup");
-                }}
-              >
-                <Text
-                  style={[
-                    styles.secondText,
-                    { color: isSignUp ? "white" : "#0F065E" },
-                  ]}
-                >
-                  Sign up
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <Text style={styles.firstText}>
-              Get to know more about ITed Education Software
-            </Text>
-
-            <Text style={styles.fifthText}>FULL NAME</Text>
-            <View style={styles.secondContainer}>
-              <TextInput
-                style={{ flex: 1, color: "#000000" }}
-                placeholderTextColor="#000000"
-                placeholder={"Full Name"}
-                onChangeText={(text) => setName(text)}
-                value={name}
-              />
-            </View>
-            <Text style={styles.fifthText}>EMAIL ADDRESS</Text>
-            <View style={styles.secondContainer}>
-              <TextInput
-                style={{ flex: 1, color: "#000000" }}
-                placeholderTextColor="#000000"
-                placeholder={"Email address"}
-                onChangeText={(text) => setEmail(text)}
-                value={email}
-                keyboardType="email-address"
-              />
-            </View>
-            <Text style={styles.fifthText}>PHONE NUMBER</Text>
-            <View style={styles.secondContainer}>
-              <TextInput
-                style={{ flex: 1, color: "#000000" }}
-                placeholderTextColor="#000000"
-                placeholder={"Your Phone number"}
-                onChangeText={(text) => setNumber(text)}
-                value={number}
-                keyboardType="numeric"
-              />
-            </View>
-            <Text style={styles.fifthText}>PREFFERD INSTITUTION</Text>
-            <View style={styles.firstContainer}>
-              <DropDownPicker
-                open={open}
-                value={institution}
-                items={year}
-                setOpen={setOpen}
-                setValue={(value) => setInstitution(value)}
-                placeholder="Select Institution"
-                style={pickerSelectStyles.inputIOS}
-                dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
-              />
-            </View>
-            <Text style={[styles.fifthText, open && { zIndex: -20 }]}>
-              PASSWORD
-            </Text>
-            <View
-              style={[
-                styles.secondContainer,
-                {
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                },
-                open && { zIndex: -20 },
-              ]}
-            >
-              <TextInput
-                style={{ flex: 1, color: "#000000" }}
-                placeholderTextColor="#000000"
-                placeholder={"Password"}
-                onChangeText={(text) => setPassword(text)}
-                value={password}
-                secureTextEntry={!isPasswordVisible}
-              />
-              <TouchableOpacity
-                onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-                style={{}}
-              >
-                <Image
-                  source={isPasswordVisible ? VisiblePassword : HidePassword}
-                />
-              </TouchableOpacity>
-            </View>
-            <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-              {isLoading ? (
-                <ActivityIndicator color="#FFFFFF" size={14} />
-              ) : (
-                <Text style={styles.thirdText}>SIGN UP</Text>
-              )}
-            </TouchableOpacity>
             <Text
               style={[
-                styles.fourthText,
-                { textAlign: "center", marginBottom: 30 },
+                styles.secondText,
+                { color: !isSignUp ? "white" : "#0F065E" },
               ]}
             >
-              Powered by Ited Softwares
+              Sign In
             </Text>
-          </ScrollView>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.transitionButton,
+              !isSignUp && { backgroundColor: "#FFFFFF" },
+            ]}
+            onPress={() => {
+              setIsSignUp(true);
+              router.push("/signup");
+            }}
+          >
+            <Text
+              style={[
+                styles.secondText,
+                { color: isSignUp ? "white" : "#0F065E" },
+              ]}
+            >
+              Sign up
+            </Text>
+          </TouchableOpacity>
         </View>
-      </KeyboardAvoidingView>
+        <Text style={styles.firstText}>
+          Get to know more about ITed Education Software
+        </Text>
+
+        <Text style={styles.fifthText}>FULL NAME</Text>
+        <View style={styles.secondContainer}>
+          <TextInput
+            style={{ color: "#000000" }}
+            placeholderTextColor="#000000"
+            placeholder={"Full Name"}
+            onChangeText={(text) => setName(text)}
+            value={name}
+          />
+        </View>
+        <Text style={styles.fifthText}>EMAIL ADDRESS</Text>
+        <View style={styles.secondContainer}>
+          <TextInput
+            style={{ color: "#000000" }}
+            placeholderTextColor="#000000"
+            placeholder={"Email address"}
+            onChangeText={(text) => setEmail(text)}
+            value={email}
+            keyboardType="email-address"
+          />
+        </View>
+        <Text style={styles.fifthText}>PHONE NUMBER</Text>
+        <View style={styles.secondContainer}>
+          <TextInput
+            style={{ color: "#000000" }}
+            placeholderTextColor="#000000"
+            placeholder={"Your Phone number"}
+            onChangeText={(text) => setNumber(text)}
+            value={number}
+            keyboardType="numeric"
+          />
+        </View>
+        <Text style={styles.fifthText}>PREFFERD INSTITUTION</Text>
+        <View style={styles.firstContainer}>
+          <DropDownPicker
+            open={open}
+            value={institution}
+            items={year}
+            setOpen={setOpen}
+            setValue={(value) => setInstitution(value)}
+            placeholder="Select Institution"
+            style={pickerSelectStyles.inputIOS}
+            dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
+          />
+        </View>
+        <Text style={[styles.fifthText, open && { zIndex: -20 }]}>
+          PASSWORD
+        </Text>
+        <View
+          style={[
+            styles.secondContainer,
+            {
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            },
+            open && { zIndex: -20 },
+          ]}
+        >
+          <TextInput
+            style={{ color: "#000000" }}
+            placeholderTextColor="#000000"
+            placeholder={"Password"}
+            onChangeText={(text) => setPassword(text)}
+            value={password}
+            secureTextEntry={!isPasswordVisible}
+          />
+          <TouchableOpacity
+            onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+            style={{}}
+          >
+            <Image
+              source={isPasswordVisible ? VisiblePassword : HidePassword}
+            />
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+          {isLoading ? (
+            <ActivityIndicator color="#FFFFFF" size={14} />
+          ) : (
+            <Text style={styles.thirdText}>SIGN UP</Text>
+          )}
+        </TouchableOpacity>
+        <Text
+          style={[styles.fourthText, { textAlign: "center", marginBottom: 30 }]}
+        >
+          Powered by Ited Softwares
+        </Text>
+        {/* </ScrollView> */}
+      </View>
+      {/* </KeyboardAvoidingView> */}
     </SafeAreaView>
   );
 };
@@ -303,7 +302,7 @@ const styles = StyleSheet.create({
   secondContainer: {
     backgroundColor: "#FFFFFF",
     marginHorizontal: 20,
-    paddingVertical: 15,
+    paddingVertical: 13,
     paddingHorizontal: 20,
     marginTop: 10,
     borderRadius: 25,

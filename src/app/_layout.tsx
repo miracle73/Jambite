@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import { persistor, store } from "../components/redux/store";
 import * as SystemUI from "expo-system-ui";
 import * as SplashScreen from "expo-splash-screen";
+import ActivityTracker from "../components/redux/ActivityTracker";
 
 SystemUI.setBackgroundColorAsync("transparent");
 
@@ -45,6 +46,7 @@ const RootLayout = () => {
       <StatusBar style="dark" />
       <Provider store={store}>
         <PersistGate loading={<LoadingSpinner />} persistor={persistor}>
+          <ActivityTracker />
           <Stack>
             <Stack.Screen
               name="index"
@@ -71,7 +73,7 @@ const RootLayout = () => {
               }}
             />
             <Stack.Screen
-              name="home"
+              name="pastQuestion"
               options={{
                 headerShown: false,
               }}

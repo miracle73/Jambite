@@ -25,15 +25,16 @@ import {
   ThirdJambiteText,
   Tiktok,
   UniversityCampus,
-} from "../../assets/svg";
-import FirstImage from "../../assets/images/Uninstalling Updates.png";
+} from "../../../assets/svg";
+import FirstImage from "../../../assets/images/Uninstalling Updates.png";
 import { useRouter } from "expo-router";
 import { useSelector } from "react-redux";
-import { RootState } from "../components/redux/store";
+import { RootState } from "../../components/redux/store";
 
 const home = () => {
   const router = useRouter();
   const user = useSelector((state: RootState) => state.user.user);
+
   return (
     <SafeAreaView
       style={{
@@ -204,7 +205,7 @@ const home = () => {
               <TouchableOpacity
                 style={[styles.smallContainer, { backgroundColor: "#EF0307" }]}
                 onPress={() => {
-                  router.push("/bottomtab/pastQuestion");
+                  router.push("/pastQuestion");
                 }}
               >
                 <View
