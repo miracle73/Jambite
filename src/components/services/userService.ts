@@ -135,6 +135,14 @@ export interface SubjectResponse2 {
   free: boolean;
 }
 
+export interface SubjectResponse3 {
+  subjects: Array<{
+    id: number;
+    name: string;
+    topics: string[];
+  }>;
+}
+
 interface ActivateAppResponse {
   success: boolean;
 }
@@ -205,6 +213,18 @@ export const userApi = createApi({
     getAllSubjects: builder.query<SubjectResponse1[], { token: string }>({
       query: ({ token }) => ({
         url: "notes/all-subjects",
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
+    getAllSubjectsWithTopics: builder.query<
+      SubjectResponse3,
+      { token: string }
+    >({
+      query: ({ token }) => ({
+        url: "notes/all-subjects-with-topics",
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -307,4 +327,5 @@ export const {
   useGetQuestionBySubjectQuery,
   useCutOffQuery,
   useGetUserInfoMutation,
+  useGetAllSubjectsWithTopicsQuery,
 } = userApi;

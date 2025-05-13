@@ -19,6 +19,7 @@ import {
 import { RootState } from "../components/redux/store";
 import { useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
+import Markdown from "react-native-markdown-display";
 
 const subjectNote = () => {
   const router = useRouter();
@@ -94,17 +95,24 @@ const subjectNote = () => {
               alignItems: "center",
             }}
           >
-            <TouchableOpacity onPress={() => router.back()}>
-              <BackArrow />
-            </TouchableOpacity>
-            <Text style={styles.firstText}>Note On {subjectName}</Text>
-
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center",
+              }}
+            >
+              <TouchableOpacity onPress={() => router.back()}>
+                <BackArrow />
+              </TouchableOpacity>
+              <Text style={styles.firstText}>Note On {subjectName}</Text>
+            </View>
             <TouchableOpacity
               style={styles.secondContainer}
               onPress={() => setShowModal(!showModal)}
             >
               <Text
-                style={{ color: "#00052D", fontSize: 12, fontWeight: "600" }}
+                style={{ color: "#00052D", fontSize: 10, fontWeight: "600" }}
               >
                 Study Objectives
               </Text>
@@ -119,12 +127,22 @@ const subjectNote = () => {
           )}
           <View>
             <Text style={styles.secondText}>{topic?.topic_content.title}</Text>
-            <Text style={styles.secondText}>
+            {/* <Text style={styles.secondText}>
               {topic?.topic_content.description}
             </Text>
             <Text style={styles.secondText}>
               {topic?.topic_content.content}
-            </Text>
+            </Text> */}
+            {topic?.topic_content.description && (
+              <Markdown style={markdownStyles}>
+                {topic.topic_content.description}
+              </Markdown>
+            )}
+            {topic?.topic_content.content && (
+              <Markdown style={markdownStyles}>
+                {topic.topic_content.content}
+              </Markdown>
+            )}
           </View>
         </View>
       </KeyboardAwareScrollView>
@@ -161,7 +179,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   firstText: {
-    fontSize: 12,
+    fontSize: 10,
     color: "#0F065E",
     fontWeight: "800",
   },
@@ -181,6 +199,96 @@ const styles = StyleSheet.create({
     fontSize: 9,
     color: "#000000",
     fontWeight: "600",
+  },
+});
+
+const markdownStyles = StyleSheet.create({
+  body: {
+    fontSize: 15,
+    color: "#000000",
+    fontWeight: "400",
+    textAlign: "justify",
+  },
+  heading1: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#0F065E",
+    marginVertical: 10,
+  },
+  heading2: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: "#0F065E",
+    marginVertical: 8,
+  },
+  heading3: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#0F065E",
+    marginVertical: 6,
+  },
+  heading4: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#0F065E",
+    marginVertical: 4,
+  },
+  heading5: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: "#0F065E",
+    marginVertical: 2,
+  },
+  heading6: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: "#0F065E",
+    marginVertical: 2,
+  },
+  paragraph: {
+    fontSize: 15,
+    marginVertical: 8,
+    color: "#000000",
+    textAlign: "justify",
+  },
+  link: {
+    color: "#007AFF",
+    textDecorationLine: "underline",
+  },
+  list_item: {
+    flexDirection: "row",
+    marginVertical: 4,
+  },
+  bullet_list: {
+    marginLeft: 10,
+  },
+  ordered_list: {
+    marginLeft: 10,
+  },
+  bullet: {
+    marginRight: 8,
+    fontSize: 15,
+  },
+  code_block: {
+    backgroundColor: "#F5F5F5",
+    padding: 10,
+    borderRadius: 5,
+    fontFamily: "monospace",
+    marginVertical: 8,
+  },
+  blockquote: {
+    borderLeftWidth: 4,
+    borderLeftColor: "#0F065E",
+    paddingLeft: 10,
+    marginLeft: 10,
+    marginVertical: 8,
+    fontStyle: "italic",
+  },
+  image: {
+    width: "100%",
+    height: 200,
+    resizeMode: "contain",
+    marginVertical: 10,
   },
 });
 

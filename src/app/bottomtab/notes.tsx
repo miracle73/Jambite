@@ -17,6 +17,8 @@ import {
   useGetAllSubjectsQuery,
   SubjectResponse1,
   SubjectResponse2,
+  SubjectResponse3,
+  useGetAllSubjectsWithTopicsQuery,
   useGetSubjectTopicQuery,
 } from "../../components/services/userService";
 import { RootState } from "../../components/redux/store";
@@ -33,6 +35,7 @@ const notes = () => {
   const [selectedTopic, setSelectedTopic] = useState("");
   const token = useSelector((state: RootState) => state.auth.token);
   const [Subjects, setSubjects] = useState<SubjectResponse1[]>([]);
+  const [Subjects2, setSubjects2] = useState<SubjectResponse3>();
   const [subjectTopics, setSubjectTopics] = useState<
     Record<string, SubjectResponse2[]>
   >({});
@@ -40,45 +43,23 @@ const notes = () => {
   const { data, isSuccess, isLoading, isError } = useGetAllSubjectsQuery({
     token: token || "",
   });
-
+  const {
+    data: subjectsWithTopics,
+    isSuccess: isTopicsSuccess,
+    isLoading: isTopicsLoading,
+    isError: isTopicsError,
+  } = useGetAllSubjectsWithTopicsQuery({
+    token: token || "",
+  });
+  useEffect(() => {
+    if (isTopicsSuccess && subjectsWithTopics) {
+      setSubjects2(subjectsWithTopics);
+      // No need to fetch topics separately as they are already included
+    }
+  }, [token, isTopicsSuccess, subjectsWithTopics]);
   useEffect(() => {
     if (isSuccess && data) {
       setSubjects(Array.isArray(data) ? data : [data]);
-
-      // Fetch topics for each subject
-      // const fetchAllTopics = async () => {
-      //   const promises = data.map((subject) => {
-      //     return useGetSubjectTopicQuery({
-      //       subject_id: subject.id,
-      //       token: token || "",
-      //     });
-      //   });
-      //   console.log(44);
-      //   try {
-      //     const results = await Promise.all(promises);
-      //     console.log(results, 66);
-      //     const topicsMap = results.reduce(
-      //       (acc: any, result: any, index: number) => {
-      //         if (result.data) {
-      //           acc[data[index].id.toString()] = result.data;
-      //         }
-      //         return acc;
-      //       },
-      //       {} as Record<string, SubjectResponse2>
-      //     );
-
-      //     setSubjectTopics(topicsMap);
-      //   } catch (error) {
-      //     console.error("Error fetching topics:", error);
-      //     Toast.show({
-      //       type: "error",
-      //       text1: "Error",
-      //       text2: "Failed to fetch topics for all subjects",
-      //     });
-      //   }
-      // };
-
-      // fetchAllTopics();
     }
   }, [token, isSuccess, data]);
 
@@ -117,18 +98,9 @@ const notes = () => {
     { label: "Calculus & Statistics", value: "calculus_statistics" },
     { label: "Geometry/Trigonometry", value: "geometry_trigonometry" },
   ];
-  // const pastQuestionSubjects = [
-  //   "MATHEMATICS",
-  //   "ENGLISH LANGUAGE",
-  //   "CHEMISTRY",
-  //   "BIOLOGY",
-  //   "PHYSICS",
-  //   "LITERATURE IN ENGLISH",
-  //   "CIVIC EDUCATION",
-  //   "ECONOMICS",
-  // ];
+
   console.log(subjectTopics);
-  if (isLoading) {
+  if (isLoading || isTopicsLoading) {
     return (
       <View
         style={{
@@ -223,7 +195,7 @@ const notes = () => {
         </View>
         {selectedText === "Subjects" && (
           <ScrollView showsVerticalScrollIndicator={false} style={{}}>
-            {Subjects.map((subject, index) => (
+            {/* {Subjects.map((subject, index) => (
               <TouchableOpacity
                 key={index}
                 style={[
@@ -264,7 +236,49 @@ const notes = () => {
                     )}
                 </View>
               </TouchableOpacity>
-            ))}
+            ))} */}
+            {Subjects2 &&
+              Subjects2.subjects.map((subject, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.secondContainer,
+                    index === Subjects2.subjects.length - 1 && {
+                      marginBottom: 170,
+                    },
+                  ]}
+                  onPress={() =>
+                    router.push({
+                      pathname: "/subject",
+                      params: {
+                        subjectName: subject.name,
+                        subjectId: subject.id,
+                      },
+                    })
+                  }
+                >
+                  <View style={styles.secondSmallContainer}>
+                    <Text
+                      style={{
+                        fontSize: 84,
+                        fontWeight: "700",
+                        color: "white",
+                      }}
+                    >
+                      {subject.name.charAt(0)}
+                    </Text>
+                  </View>
+                  <View style={{ width: "60%" }}>
+                    <Text style={styles.secondText}>{subject.name}</Text>
+
+                    {subject.topics.slice(0, 3).map((topic, index) => (
+                      <Text key={index} style={styles.thirdText}>
+                        {topic}
+                      </Text>
+                    ))}
+                  </View>
+                </TouchableOpacity>
+              ))}
           </ScrollView>
         )}
         {selectedText === "Exercises" && (

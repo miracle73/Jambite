@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Image,
 } from "react-native";
 import React, { useState } from "react";
 import {
@@ -22,6 +23,7 @@ import { useRouter } from "expo-router";
 import { RootState } from "../../components/redux/store";
 import { useSelector } from "react-redux";
 import DeleteModal from "../../components/modals/DeleteModal";
+import PIcon from "../../../assets/images/PIcon-2.png";
 
 const settings = () => {
   const router = useRouter();
@@ -57,7 +59,17 @@ const settings = () => {
               alignItems: "center",
             }}
           >
-            <View style={styles.circularContainer}></View>
+            <View style={styles.circularContainer}>
+              <Image
+                source={PIcon}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: 40,
+                  resizeMode: "cover",
+                }}
+              />
+            </View>
             <View>
               <Text style={styles.secondText}>{user.full_name}</Text>
               <Text style={styles.secondText}>{user.email}</Text>
@@ -200,6 +212,7 @@ const styles = StyleSheet.create({
     height: 78,
     width: 78,
     borderRadius: 40,
+    padding: 10,
   },
   secondContainer: {
     borderWidth: 1,

@@ -4,10 +4,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
+  Image,
 } from "react-native";
 import React from "react";
 import { JambiteText } from "../../assets/svg";
 import { useRouter } from "expo-router";
+import PIcon from "../../assets/Jambite-2.png";
 
 const index = () => {
   const router = useRouter();
@@ -29,7 +31,17 @@ const index = () => {
               flexDirection: "row",
             }}
           >
-            <View style={styles.roundedContainer}></View>
+            <View style={styles.roundedContainer}>
+              <Image
+                source={PIcon}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: 100,
+                  resizeMode: "cover",
+                }}
+              />
+            </View>
           </View>
           <Text style={styles.firstText}>Welcome to Ited</Text>
           <View
