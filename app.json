@@ -18,7 +18,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/Jambite-2.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.mirack.jambite"
