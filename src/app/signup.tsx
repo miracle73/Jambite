@@ -105,7 +105,7 @@ const signup = () => {
 
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 70 }}
+      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 30 }}
     >
       {/* <KeyboardAvoidingView
         style={{ flex: 1 }}
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
   secondContainer: {
     backgroundColor: "#FFFFFF",
     marginHorizontal: 20,
-    paddingVertical: 15,
+    paddingVertical: 10,
     paddingHorizontal: 20,
     marginTop: 10,
     borderRadius: 25,

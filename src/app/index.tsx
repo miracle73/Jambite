@@ -18,6 +18,7 @@ const index = () => {
       <View
         style={{
           paddingHorizontal: 20,
+          paddingVertical: 50,
           justifyContent: "space-between",
           flex: 1,
         }}

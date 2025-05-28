@@ -73,7 +73,7 @@ const editProfile = () => {
             <TextInput
               style={{ color: "#000000" }}
               placeholderTextColor="#000000"
-              placeholder={""}
+              placeholder={"Full Name"}
               onChangeText={(text) => setFullName(text)}
               value={fullName}
             />
@@ -85,7 +85,7 @@ const editProfile = () => {
             <TextInput
               style={{ color: "#000000" }}
               placeholderTextColor="#000000"
-              placeholder={""}
+              placeholder={"Email Address"}
               onChangeText={(text) => setEmail(text)}
               value={email}
             />
@@ -98,7 +98,7 @@ const editProfile = () => {
             <TextInput
               style={{ color: "#000000" }}
               placeholderTextColor="#000000"
-              placeholder={""}
+              placeholder={"Phone Number"}
               onChangeText={(text) => setPhoneNumber(text)}
               value={phoneNumber}
               keyboardType="numeric"
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
 
   secondContainer: {
     backgroundColor: "#FFFFFF",
-    paddingVertical: 15,
+    paddingVertical: 10,
     paddingHorizontal: 20,
 
     borderRadius: 25,

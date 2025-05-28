@@ -85,7 +85,7 @@ const subject = () => {
 
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
+      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 50 }}
     >
       <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
