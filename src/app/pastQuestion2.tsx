@@ -15,6 +15,7 @@ import { useRouter } from "expo-router";
 import DropDownPicker from "react-native-dropdown-picker";
 import Toast from "react-native-toast-message";
 import { useLocalSearchParams } from "expo-router";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const pastQuestion2 = () => {
   const [open, setOpen] = useState(false);
@@ -48,82 +49,84 @@ const pastQuestion2 = () => {
     { label: "1 hour", value: "1_hour" },
   ];
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
-    >
-      {/* <KeyboardAwareScrollView
+    <ProtectedRoute>
+      <SafeAreaView
+        style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
+      >
+        {/* <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
       > */}
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-      >
-        <View
-          style={{
-            paddingHorizontal: 20,
-            justifyContent: "flex-start",
-            flex: 1,
-          }}
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
         >
-          <View style={{ marginBottom: 70 }}>
-            <TouchableOpacity onPress={() => router.back()}>
-              <BackArrow />
-            </TouchableOpacity>
-          </View>
-          <Text style={[styles.firstText, { textAlign: "center" }]}>
-            {subjectName} Past Questions
-          </Text>
-          <Text style={[styles.secondText, { textAlign: "center" }]}>
-            Go through the previous questions to prepare fully for your exams
-          </Text>
-          <View style={styles.firstContainer}>
-            <DropDownPicker
-              open={open}
-              value={selectedYear}
-              items={year}
-              setOpen={setOpen}
-              setValue={(value) => setSelectedYear(value)}
-              placeholder="Select Year"
-              style={pickerSelectStyles.inputIOS}
-              dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
-            />
-
-            <View style={[{ marginTop: 30 }, open && { zIndex: -20 }]}>
+          <View
+            style={{
+              paddingHorizontal: 20,
+              justifyContent: "flex-start",
+              flex: 1,
+            }}
+          >
+            <View style={{ marginBottom: 70 }}>
+              <TouchableOpacity onPress={() => router.back()}>
+                <BackArrow />
+              </TouchableOpacity>
+            </View>
+            <Text style={[styles.firstText, { textAlign: "center" }]}>
+              {subjectName} Past Questions
+            </Text>
+            <Text style={[styles.secondText, { textAlign: "center" }]}>
+              Go through the previous questions to prepare fully for your exams
+            </Text>
+            <View style={styles.firstContainer}>
               <DropDownPicker
-                open={open2}
-                value={selectedTime}
-                items={time}
-                setOpen={setOpen2}
-                setValue={(value) => setSelectedTime(value)}
-                placeholder="Select Time(Hours/Minutes)"
+                open={open}
+                value={selectedYear}
+                items={year}
+                setOpen={setOpen}
+                setValue={(value) => setSelectedYear(value)}
+                placeholder="Select Year"
                 style={pickerSelectStyles.inputIOS}
                 dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
               />
+
+              <View style={[{ marginTop: 30 }, open && { zIndex: -20 }]}>
+                <DropDownPicker
+                  open={open2}
+                  value={selectedTime}
+                  items={time}
+                  setOpen={setOpen2}
+                  setValue={(value) => setSelectedTime(value)}
+                  placeholder="Select Time(Hours/Minutes)"
+                  style={pickerSelectStyles.inputIOS}
+                  dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
+                />
+              </View>
             </View>
-          </View>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              if (!selectedYear || !selectedTime) {
-                Toast.show({
-                  type: "error",
-                  text1: "Error",
-                  text2: "Please select a year and time.",
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                if (!selectedYear || !selectedTime) {
+                  Toast.show({
+                    type: "error",
+                    text1: "Error",
+                    text2: "Please select a year and time.",
+                  });
+                  return;
+                }
+                router.push({
+                  pathname: "/subjectPastQuestion",
+                  params: { id: subjectId, name: subjectname },
                 });
-                return;
-              }
-              router.push({
-                pathname: "/subjectPastQuestion",
-                params: { id: subjectId, name: subjectname },
-              });
-            }}
-          >
-            <Text style={styles.sixthText}>Begin</Text>
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+              }}
+            >
+              <Text style={styles.sixthText}>Begin</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </ProtectedRoute>
   );
 };
 

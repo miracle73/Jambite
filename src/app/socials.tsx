@@ -16,59 +16,99 @@ import {
 } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const socials = () => {
   const router = useRouter();
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
-    >
-      <KeyboardAwareScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        showsVerticalScrollIndicator={false}
+    <ProtectedRoute>
+      <SafeAreaView
+        style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
       >
-        <View
-          style={{
-            paddingHorizontal: 20,
-            justifyContent: "flex-start",
-            flex: 1,
-          }}
+        <KeyboardAwareScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          showsVerticalScrollIndicator={false}
         >
-          <View style={{ marginBottom: 70 }}>
-            <TouchableOpacity onPress={() => router.back()}>
-              <BackArrow />
-            </TouchableOpacity>
-          </View>
-          <Text style={[styles.firstText, { textAlign: "center" }]}>
-            Our Socials
-          </Text>
-          <Text style={[styles.secondText, { textAlign: "center" }]}>
-            Follow us on our social media handles
-          </Text>
+          <View
+            style={{
+              paddingHorizontal: 20,
+              justifyContent: "flex-start",
+              flex: 1,
+            }}
+          >
+            <View style={{ marginBottom: 70 }}>
+              <TouchableOpacity onPress={() => router.back()}>
+                <BackArrow />
+              </TouchableOpacity>
+            </View>
+            <Text style={[styles.firstText, { textAlign: "center" }]}>
+              Our Socials
+            </Text>
+            <Text style={[styles.secondText, { textAlign: "center" }]}>
+              Follow us on our social media handles
+            </Text>
 
-          <View style={[styles.fourthContainer, { marginTop: 50 }]}>
-            <FacebookSocials />
-            <Text style={styles.thirdText}>
-              https://www.facebook.com/profile.php?id=61566071536017
-            </Text>
+            <View style={[styles.fourthContainer, { marginTop: 50 }]}>
+              <FacebookSocials />
+              <TouchableOpacity
+                onPress={() => {
+                  // Open Facebook profile in browser
+                  import("react-native").then(({ Linking }) => {
+                    Linking.openURL(
+                      "https://www.facebook.com/profile.php?id=61566071536017"
+                    );
+                  });
+                }}
+              >
+                <Text style={styles.thirdText}>
+                  itededucationalsoftwares@facebook.com
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.fourthContainer}>
+              <InstagramSocials />
+              <TouchableOpacity
+                onPress={() => {
+                  import("react-native").then(({ Linking }) => {
+                    Linking.openURL("https://www.instagram.com/itedsoftwares/");
+                  });
+                }}
+              >
+                <Text style={styles.thirdText}>
+                  itedsoftwares@instagram.com
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.fourthContainer}>
+              <TiktokSocials />
+              <TouchableOpacity
+                onPress={() => {
+                  import("react-native").then(({ Linking }) => {
+                    Linking.openURL("https://www.tiktok.com/itedsoftwares/");
+                  });
+                }}
+              >
+                <Text style={styles.thirdText}>itedsoftwares@tiktok.com</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.fourthContainer}>
+              <TelegramSocials />
+              <TouchableOpacity
+                onPress={() => {
+                  import("react-native").then(({ Linking }) => {
+                    Linking.openURL("https://t.me/itedsoftwares");
+                  });
+                }}
+              >
+                <Text style={styles.thirdText}>
+                  itedsoftwares@telegtram.com
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={styles.fourthContainer}>
-            <InstagramSocials />
-            <Text style={styles.thirdText}>
-              https://www.instagram.com/itedsoftwares/{" "}
-            </Text>
-          </View>
-          <View style={styles.fourthContainer}>
-            <TiktokSocials />
-            <Text style={styles.thirdText}>itedsoftwares@tiktok.com</Text>
-          </View>
-          <View style={styles.fourthContainer}>
-            <TelegramSocials />
-            <Text style={styles.thirdText}>https://t.me/itedsoftwares </Text>
-          </View>
-        </View>
-      </KeyboardAwareScrollView>
-    </SafeAreaView>
+        </KeyboardAwareScrollView>
+      </SafeAreaView>
+    </ProtectedRoute>
   );
 };
 

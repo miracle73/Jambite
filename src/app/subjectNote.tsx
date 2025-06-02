@@ -20,6 +20,7 @@ import { RootState } from "../components/redux/store";
 import { useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
 import Markdown from "react-native-markdown-display";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const subjectNote = () => {
   const router = useRouter();
@@ -73,80 +74,77 @@ const subjectNote = () => {
     );
   }
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 50 }}
-    >
-      <KeyboardAwareScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        showsVerticalScrollIndicator={false}
+    <ProtectedRoute>
+      <SafeAreaView
+        style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 50 }}
       >
-        <View
-          style={{
-            paddingHorizontal: 20,
-            justifyContent: "flex-start",
-            flex: 1,
-          }}
+        <KeyboardAwareScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          showsVerticalScrollIndicator={false}
         >
           <View
             style={{
-              marginBottom: 10,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
+              paddingHorizontal: 20,
+              justifyContent: "flex-start",
+              flex: 1,
             }}
           >
             <View
               style={{
+                marginBottom: 10,
                 flexDirection: "row",
-                justifyContent: "flex-start",
+                justifyContent: "space-between",
                 alignItems: "center",
               }}
             >
-              <TouchableOpacity onPress={() => router.back()}>
-                <BackArrow />
-              </TouchableOpacity>
-              <Text style={styles.firstText}>Note On {subjectName}</Text>
-            </View>
-            <TouchableOpacity
-              style={styles.secondContainer}
-              onPress={() => setShowModal(!showModal)}
-            >
-              <Text
-                style={{ color: "#00052D", fontSize: 10, fontWeight: "600" }}
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                }}
               >
-                Study Objectives
-              </Text>
-            </TouchableOpacity>
-          </View>
-          {showModal && (
-            <View style={styles.firstContainer}>
-              <Text style={[styles.fourthText, { marginBottom: 5 }]}>
-                {/* By the end of this topic, you should be able to: */}
-              </Text>
+                <TouchableOpacity onPress={() => router.back()}>
+                  <BackArrow />
+                </TouchableOpacity>
+                <Text style={styles.firstText}>Note On {subjectName}</Text>
+              </View>
+              <TouchableOpacity
+                style={styles.secondContainer}
+                onPress={() => setShowModal(!showModal)}
+              >
+                <Text
+                  style={{ color: "#00052D", fontSize: 10, fontWeight: "600" }}
+                >
+                  Study Objectives
+                </Text>
+              </TouchableOpacity>
             </View>
-          )}
-          <View>
-            <Text style={styles.secondText}>{topic?.topic_content.title}</Text>
-            {/* <Text style={styles.secondText}>
-              {topic?.topic_content.description}
-            </Text>
-            <Text style={styles.secondText}>
-              {topic?.topic_content.content}
-            </Text> */}
-            {topic?.topic_content.description && (
-              <Markdown style={markdownStyles}>
-                {topic.topic_content.description}
-              </Markdown>
+            {showModal && (
+              <View style={styles.firstContainer}>
+                <Text style={[styles.fourthText, { marginBottom: 5 }]}></Text>
+              </View>
             )}
-            {topic?.topic_content.content && (
-              <Markdown style={markdownStyles}>
-                {topic.topic_content.content}
-              </Markdown>
-            )}
+            <View>
+              <Text style={styles.secondText}>
+                {topic?.topic_content.title}
+              </Text>
+
+              {topic?.topic_content.description && (
+                <Markdown style={markdownStyles}>
+                  {topic.topic_content.description}
+                </Markdown>
+              )}
+              {topic?.topic_content.content && (
+                <Markdown style={markdownStyles}>
+                  {topic.topic_content.content}
+                </Markdown>
+              )}
+            </View>
           </View>
-        </View>
-      </KeyboardAwareScrollView>
-    </SafeAreaView>
+        </KeyboardAwareScrollView>
+      </SafeAreaView>
+    </ProtectedRoute>
   );
 };
 //

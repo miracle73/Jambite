@@ -9,6 +9,7 @@ import { persistor, store } from "../components/redux/store";
 import * as SystemUI from "expo-system-ui";
 import * as SplashScreen from "expo-splash-screen";
 import ActivityTracker from "../components/redux/ActivityTracker";
+import AuthGuard from "../components/AuthGuard";
 
 SystemUI.setBackgroundColorAsync("transparent");
 
@@ -47,6 +48,7 @@ const RootLayout = () => {
       <Provider store={store}>
         <PersistGate loading={<LoadingSpinner />} persistor={persistor}>
           <ActivityTracker />
+
           <Stack>
             <Stack.Screen
               name="index"
@@ -73,6 +75,25 @@ const RootLayout = () => {
               }}
             />
             <Stack.Screen
+              name="forgotPassword"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="resetPassword"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="forgotPasswordVerification"
+              options={{
+                headerShown: false,
+              }}
+            />
+
+            <Stack.Screen
               name="pastQuestion"
               options={{
                 headerShown: false,
@@ -91,18 +112,7 @@ const RootLayout = () => {
                 headerShown: false,
               }}
             />
-            <Stack.Screen
-              name="forgotPassword"
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="resetPassword"
-              options={{
-                headerShown: false,
-              }}
-            />
+
             <Stack.Screen
               name="editProfile"
               options={{
@@ -176,12 +186,7 @@ const RootLayout = () => {
                 headerShown: false,
               }}
             />
-            <Stack.Screen
-              name="forgotPasswordVerification"
-              options={{
-                headerShown: false,
-              }}
-            />
+
             <Stack.Screen
               name="cutoff"
               options={{

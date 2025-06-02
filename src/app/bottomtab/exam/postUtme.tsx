@@ -15,15 +15,13 @@ import { useRouter } from "expo-router";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useGetAllInstitutionsQuery } from "../../../components/services/userService";
 import Toast from "react-native-toast-message";
+import ProtectedRoute from "../../../components/ProtectedRoute";
 
 const postUtme = () => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
-  const [open3, setOpen3] = useState(false);
-  const [selectedYear, setSelectedYear] = useState("");
   const [selectedUniversity, setSelectedUniversity] = useState("");
-  const [selectedFaculty, setSelectedFaculty] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const { data: institutionsData, isLoading: isInstitutionsLoading } =
     useGetAllInstitutionsQuery();
@@ -51,105 +49,94 @@ const postUtme = () => {
     value: `${i + 1}`,
   }));
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
-    >
-      {/* <KeyboardAwareScrollView
+    <ProtectedRoute>
+      <SafeAreaView
+        style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
+      >
+        {/* <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
       > */}
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-      >
-        <View
-          style={{
-            paddingHorizontal: 20,
-            justifyContent: "flex-start",
-            flex: 1,
-          }}
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
         >
-          <View style={{ marginBottom: 70 }}>
-            <TouchableOpacity onPress={() => router.push("/bottomtab/home")}>
-              <BackArrow />
-            </TouchableOpacity>
-          </View>
-          <Text style={[styles.firstText, { textAlign: "center" }]}>
-            POST UTME
-          </Text>
-          <Text style={[styles.secondText, { textAlign: "center" }]}>
-            Study and prepare ahead for
-          </Text>
-          <View style={styles.firstContainer}>
-            <DropDownPicker
-              open={open}
-              value={selectedUniversity}
-              items={university}
-              setOpen={setOpen}
-              setValue={(value) => setSelectedUniversity(value)}
-              placeholder="Select University"
-              style={pickerSelectStyles.inputIOS}
-              dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
-            />
-
-            {/* <View style={[{ marginTop: 30 }, open && { zIndex: -20 }]}>
-              <DropDownPicker
-                open={open2}
-                value={selectedFaculty}
-                items={faculty}
-                setOpen={setOpen2}
-                setValue={(value) => setSelectedFaculty(value)}
-                placeholder="Select Faculty"
-                style={pickerSelectStyles.inputIOS}
-                dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
-              />
-            </View> */}
-
-            <View style={[{ marginTop: 30 }, open && { zIndex: -20 }]}>
-              <DropDownPicker
-                open={open2}
-                value={selectedTime}
-                items={time}
-                setOpen={setOpen2}
-                setValue={(value) => setSelectedTime(value)}
-                placeholder="Select Question Number"
-                style={pickerSelectStyles.inputIOS}
-                dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
-              />
-            </View>
-          </View>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              if (!selectedUniversity) {
-                Toast.show({
-                  type: "error",
-                  text1: "Error",
-                  text2: "Please select a school",
-                });
-
-                return;
-              }
-              if (!selectedTime) {
-                Toast.show({
-                  type: "error",
-                  text1: "Error",
-                  text2: "Please select a question number",
-                });
-
-                return;
-              }
-              router.push({
-                pathname: "/cbtQuestions2",
-                params: { id: selectedTime },
-              });
+          <View
+            style={{
+              paddingHorizontal: 20,
+              justifyContent: "flex-start",
+              flex: 1,
             }}
           >
-            <Text style={styles.sixthText}>Begin</Text>
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+            <View style={{ marginBottom: 70 }}>
+              <TouchableOpacity onPress={() => router.push("/bottomtab/home")}>
+                <BackArrow />
+              </TouchableOpacity>
+            </View>
+            <Text style={[styles.firstText, { textAlign: "center" }]}>
+              POST UTME
+            </Text>
+            <Text style={[styles.secondText, { textAlign: "center" }]}>
+              Study and prepare ahead for
+            </Text>
+            <View style={styles.firstContainer}>
+              <DropDownPicker
+                open={open}
+                value={selectedUniversity}
+                items={university}
+                setOpen={setOpen}
+                setValue={(value) => setSelectedUniversity(value)}
+                placeholder="Select University"
+                style={pickerSelectStyles.inputIOS}
+                dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
+              />
+
+              <View style={[{ marginTop: 30 }, open && { zIndex: -20 }]}>
+                <DropDownPicker
+                  open={open2}
+                  value={selectedTime}
+                  items={time}
+                  setOpen={setOpen2}
+                  setValue={(value) => setSelectedTime(value)}
+                  placeholder="Select Question Number"
+                  style={pickerSelectStyles.inputIOS}
+                  dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
+                />
+              </View>
+            </View>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                if (!selectedUniversity) {
+                  Toast.show({
+                    type: "error",
+                    text1: "Error",
+                    text2: "Please select a school",
+                  });
+
+                  return;
+                }
+                if (!selectedTime) {
+                  Toast.show({
+                    type: "error",
+                    text1: "Error",
+                    text2: "Please select a question number",
+                  });
+
+                  return;
+                }
+                router.push({
+                  pathname: "/cbtQuestions2",
+                  params: { id: selectedTime },
+                });
+              }}
+            >
+              <Text style={styles.sixthText}>Begin</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </ProtectedRoute>
   );
 };
 

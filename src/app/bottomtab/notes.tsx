@@ -19,11 +19,11 @@ import {
   SubjectResponse2,
   SubjectResponse3,
   useGetAllSubjectsWithTopicsQuery,
-  useGetSubjectTopicQuery,
 } from "../../components/services/userService";
 import { RootState } from "../../components/redux/store";
 import { useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
+import ProtectedRoute from "../../components/ProtectedRoute";
 
 const notes = () => {
   const router = useRouter();
@@ -54,7 +54,6 @@ const notes = () => {
   useEffect(() => {
     if (isTopicsSuccess && subjectsWithTopics) {
       setSubjects2(subjectsWithTopics);
-      // No need to fetch topics separately as they are already included
     }
   }, [token, isTopicsSuccess, subjectsWithTopics]);
   useEffect(() => {
@@ -116,86 +115,87 @@ const notes = () => {
   }
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#FFFFFF",
-        paddingBottom: 50,
-      }}
-    >
-      <View style={{}}>
-        <View
-          style={{
-            backgroundColor: "#0AA2D30F",
-            paddingHorizontal: 20,
-            paddingTop: 40,
-            paddingBottom: 20,
-          }}
-        >
-          <TouchableOpacity onPress={() => router.push("/bottomtab/home")}>
-            <BackArrow />
-          </TouchableOpacity>
-          <Text
+    <ProtectedRoute>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: "#FFFFFF",
+          paddingBottom: 50,
+        }}
+      >
+        <View style={{}}>
+          <View
             style={{
-              fontSize: 15,
-              fontWeight: "600",
-              marginTop: 15,
-              color: "#0F065E",
-              paddingLeft: 10,
+              backgroundColor: "#0AA2D30F",
+              paddingHorizontal: 20,
+              paddingTop: 40,
+              paddingBottom: 20,
             }}
           >
-            Study your JAMB combinatioin subjects
-          </Text>
-          <View style={styles.firstContainer}>
-            <TouchableOpacity
-              style={
-                selectedText === "Subjects"
-                  ? styles.smallContainer
-                  : {
-                      backgroundColor: "#FFFFFF",
-                      paddingHorizontal: 10,
-                      paddingVertical: 10,
-                    }
-              }
-              onPress={() => setSelectedText("Subjects")}
-            >
-              <Text style={styles.firstText}>Subjects</Text>
+            <TouchableOpacity onPress={() => router.push("/bottomtab/home")}>
+              <BackArrow />
             </TouchableOpacity>
+            <Text
+              style={{
+                fontSize: 15,
+                fontWeight: "600",
+                marginTop: 15,
+                color: "#0F065E",
+                paddingLeft: 10,
+              }}
+            >
+              Study your JAMB combinatioin subjects
+            </Text>
+            <View style={styles.firstContainer}>
+              <TouchableOpacity
+                style={
+                  selectedText === "Subjects"
+                    ? styles.smallContainer
+                    : {
+                        backgroundColor: "#FFFFFF",
+                        paddingHorizontal: 10,
+                        paddingVertical: 10,
+                      }
+                }
+                onPress={() => setSelectedText("Subjects")}
+              >
+                <Text style={styles.firstText}>Subjects</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={() => setSelectedText("Exercises")}
-              style={
-                selectedText === "Exercises"
-                  ? styles.smallContainer
-                  : {
-                      backgroundColor: "#FFFFFF",
-                      paddingHorizontal: 10,
-                      paddingVertical: 10,
-                    }
-              }
-            >
-              <Text style={styles.firstText}>Exercises</Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setSelectedText("Exercises")}
+                style={
+                  selectedText === "Exercises"
+                    ? styles.smallContainer
+                    : {
+                        backgroundColor: "#FFFFFF",
+                        paddingHorizontal: 10,
+                        paddingVertical: 10,
+                      }
+                }
+              >
+                <Text style={styles.firstText}>Exercises</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={() => setSelectedText("Past Questions")}
-              style={
-                selectedText === "Past Questions"
-                  ? styles.smallContainer
-                  : {
-                      backgroundColor: "#FFFFFF",
-                      paddingHorizontal: 10,
-                      paddingVertical: 10,
-                    }
-              }
-            >
-              <Text style={styles.firstText}>Past Questions</Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setSelectedText("Past Questions")}
+                style={
+                  selectedText === "Past Questions"
+                    ? styles.smallContainer
+                    : {
+                        backgroundColor: "#FFFFFF",
+                        paddingHorizontal: 10,
+                        paddingVertical: 10,
+                      }
+                }
+              >
+                <Text style={styles.firstText}>Past Questions</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-        {selectedText === "Subjects" && (
-          <ScrollView showsVerticalScrollIndicator={false} style={{}}>
-            {/* {Subjects.map((subject, index) => (
+          {selectedText === "Subjects" && (
+            <ScrollView showsVerticalScrollIndicator={false} style={{}}>
+              {/* {Subjects.map((subject, index) => (
               <TouchableOpacity
                 key={index}
                 style={[
@@ -237,117 +237,120 @@ const notes = () => {
                 </View>
               </TouchableOpacity>
             ))} */}
-            {Subjects2 &&
-              Subjects2.subjects.map((subject, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.secondContainer,
-                    index === Subjects2.subjects.length - 1 && {
-                      marginBottom: 170,
-                    },
-                  ]}
-                  onPress={() =>
-                    router.push({
-                      pathname: "/subject",
-                      params: {
-                        subjectName: subject.name,
-                        subjectId: subject.id,
+              {Subjects2 &&
+                Subjects2.subjects.map((subject, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={[
+                      styles.secondContainer,
+                      index === Subjects2.subjects.length - 1 && {
+                        marginBottom: 170,
                       },
-                    })
-                  }
-                >
-                  <View style={styles.secondSmallContainer}>
-                    <Text
-                      style={{
-                        fontSize: 84,
-                        fontWeight: "700",
-                        color: "white",
-                      }}
-                    >
-                      {subject.name.charAt(0)}
-                    </Text>
-                  </View>
-                  <View style={{ width: "60%" }}>
-                    <Text style={styles.secondText}>{subject.name}</Text>
-
-                    {subject.topics.slice(0, 3).map((topic, index) => (
-                      <Text key={index} style={styles.thirdText}>
-                        {topic}
+                    ]}
+                    onPress={() =>
+                      router.push({
+                        pathname: "/subject",
+                        params: {
+                          subjectName: subject.name,
+                          subjectId: subject.id,
+                        },
+                      })
+                    }
+                  >
+                    <View style={styles.secondSmallContainer}>
+                      <Text
+                        style={{
+                          fontSize: 84,
+                          fontWeight: "700",
+                          color: "white",
+                        }}
+                      >
+                        {subject.name.charAt(0)}
                       </Text>
-                    ))}
-                  </View>
-                </TouchableOpacity>
-              ))}
-          </ScrollView>
-        )}
-        {selectedText === "Exercises" && (
-          <>
-            <Text style={styles.fourthText}>Solve Word problem questions</Text>
-            <Text style={styles.fifthText}>Solve Word problem questions</Text>
-            <View style={styles.thirdContainer}>
-              <DropDownPicker
-                open={open}
-                value={selectedSubject}
-                items={Subjects.map((subject) => ({
-                  label: subject.name,
-                  value: subject.id.toString(),
-                }))}
-                setOpen={setOpen}
-                setValue={(value) => setSelectedSubject(value)}
-                placeholder="Select Subject"
-                style={pickerSelectStyles.inputIOS}
-                dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
-              />
-            </View>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => {
-                const selected = Subjects.find(
-                  (subject) => String(subject.id) === selectedSubject
-                );
-                if (selected) {
-                  router.push({
-                    pathname: "/exerciseTopics",
-                    params: {
-                      name: selected.name,
-                      id: String(selected.id),
-                    },
-                  });
-                }
-              }}
-            >
-              <Text style={styles.sixthText}>Begin</Text>
-            </TouchableOpacity>
-          </>
-        )}
-        {selectedText === "Past Questions" && (
-          <>
-            <ScrollView style={{}} showsVerticalScrollIndicator={false}>
-              {Subjects.map((subject, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.fourthContainer,
-                    index === Subjects.length - 1 && {
-                      marginBottom: 170,
-                    },
-                  ]}
-                  onPress={() => {
-                    router.push({
-                      pathname: "/pastQuestion2",
-                      params: { subjectName: subject.name, id: subject.id },
-                    });
-                  }}
-                >
-                  <Text style={styles.seventhText}>{subject.name}</Text>
-                </TouchableOpacity>
-              ))}
+                    </View>
+                    <View style={{ width: "60%" }}>
+                      <Text style={styles.secondText}>{subject.name}</Text>
+
+                      {subject.topics.slice(0, 3).map((topic, index) => (
+                        <Text key={index} style={styles.thirdText}>
+                          {topic}
+                        </Text>
+                      ))}
+                    </View>
+                  </TouchableOpacity>
+                ))}
             </ScrollView>
-          </>
-        )}
+          )}
+          {selectedText === "Exercises" && (
+            <>
+              <Text style={styles.fourthText}>
+                Solve Word problem questions
+              </Text>
+              <Text style={styles.fifthText}>Solve Word problem questions</Text>
+              <View style={styles.thirdContainer}>
+                <DropDownPicker
+                  open={open}
+                  value={selectedSubject}
+                  items={Subjects.map((subject) => ({
+                    label: subject.name,
+                    value: subject.id.toString(),
+                  }))}
+                  setOpen={setOpen}
+                  setValue={(value) => setSelectedSubject(value)}
+                  placeholder="Select Subject"
+                  style={pickerSelectStyles.inputIOS}
+                  dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
+                />
+              </View>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  const selected = Subjects.find(
+                    (subject) => String(subject.id) === selectedSubject
+                  );
+                  if (selected) {
+                    router.push({
+                      pathname: "/exerciseTopics",
+                      params: {
+                        name: selected.name,
+                        id: String(selected.id),
+                      },
+                    });
+                  }
+                }}
+              >
+                <Text style={styles.sixthText}>Begin</Text>
+              </TouchableOpacity>
+            </>
+          )}
+          {selectedText === "Past Questions" && (
+            <>
+              <ScrollView style={{}} showsVerticalScrollIndicator={false}>
+                {Subjects.map((subject, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={[
+                      styles.fourthContainer,
+                      index === Subjects.length - 1 && {
+                        marginBottom: 170,
+                      },
+                    ]}
+                    onPress={() => {
+                      router.push({
+                        pathname: "/pastQuestion2",
+                        params: { subjectName: subject.name, id: subject.id },
+                      });
+                    }}
+                  >
+                    <Text style={styles.seventhText}>{subject.name}</Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </>
+          )}
+        </View>
       </View>
-    </View>
+    </ProtectedRoute>
   );
 };
 

@@ -103,7 +103,7 @@ const resetPassword = () => {
               <TextInput
                 style={{ flex: 1, color: "#000000" }}
                 placeholderTextColor="#000000"
-                placeholder={""}
+                placeholder={"Password"}
                 onChangeText={(text) => setPassword(text)}
                 value={password}
                 secureTextEntry={!isPasswordVisible}
@@ -124,7 +124,7 @@ const resetPassword = () => {
               <TextInput
                 style={{ flex: 1, color: "#000000" }}
                 placeholderTextColor="#000000"
-                placeholder={""}
+                placeholder={"Confirm Password"}
                 onChangeText={(text) => setCPassword(text)}
                 value={cpassword}
                 secureTextEntry={!isPasswordVisible2}
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
 
   secondContainer: {
     backgroundColor: "#FFFFFF",
-    paddingVertical: 15,
+    paddingVertical: 10,
     paddingHorizontal: 20,
     flexDirection: "row",
     justifyContent: "space-between",

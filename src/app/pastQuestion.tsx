@@ -18,6 +18,7 @@ import {
 import { RootState } from "../components/redux/store";
 import { useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const pastQuestion = () => {
   const router = useRouter();
@@ -52,80 +53,73 @@ const pastQuestion = () => {
       });
     }
   }, [token, isSuccess, data, isError, router]);
-  // const pastQuestionSubjects = [
-  //   "MATHEMATICS",
-  //   "ENGLISH LANGUAGE",
-  //   "CHEMISTRY",
-  //   "BIOLOGY",
-  //   "PHYSICS",
-  //   "LITERATURE IN ENGLISH",
-  //   "CIVIC EDUCATION",
-  //   "ECONOMICS",
-  // ];
+
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 50 }}
-    >
-      <KeyboardAwareScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        showsVerticalScrollIndicator={false}
+    <ProtectedRoute>
+      <SafeAreaView
+        style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 50 }}
       >
-        <View
-          style={{
-            justifyContent: "flex-start",
-            flex: 1,
-          }}
+        <KeyboardAwareScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          showsVerticalScrollIndicator={false}
         >
           <View
             style={{
-              paddingHorizontal: 20,
               justifyContent: "flex-start",
-              gap: 4,
-              alignItems: "center",
-              flexDirection: "row",
+              flex: 1,
             }}
           >
-            <TouchableOpacity onPress={() => router.push("/bottomtab/home")}>
-              <BackArrow />
-            </TouchableOpacity>
-            <Text style={[styles.firstText, { textAlign: "center" }]}>
-              PAST QUESTIONS
-            </Text>
-          </View>
-
-          <Text
-            style={[
-              styles.secondText,
-              { textAlign: "center", paddingHorizontal: 30, marginTop: 10 },
-            ]}
-          >
-            Go through the previous questions to prepare fully for your exams
-          </Text>
-
-          <ScrollView style={{}}>
-            {pastQuestionSubjects.map((subject, index) => (
-              <TouchableOpacity
-                key={index}
-                style={[
-                  styles.fourthContainer,
-                  index === pastQuestionSubjects.length - 1 && {
-                    marginBottom: 20,
-                  },
-                ]}
-                onPress={() => {
-                  router.push({
-                    pathname: "/pastQuestion2",
-                    params: { subjectName: subject.name, id: subject.id },
-                  });
-                }}
-              >
-                <Text style={styles.thirdText}>{subject.name}</Text>
+            <View
+              style={{
+                paddingHorizontal: 20,
+                justifyContent: "flex-start",
+                gap: 4,
+                alignItems: "center",
+                flexDirection: "row",
+              }}
+            >
+              <TouchableOpacity onPress={() => router.push("/bottomtab/home")}>
+                <BackArrow />
               </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-      </KeyboardAwareScrollView>
-    </SafeAreaView>
+              <Text style={[styles.firstText, { textAlign: "center" }]}>
+                PAST QUESTIONS
+              </Text>
+            </View>
+
+            <Text
+              style={[
+                styles.secondText,
+                { textAlign: "center", paddingHorizontal: 30, marginTop: 10 },
+              ]}
+            >
+              Go through the previous questions to prepare fully for your exams
+            </Text>
+
+            <ScrollView style={{}}>
+              {pastQuestionSubjects.map((subject, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.fourthContainer,
+                    index === pastQuestionSubjects.length - 1 && {
+                      marginBottom: 20,
+                    },
+                  ]}
+                  onPress={() => {
+                    router.push({
+                      pathname: "/pastQuestion2",
+                      params: { subjectName: subject.name, id: subject.id },
+                    });
+                  }}
+                >
+                  <Text style={styles.thirdText}>{subject.name}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        </KeyboardAwareScrollView>
+      </SafeAreaView>
+    </ProtectedRoute>
   );
 };
 

@@ -74,7 +74,7 @@ const forgotPassword = () => {
               <TextInput
                 style={{ flex: 1, color: "#000000" }}
                 placeholderTextColor="#000000"
-                placeholder={""}
+                placeholder={"Email Address"}
                 onChangeText={(text) => setEmail(text)}
                 value={email}
               />

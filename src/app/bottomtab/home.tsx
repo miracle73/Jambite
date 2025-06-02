@@ -30,356 +30,370 @@ import FirstImage from "../../../assets/images/Uninstalling Updates.png";
 import { useRouter } from "expo-router";
 import { useSelector } from "react-redux";
 import { RootState } from "../../components/redux/store";
+import ProtectedRoute from "../../components/ProtectedRoute";
 
 const home = () => {
   const router = useRouter();
   const user = useSelector((state: RootState) => state.user.user);
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: "#FFFFFF",
-        paddingTop: 50,
-      }}
-    >
-      <ScrollView style={{}} showsVerticalScrollIndicator={false}>
-        <View
-          style={{
-            marginHorizontal: 20,
-            paddingBottom: 30,
-          }}
-        >
+    <ProtectedRoute>
+      <SafeAreaView
+        style={{
+          flex: 1,
+          backgroundColor: "#FFFFFF",
+          paddingTop: 50,
+        }}
+      >
+        <ScrollView style={{}} showsVerticalScrollIndicator={false}>
           <View
             style={{
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexDirection: "row",
+              marginHorizontal: 20,
+              paddingBottom: 30,
             }}
           >
-            <SmallerJambiteText />
             <View
               style={{
-                justifyContent: "flex-end",
+                justifyContent: "space-between",
                 alignItems: "center",
-                gap: 2,
                 flexDirection: "row",
               }}
             >
-              <TouchableOpacity
-                onPress={() => router.push("/bottomtab/settings")}
+              <SmallerJambiteText />
+              <View
+                style={{
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                  gap: 2,
+                  flexDirection: "row",
+                }}
               >
-                <ProfileIcon />
-              </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => router.push("/bottomtab/settings")}
+                >
+                  <ProfileIcon />
+                </TouchableOpacity>
 
-              <Text style={styles.secondText}>{user.full_name}</Text>
+                <Text style={styles.secondText}>{user.full_name}</Text>
+              </View>
             </View>
-          </View>
-          <View
-            style={{
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexDirection: "row",
-            }}
-          >
             <View
               style={{
-                justifyContent: "center",
+                justifyContent: "space-between",
                 alignItems: "center",
+                flexDirection: "row",
               }}
             >
               <View
                 style={{
-                  height: 40,
-                  width: 40,
-                  borderRadius: 30,
-                  borderWidth: 7,
-                  borderColor: "#0F065E",
-                  flexDirection: "row",
                   justifyContent: "center",
                   alignItems: "center",
-                  position: "relative",
                 }}
               >
-                <Text
+                <View
                   style={{
-                    fontSize: 15,
-                    color: "#0F065E",
-                    fontWeight: "800",
-                  }}
-                >
-                  18
-                </Text>
-              </View>
-              <View
-                style={{
-                  height: 11,
-                  width: 50,
-                  backgroundColor: "#0F065E",
-                  borderRadius: 10,
-                  position: "absolute",
-                  bottom: -5,
-                  left: -5,
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 5,
-                    color: "#FFFFFF",
-                    fontWeight: "600",
-                    textAlign: "center",
+                    height: 40,
+                    width: 40,
+                    borderRadius: 30,
+                    borderWidth: 7,
+                    borderColor: "#0F065E",
                     flexDirection: "row",
                     justifyContent: "center",
                     alignItems: "center",
+                    position: "relative",
                   }}
                 >
-                  Before Examination
-                </Text>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: "#0F065E",
+                      fontWeight: "800",
+                    }}
+                  >
+                    18
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    height: 11,
+                    width: 50,
+                    backgroundColor: "#0F065E",
+                    borderRadius: 10,
+                    position: "absolute",
+                    bottom: -5,
+                    left: -5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 5,
+                      color: "#FFFFFF",
+                      fontWeight: "600",
+                      textAlign: "center",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    Before Examination
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.firstContainer}>
+                <View style={styles.innerContainer}>
+                  <Text style={styles.firstText}>Study Progress</Text>
+                  <View style={styles.circularContainer}></View>
+                </View>
+                <View
+                  style={{
+                    width: "100%",
+                    flexDirection: "row",
+                    justifyContent: "flex-end",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text style={styles.firstText}>100/100</Text>
+                </View>
               </View>
             </View>
-            <View style={styles.firstContainer}>
-              <View style={styles.innerContainer}>
-                <Text style={styles.firstText}>Study Progress</Text>
-                <View style={styles.circularContainer}></View>
-              </View>
+            <Text style={styles.thirdText}>Ready to complete study today</Text>
+            <View style={styles.secondContainer}>
               <View
                 style={{
-                  width: "100%",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={styles.firstText}>100/100</Text>
-              </View>
-            </View>
-          </View>
-          <Text style={styles.thirdText}>Ready to complete study today</Text>
-          <View style={styles.secondContainer}>
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "flex-end",
-                paddingHorizontal: 10,
-              }}
-            >
-              <Text style={styles.fourthText}>ITED</Text>
-              {/* <SecondJambiteText /> */}
-              <ThirdJambiteText />
-            </View>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "flex-start",
-              marginTop: 20,
-            }}
-          >
-            <View
-              style={{
-                width: "48%",
-              }}
-            >
-              <TouchableOpacity
-                style={styles.smallContainer}
-                onPress={() => {
-                  router.push("/bottomtab/notes");
-                }}
-              >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    width: "100%",
-                  }}
-                >
-                  <Text style={styles.fifthText}>Outline Notes</Text>
-                  <OpenBookIcon />
-                </View>
-                <Text style={styles.sixthText}>
-                  Read with your outline for each subject
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.smallContainer, { backgroundColor: "#EF0307" }]}
-                onPress={() => {
-                  router.push("/pastQuestion");
-                }}
-              >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    width: "100%",
-                  }}
-                >
-                  <Text style={styles.fifthText}>Past Questions</Text>
-                  <AskQuestion />
-                </View>
-                <Text style={styles.sixthText}>
-                  Go through past questions and prepare ahead
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.smallContainer,
-                  { backgroundColor: "#041C42D1" },
-                ]}
-                onPress={() => {
-                  router.push("/activation");
-                }}
-              >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    width: "100%",
-                  }}
-                >
-                  <Text style={styles.fifthText}>App Activation </Text>
-                  <Activation />
-                </View>
-                <Text style={styles.sixthText}>
-                  Activate your app to enjoy full version of the software
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                width: "48%",
-              }}
-            >
-              <TouchableOpacity
-                style={[
-                  styles.smallContainer,
-                  { backgroundColor: "#041C42B5" },
-                ]}
-                onPress={() => {
-                  router.push("/bottomtab/exam/postUtme");
-                }}
-              >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    width: "100%",
-                  }}
-                >
-                  <Text style={styles.fifthText}>POST UTME</Text>
-                  <AddDocument />
-                </View>
-                <Text style={styles.sixthText}>
-                  Go through your prefferd instifution POST UTME questions
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.smallContainer, { backgroundColor: "#1E1E1E" }]}
-                onPress={() => {
-                  router.push("/bottomtab/exam/cbt");
-                }}
-              >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    width: "100%",
-                  }}
-                >
-                  <Text style={styles.fifthText}>CBT MODE</Text>
-                  <LaptopWithCursor />
-                </View>
-                <Text style={styles.sixthText}>
-                  If you are proud of yourself give it a try.
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.smallContainer, { backgroundColor: "#0F065E" }]}
-                onPress={() => {
-                  router.push("/scholarship");
-                }}
-              >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    width: "100%",
-                  }}
-                >
-                  <Text style={styles.fifthText}>Scholarship</Text>
-                  <Scholarship />
-                </View>
-                <Text style={styles.sixthText}>
-                  IRegister and Stand the chance to become our best student.
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.fifthContainer}>
-            <View style={styles.fourthContainer}>
-              <View style={{ width: "80%" }}>
-                <Text style={styles.seventhText}>App Update Available </Text>
-                <Text style={styles.eighthText}>
-                  Ited Jambite latest software version available .{" "}
-                </Text>
-              </View>
-              <View style={{ width: "20%" }}>
-                <Image source={FirstImage} />
-              </View>
-            </View>
-            <TouchableOpacity
-              style={styles.fourthContainer}
-              onPress={() => {
-                router.push("/cutoff");
-              }}
-            >
-              <View style={{ width: "80%" }}>
-                <Text style={styles.seventhText}>University/Cut Off Mark </Text>
-                <Text style={styles.eighthText}>
-                  Check out list of universities, thier cutoff marks and
-                  accredited courses they offer .{" "}
-                </Text>
-              </View>
-              <View style={{ width: "20%" }}>
-                <UniversityCampus />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.fourthContainer}
-              onPress={() => {
-                router.push("/socials");
-              }}
-            >
-              <View style={{ width: "50%" }}>
-                <Text style={styles.seventhText}>Task/Refund</Text>
-                <Text style={styles.eighthText}>
-                  Check out simple ways to qualify for our random giveaway.{" "}
-                </Text>
-              </View>
-              <View
-                style={{
-                  width: "50%",
                   justifyContent: "center",
-                  alignItems: "flex-start",
-                  flexDirection: "row",
+                  alignItems: "flex-end",
+                  paddingHorizontal: 10,
                 }}
               >
-                <Instagram />
-                <Telegram />
-                <Facebook />
-                <Tiktok />
+                <Text style={styles.fourthText}>ITED</Text>
+
+                <ThirdJambiteText />
               </View>
-            </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+                marginTop: 20,
+              }}
+            >
+              <View
+                style={{
+                  width: "48%",
+                }}
+              >
+                <TouchableOpacity
+                  style={styles.smallContainer}
+                  onPress={() => {
+                    router.push("/bottomtab/notes");
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: "100%",
+                    }}
+                  >
+                    <Text style={styles.fifthText}>Outline Notes</Text>
+                    <OpenBookIcon />
+                  </View>
+                  <Text style={styles.sixthText}>
+                    Read with your outline for each subject
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.smallContainer,
+                    { backgroundColor: "#EF0307" },
+                  ]}
+                  onPress={() => {
+                    router.push("/pastQuestion");
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: "100%",
+                    }}
+                  >
+                    <Text style={styles.fifthText}>Past Questions</Text>
+                    <AskQuestion />
+                  </View>
+                  <Text style={styles.sixthText}>
+                    Go through past questions and prepare ahead
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.smallContainer,
+                    { backgroundColor: "#041C42D1" },
+                  ]}
+                  onPress={() => {
+                    router.push("/activation");
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: "100%",
+                    }}
+                  >
+                    <Text style={styles.fifthText}>App Activation </Text>
+                    <Activation />
+                  </View>
+                  <Text style={styles.sixthText}>
+                    Activate your app to enjoy full version of the software
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  width: "48%",
+                }}
+              >
+                <TouchableOpacity
+                  style={[
+                    styles.smallContainer,
+                    { backgroundColor: "#041C42B5" },
+                  ]}
+                  onPress={() => {
+                    router.push("/bottomtab/exam/postUtme");
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: "100%",
+                    }}
+                  >
+                    <Text style={styles.fifthText}>POST UTME</Text>
+                    <AddDocument />
+                  </View>
+                  <Text style={styles.sixthText}>
+                    Go through your prefferd instifution POST UTME questions
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.smallContainer,
+                    { backgroundColor: "#1E1E1E" },
+                  ]}
+                  onPress={() => {
+                    router.push("/bottomtab/exam/cbt");
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: "100%",
+                    }}
+                  >
+                    <Text style={styles.fifthText}>CBT MODE</Text>
+                    <LaptopWithCursor />
+                  </View>
+                  <Text style={styles.sixthText}>
+                    If you are proud of yourself give it a try.
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.smallContainer,
+                    { backgroundColor: "#0F065E" },
+                  ]}
+                  onPress={() => {
+                    router.push("/scholarship");
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: "100%",
+                    }}
+                  >
+                    <Text style={styles.fifthText}>Scholarship</Text>
+                    <Scholarship />
+                  </View>
+                  <Text style={styles.sixthText}>
+                    IRegister and Stand the chance to become our best student.
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={styles.fifthContainer}>
+              <View style={styles.fourthContainer}>
+                <View style={{ width: "80%" }}>
+                  <Text style={styles.seventhText}>App Update Available </Text>
+                  <Text style={styles.eighthText}>
+                    Ited Jambite latest software version available .{" "}
+                  </Text>
+                </View>
+                <View style={{ width: "20%" }}>
+                  <Image source={FirstImage} />
+                </View>
+              </View>
+              <TouchableOpacity
+                style={styles.fourthContainer}
+                onPress={() => {
+                  router.push("/cutoff");
+                }}
+              >
+                <View style={{ width: "80%" }}>
+                  <Text style={styles.seventhText}>
+                    University/Cut Off Mark{" "}
+                  </Text>
+                  <Text style={styles.eighthText}>
+                    Check out list of universities, thier cutoff marks and
+                    accredited courses they offer .{" "}
+                  </Text>
+                </View>
+                <View style={{ width: "20%" }}>
+                  <UniversityCampus />
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.fourthContainer}
+                onPress={() => {
+                  router.push("/socials");
+                }}
+              >
+                <View style={{ width: "50%" }}>
+                  <Text style={styles.seventhText}>Task/Refund</Text>
+                  <Text style={styles.eighthText}>
+                    Check out simple ways to qualify for our random giveaway.{" "}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    width: "50%",
+                    justifyContent: "center",
+                    alignItems: "flex-start",
+                    flexDirection: "row",
+                  }}
+                >
+                  <Instagram />
+                  <Telegram />
+                  <Facebook />
+                  <Tiktok />
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+    </ProtectedRoute>
   );
 };
 

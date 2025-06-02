@@ -12,6 +12,8 @@ import ModalIcon from "../../../assets/images/Modal Icon.png";
 import TouchableOutside from "./TouchableOutside";
 import { useRouter } from "expo-router";
 import { AlertIcon } from "../../../assets/svg";
+import { logoutUser } from "../redux/slices/authSlice";
+import { useAppDispatch } from "../redux/store";
 
 const { width, height } = Dimensions.get("window");
 interface LogoutModalProps {
@@ -20,6 +22,7 @@ interface LogoutModalProps {
 }
 const DeleteModal = ({ setModal, modal }: LogoutModalProps) => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   return (
     <Modal
       animationType="slide"
@@ -73,6 +76,7 @@ const DeleteModal = ({ setModal, modal }: LogoutModalProps) => {
                 style={styles.button}
                 onPress={() => {
                   router.push("/signup");
+                  dispatch(logoutUser());
                   setModal(false);
                 }}
               >

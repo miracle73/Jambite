@@ -21,6 +21,7 @@ import { RootState } from "../components/redux/store";
 import { useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
 import { useLocalSearchParams } from "expo-router";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const subject = () => {
   const router = useRouter();
@@ -84,88 +85,90 @@ const subject = () => {
   }
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 50 }}
-    >
-      <KeyboardAwareScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        showsVerticalScrollIndicator={false}
+    <ProtectedRoute>
+      <SafeAreaView
+        style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 50 }}
       >
-        <View
-          style={{
-            justifyContent: "flex-start",
-            flex: 1,
-          }}
+        <KeyboardAwareScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          showsVerticalScrollIndicator={false}
         >
           <View
             style={{
-              marginBottom: 20,
-              paddingHorizontal: 20,
               justifyContent: "flex-start",
-              gap: 4,
-              alignItems: "center",
-              flexDirection: "row",
+              flex: 1,
             }}
           >
-            <TouchableOpacity onPress={() => router.back()}>
-              <BackArrow />
-            </TouchableOpacity>
+            <View
+              style={{
+                marginBottom: 20,
+                paddingHorizontal: 20,
+                justifyContent: "flex-start",
+                gap: 4,
+                alignItems: "center",
+                flexDirection: "row",
+              }}
+            >
+              <TouchableOpacity onPress={() => router.back()}>
+                <BackArrow />
+              </TouchableOpacity>
 
-            <Text style={[styles.firstText, { textAlign: "center" }]}>
-              {subjectName}
+              <Text style={[styles.firstText, { textAlign: "center" }]}>
+                {subjectName}
+              </Text>
+            </View>
+
+            <Text
+              style={[
+                styles.secondText,
+                { textAlign: "center", paddingHorizontal: 20 },
+              ]}
+            >
+              Do well to track all courses which are aligned with Jamb syllables
             </Text>
-          </View>
 
-          <Text
-            style={[
-              styles.secondText,
-              { textAlign: "center", paddingHorizontal: 20 },
-            ]}
-          >
-            Do well to track all courses which are aligned with Jamb syllables
-          </Text>
-
-          <ScrollView style={{}}>
-            {topics?.map((topic, index) => (
-              <TouchableOpacity
-                key={index}
-                style={[
-                  styles.fourthContainer,
-                  index === topics.length - 1 && {
-                    marginBottom: 20,
-                  },
-                ]}
-                onPress={() => {
-                  if (topic.free) {
-                    router.push({
-                      pathname: "/subjectNote",
-                      params: { subjectName: subject, id: topic.id },
-                    });
-                  } else {
-                    if (user?.activated) {
+            <ScrollView style={{}}>
+              {topics?.map((topic, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.fourthContainer,
+                    index === topics.length - 1 && {
+                      marginBottom: 20,
+                    },
+                  ]}
+                  onPress={() => {
+                    if (topic.free) {
                       router.push({
                         pathname: "/subjectNote",
                         params: { subjectName: subject, id: topic.id },
                       });
                     } else {
-                      Toast.show({
-                        type: "error",
-                        text1: "Error",
-                        text2:
-                          "This topic is locked, please subscribe to unlock it.",
-                      });
+                      if (user?.activated) {
+                        router.push({
+                          pathname: "/subjectNote",
+                          params: { subjectName: subject, id: topic.id },
+                        });
+                      } else {
+                        Toast.show({
+                          type: "error",
+                          text1: "Error",
+                          text2:
+                            "This topic is locked, please subscribe to unlock it.",
+                        });
+                      }
                     }
-                  }
-                }}
-              >
-                <Text style={styles.thirdText}>{topic.title}</Text>
-                {!topic.free && <EvilIcons name="lock" size={15} />}
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-      </KeyboardAwareScrollView>
-    </SafeAreaView>
+                  }}
+                >
+                  <Text style={styles.thirdText}>{topic.title}</Text>
+                  {!topic.free && <EvilIcons name="lock" size={15} />}
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        </KeyboardAwareScrollView>
+      </SafeAreaView>
+    </ProtectedRoute>
   );
 };
 

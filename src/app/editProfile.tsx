@@ -13,6 +13,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useRouter } from "expo-router";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useGetAllInstitutionsQuery } from "../components/services/userService";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const editProfile = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -41,97 +42,98 @@ const editProfile = () => {
       value: institution.id,
     })) || [];
 
-  console.log(year, 5000);
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 50 }}
-    >
-      {/* <KeyboardAwareScrollView
+    <ProtectedRoute>
+      <SafeAreaView
+        style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 50 }}
+      >
+        {/* <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
       > */}
-      <View
-        style={{
-          paddingHorizontal: 20,
-          justifyContent: "flex-start",
-          flex: 1,
-        }}
-      >
-        <View style={{ marginBottom: 20 }}>
-          <TouchableOpacity onPress={() => router.back()}>
-            <BackArrow />
-          </TouchableOpacity>
+        <View
+          style={{
+            paddingHorizontal: 20,
+            justifyContent: "flex-start",
+            flex: 1,
+          }}
+        >
+          <View style={{ marginBottom: 20 }}>
+            <TouchableOpacity onPress={() => router.back()}>
+              <BackArrow />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.container}>
+            <Text style={styles.secondText}>Edit Profile</Text>
+            <Text style={styles.firstText}>
+              Update your details and get it saved
+            </Text>
+            <View style={{ marginTop: 20 }} />
+            <Text style={styles.fourthText}>FULL NAME</Text>
+            <View style={styles.secondContainer}>
+              <TextInput
+                style={{ color: "#000000" }}
+                placeholderTextColor="#000000"
+                placeholder={"Full Name"}
+                onChangeText={(text) => setFullName(text)}
+                value={fullName}
+              />
+            </View>
+            <Text style={[styles.fourthText, { marginTop: 25 }]}>
+              EMAIL ADDRESS
+            </Text>
+            <View style={styles.secondContainer}>
+              <TextInput
+                style={{ color: "#000000" }}
+                placeholderTextColor="#000000"
+                placeholder={"Email Address"}
+                onChangeText={(text) => setEmail(text)}
+                value={email}
+              />
+            </View>
+
+            <Text style={[styles.fourthText, { marginTop: 25 }]}>
+              PHONE NUMBER
+            </Text>
+            <View style={styles.secondContainer}>
+              <TextInput
+                style={{ color: "#000000" }}
+                placeholderTextColor="#000000"
+                placeholder={"Phone Number"}
+                onChangeText={(text) => setPhoneNumber(text)}
+                value={phoneNumber}
+                keyboardType="numeric"
+              />
+            </View>
+
+            <Text style={[styles.fourthText, { marginTop: 25 }]}>
+              PREFFERD INSTITUTION
+            </Text>
+            <View style={styles.firstContainer}>
+              <DropDownPicker
+                open={open}
+                value={institution}
+                items={year}
+                setOpen={setOpen}
+                setValue={(value) => setInstitution(value)}
+                placeholder="Select Institution"
+                style={pickerSelectStyles.inputIOS}
+                dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
+              />
+            </View>
+
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+              {loading ? (
+                <ActivityIndicator color="#FFFFFF" size={14} />
+              ) : (
+                <Text style={styles.thirdText}>Save</Text>
+              )}
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.container}>
-          <Text style={styles.secondText}>Edit Profile</Text>
-          <Text style={styles.firstText}>
-            Update your details and get it saved
-          </Text>
-          <View style={{ marginTop: 20 }} />
-          <Text style={styles.fourthText}>FULL NAME</Text>
-          <View style={styles.secondContainer}>
-            <TextInput
-              style={{ color: "#000000" }}
-              placeholderTextColor="#000000"
-              placeholder={"Full Name"}
-              onChangeText={(text) => setFullName(text)}
-              value={fullName}
-            />
-          </View>
-          <Text style={[styles.fourthText, { marginTop: 25 }]}>
-            EMAIL ADDRESS
-          </Text>
-          <View style={styles.secondContainer}>
-            <TextInput
-              style={{ color: "#000000" }}
-              placeholderTextColor="#000000"
-              placeholder={"Email Address"}
-              onChangeText={(text) => setEmail(text)}
-              value={email}
-            />
-          </View>
-
-          <Text style={[styles.fourthText, { marginTop: 25 }]}>
-            PHONE NUMBER
-          </Text>
-          <View style={styles.secondContainer}>
-            <TextInput
-              style={{ color: "#000000" }}
-              placeholderTextColor="#000000"
-              placeholder={"Phone Number"}
-              onChangeText={(text) => setPhoneNumber(text)}
-              value={phoneNumber}
-              keyboardType="numeric"
-            />
-          </View>
-
-          <Text style={[styles.fourthText, { marginTop: 25 }]}>
-            PREFFERD INSTITUTION
-          </Text>
-          <View style={styles.firstContainer}>
-            <DropDownPicker
-              open={open}
-              value={institution}
-              items={year}
-              setOpen={setOpen}
-              setValue={(value) => setInstitution(value)}
-              placeholder="Select Institution"
-              style={pickerSelectStyles.inputIOS}
-              dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
-            />
-          </View>
-
-          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-            {loading ? (
-              <ActivityIndicator color="#FFFFFF" size={14} />
-            ) : (
-              <Text style={styles.thirdText}>Save</Text>
-            )}
-          </TouchableOpacity>
-        </View>
-      </View>
-      {/* </KeyboardAwareScrollView> */}
-    </SafeAreaView>
+        {/* </KeyboardAwareScrollView> */}
+      </SafeAreaView>
+    </ProtectedRoute>
   );
 };
 

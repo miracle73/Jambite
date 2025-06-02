@@ -18,6 +18,7 @@ import {
 import { RootState } from "../../../components/redux/store";
 import { useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
+import ProtectedRoute from "../../../components/ProtectedRoute";
 
 const cbt = () => {
   const router = useRouter();
@@ -77,117 +78,119 @@ const cbt = () => {
     { label: "Physics", value: "physics" },
   ];
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
-    >
-      {/* <KeyboardAwareScrollView
+    <ProtectedRoute>
+      <SafeAreaView
+        style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
+      >
+        {/* <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
       > */}
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-      >
-        <View
-          style={{
-            paddingHorizontal: 20,
-            justifyContent: "flex-start",
-            flex: 1,
-          }}
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
         >
-          <View style={{ marginBottom: 70 }}>
-            <TouchableOpacity onPress={() => router.push("/bottomtab/home")}>
-              <BackArrow />
-            </TouchableOpacity>
-          </View>
-          <Text style={[styles.firstText, { textAlign: "center" }]}>
-            CBT MODE
-          </Text>
-          <Text style={[styles.secondText, { textAlign: "center" }]}>
-            Select your jamb subject
-          </Text>
-          <View style={styles.firstContainer}>
-            <DropDownPicker
-              open={open}
-              value={selectedYear}
-              items={year}
-              setOpen={setOpen}
-              setValue={(value) => setSelectedYear(value)}
-              placeholder="Select Year"
-              style={pickerSelectStyles.inputIOS}
-              dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
-            />
-
-            <View style={[{ marginTop: 30 }, open && { zIndex: -20 }]}>
-              <DropDownPicker
-                open={secondOpen}
-                value={selectedTime}
-                items={time}
-                setOpen={setSecondOpen}
-                setValue={(value) => setSelectedTime(value)}
-                placeholder="Select Time(Hours/Minutes)"
-                style={pickerSelectStyles.inputIOS}
-                dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
-              />
-            </View>
-            <View
-              style={[
-                { marginTop: 30 },
-                (secondOpen || open) && { zIndex: -20 },
-              ]}
-            >
-              <DropDownPicker
-                open={thirdOpen}
-                value={selectedSubject}
-                items={pastQuestionSubjects.map((subject) => ({
-                  label: subject.name,
-                  value: String(subject.id),
-                }))}
-                setOpen={setThirdOpen}
-                setValue={(value) => setSelectedSubject(value)}
-                placeholder="Select Subject"
-                style={pickerSelectStyles.inputIOS}
-                dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
-              />
-            </View>
-          </View>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              if (!selectedYear || !selectedTime || !selectedSubject) {
-                Toast.show({
-                  type: "error",
-                  text1: "Error",
-                  text2: "Please select all fields.",
-                });
-                return;
-              }
-              const selected = pastQuestionSubjects.find(
-                (subject) => String(subject.id) === selectedSubject
-              );
-
-              if (selected) {
-                router.push({
-                  pathname: "/cbtQuestions",
-                  params: {
-                    name: selected.name,
-                    id: String(selected.id),
-                  },
-                });
-              } else {
-                Toast.show({
-                  type: "error",
-                  text1: "Invalid Selection",
-                  text2: "Please select a valid subject.",
-                });
-              }
+          <View
+            style={{
+              paddingHorizontal: 20,
+              justifyContent: "flex-start",
+              flex: 1,
             }}
           >
-            <Text style={styles.sixthText}>Begin</Text>
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+            <View style={{ marginBottom: 70 }}>
+              <TouchableOpacity onPress={() => router.push("/bottomtab/home")}>
+                <BackArrow />
+              </TouchableOpacity>
+            </View>
+            <Text style={[styles.firstText, { textAlign: "center" }]}>
+              CBT MODE
+            </Text>
+            <Text style={[styles.secondText, { textAlign: "center" }]}>
+              Select your jamb subject
+            </Text>
+            <View style={styles.firstContainer}>
+              <DropDownPicker
+                open={open}
+                value={selectedYear}
+                items={year}
+                setOpen={setOpen}
+                setValue={(value) => setSelectedYear(value)}
+                placeholder="Select Year"
+                style={pickerSelectStyles.inputIOS}
+                dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
+              />
+
+              <View style={[{ marginTop: 30 }, open && { zIndex: -20 }]}>
+                <DropDownPicker
+                  open={secondOpen}
+                  value={selectedTime}
+                  items={time}
+                  setOpen={setSecondOpen}
+                  setValue={(value) => setSelectedTime(value)}
+                  placeholder="Select Time(Hours/Minutes)"
+                  style={pickerSelectStyles.inputIOS}
+                  dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
+                />
+              </View>
+              <View
+                style={[
+                  { marginTop: 30 },
+                  (secondOpen || open) && { zIndex: -20 },
+                ]}
+              >
+                <DropDownPicker
+                  open={thirdOpen}
+                  value={selectedSubject}
+                  items={pastQuestionSubjects.map((subject) => ({
+                    label: subject.name,
+                    value: String(subject.id),
+                  }))}
+                  setOpen={setThirdOpen}
+                  setValue={(value) => setSelectedSubject(value)}
+                  placeholder="Select Subject"
+                  style={pickerSelectStyles.inputIOS}
+                  dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
+                />
+              </View>
+            </View>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                if (!selectedYear || !selectedTime || !selectedSubject) {
+                  Toast.show({
+                    type: "error",
+                    text1: "Error",
+                    text2: "Please select all fields.",
+                  });
+                  return;
+                }
+                const selected = pastQuestionSubjects.find(
+                  (subject) => String(subject.id) === selectedSubject
+                );
+
+                if (selected) {
+                  router.push({
+                    pathname: "/cbtQuestions",
+                    params: {
+                      name: selected.name,
+                      id: String(selected.id),
+                    },
+                  });
+                } else {
+                  Toast.show({
+                    type: "error",
+                    text1: "Invalid Selection",
+                    text2: "Please select a valid subject.",
+                  });
+                }
+              }}
+            >
+              <Text style={styles.sixthText}>Begin</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </ProtectedRoute>
   );
 };
 

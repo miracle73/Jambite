@@ -14,6 +14,7 @@ import { useCutOffQuery } from "../components/services/userService";
 import { RootState } from "../components/redux/store";
 import { useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const cutoff = () => {
   const router = useRouter();
@@ -46,39 +47,41 @@ const cutoff = () => {
     );
   }
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
-    >
-      <KeyboardAwareScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        showsVerticalScrollIndicator={false}
+    <ProtectedRoute>
+      <SafeAreaView
+        style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
       >
-        <View
-          style={{
-            paddingHorizontal: 20,
-            justifyContent: "flex-start",
-            flex: 1,
-          }}
+        <KeyboardAwareScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          showsVerticalScrollIndicator={false}
         >
           <View
             style={{
-              marginBottom: 30,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
+              paddingHorizontal: 20,
+              justifyContent: "flex-start",
+              flex: 1,
             }}
           >
-            <TouchableOpacity onPress={() => router.back()}>
-              <BackArrow />
-            </TouchableOpacity>
-          </View>
+            <View
+              style={{
+                marginBottom: 30,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <TouchableOpacity onPress={() => router.back()}>
+                <BackArrow />
+              </TouchableOpacity>
+            </View>
 
-          <View>
-            <Text style={styles.secondText}>{data?.text}</Text>
+            <View>
+              <Text style={styles.secondText}>{data?.text}</Text>
+            </View>
           </View>
-        </View>
-      </KeyboardAwareScrollView>
-    </SafeAreaView>
+        </KeyboardAwareScrollView>
+      </SafeAreaView>
+    </ProtectedRoute>
   );
 };
 //

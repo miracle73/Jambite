@@ -112,10 +112,6 @@ const signin = () => {
                 marginTop: 20,
               }}
             >
-              {/* <Text style={styles.secondText}>Sign up</Text>
-                            <View style={styles.transitionButton}>
-                                <Text style={[styles.secondText, { color: "white" }]}>Sign In</Text>
-                            </View> */}
               <TouchableOpacity
                 style={[
                   styles.transitionButton,

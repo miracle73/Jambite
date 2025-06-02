@@ -18,6 +18,7 @@ import { RootState } from "../components/redux/store";
 import { useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
 import { useLocalSearchParams } from "expo-router";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const subjectPastQuestion = () => {
   const router = useRouter();
@@ -156,163 +157,165 @@ const subjectPastQuestion = () => {
     );
   }
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
-    >
-      <KeyboardAwareScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        showsVerticalScrollIndicator={false}
+    <ProtectedRoute>
+      <SafeAreaView
+        style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
       >
-        <View
-          style={{
-            paddingHorizontal: 20,
-            justifyContent: "flex-start",
-            flex: 1,
-          }}
+        <KeyboardAwareScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          showsVerticalScrollIndicator={false}
         >
-          {questions && questions.length >= currentQuestion && (
-            <>
-              <View
-                style={{
-                  marginBottom: 30,
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
+          <View
+            style={{
+              paddingHorizontal: 20,
+              justifyContent: "flex-start",
+              flex: 1,
+            }}
+          >
+            {questions && questions.length >= currentQuestion && (
+              <>
                 <View
                   style={{
+                    marginBottom: 30,
                     flexDirection: "row",
-                    justifyContent: "flex-start",
-                    gap: 2,
+                    justifyContent: "space-between",
                     alignItems: "center",
                   }}
                 >
-                  <TouchableOpacity onPress={() => router.back()}>
-                    <BackArrow />
-                  </TouchableOpacity>
-                  <Text style={styles.firstText}>{name} </Text>
-                </View>
-
-                <TouchableOpacity style={styles.secondContainer}>
-                  <Text
+                  <View
                     style={{
-                      color: "#FFFFFF",
-                      fontSize: 15,
-                      fontWeight: "600",
+                      flexDirection: "row",
+                      justifyContent: "flex-start",
+                      gap: 2,
+                      alignItems: "center",
                     }}
                   >
-                    {questions[currentQuestion - 1]?.year}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
-              <View style={styles.firstContainer}>
-                <Text style={styles.secondText}>
-                  Question {currentQuestion}
-                </Text>
-                <Text style={styles.thirdText}>
-                  {questions[currentQuestion - 1]?.question_text}
-                </Text>
-              </View>
-
-              <View style={{ marginVertical: 20, paddingHorizontal: 10 }}>
-                {["a", "b", "c", "d", "e"].map((optionKey) => {
-                  const optionValue =
-                    questions[currentQuestion - 1]?.[
-                      optionKey as keyof Question
-                    ];
-                  if (!optionValue) return null;
-
-                  return (
-                    <TouchableOpacity
-                      key={optionKey}
-                      style={styles.thirdContainer}
-                      onPress={() =>
-                        handleOptionSelect(optionKey.toUpperCase())
-                      }
-                    >
-                      <Text style={styles.fourthText}>
-                        {optionKey.toUpperCase()}
-                      </Text>
-                      <View
-                        style={[
-                          styles.fourthContainer,
-                          selectedAnswers[currentQuestion] ===
-                          optionKey.toUpperCase()
-                            ? styles.selectedOption
-                            : {},
-                        ]}
-                      />
-                      <Text style={styles.fourthText}>{optionValue}</Text>
+                    <TouchableOpacity onPress={() => router.back()}>
+                      <BackArrow />
                     </TouchableOpacity>
-                  );
-                })}
-              </View>
-              <TouchableOpacity onPress={() => setShowModal(!showModal)}>
-                <Text style={styles.fifthText}>Show solutions</Text>
-              </TouchableOpacity>
+                    <Text style={styles.firstText}>{name} </Text>
+                  </View>
 
-              {showModal && (
-                <View style={styles.fifthContainer}>
-                  <Text style={[styles.sixthText, { marginBottom: 5 }]}>
-                    {questions[currentQuestion - 1]?.correct_answer}
+                  <TouchableOpacity style={styles.secondContainer}>
+                    <Text
+                      style={{
+                        color: "#FFFFFF",
+                        fontSize: 15,
+                        fontWeight: "600",
+                      }}
+                    >
+                      {questions[currentQuestion - 1]?.year}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
+                <View style={styles.firstContainer}>
+                  <Text style={styles.secondText}>
+                    Question {currentQuestion}
+                  </Text>
+                  <Text style={styles.thirdText}>
+                    {questions[currentQuestion - 1]?.question_text}
                   </Text>
                 </View>
-              )}
 
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <TouchableOpacity
-                  style={[
-                    styles.firstButton,
-                    currentQuestion === 1 ? styles.disabledButton : {},
-                  ]}
-                  onPress={handlePrevious}
-                  disabled={currentQuestion === 1}
-                >
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      color: currentQuestion === 1 ? "#D9D9D9" : "#0F065E",
-                      fontWeight: "700",
-                    }}
-                  >
-                    Previous
-                  </Text>
+                <View style={{ marginVertical: 20, paddingHorizontal: 10 }}>
+                  {["a", "b", "c", "d", "e"].map((optionKey) => {
+                    const optionValue =
+                      questions[currentQuestion - 1]?.[
+                        optionKey as keyof Question
+                      ];
+                    if (!optionValue) return null;
+
+                    return (
+                      <TouchableOpacity
+                        key={optionKey}
+                        style={styles.thirdContainer}
+                        onPress={() =>
+                          handleOptionSelect(optionKey.toUpperCase())
+                        }
+                      >
+                        <Text style={styles.fourthText}>
+                          {optionKey.toUpperCase()}
+                        </Text>
+                        <View
+                          style={[
+                            styles.fourthContainer,
+                            selectedAnswers[currentQuestion] ===
+                            optionKey.toUpperCase()
+                              ? styles.selectedOption
+                              : {},
+                          ]}
+                        />
+                        <Text style={styles.fourthText}>{optionValue}</Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+                <TouchableOpacity onPress={() => setShowModal(!showModal)}>
+                  <Text style={styles.fifthText}>Show solutions</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity
-                  style={[
-                    styles.secondButton,
-                    currentQuestion === questions.length
-                      ? styles.disabledButton
-                      : {},
-                  ]}
-                  onPress={handleNext}
-                  disabled={currentQuestion === questions.length}
+                {showModal && (
+                  <View style={styles.fifthContainer}>
+                    <Text style={[styles.sixthText, { marginBottom: 5 }]}>
+                      {questions[currentQuestion - 1]?.correct_answer}
+                    </Text>
+                  </View>
+                )}
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
                 >
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      color: "#FFFFFF",
-                      fontWeight: "700",
-                    }}
+                  <TouchableOpacity
+                    style={[
+                      styles.firstButton,
+                      currentQuestion === 1 ? styles.disabledButton : {},
+                    ]}
+                    onPress={handlePrevious}
+                    disabled={currentQuestion === 1}
                   >
-                    Next
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </>
-          )}
-        </View>
-      </KeyboardAwareScrollView>
-    </SafeAreaView>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        color: currentQuestion === 1 ? "#D9D9D9" : "#0F065E",
+                        fontWeight: "700",
+                      }}
+                    >
+                      Previous
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={[
+                      styles.secondButton,
+                      currentQuestion === questions.length
+                        ? styles.disabledButton
+                        : {},
+                    ]}
+                    onPress={handleNext}
+                    disabled={currentQuestion === questions.length}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        color: "#FFFFFF",
+                        fontWeight: "700",
+                      }}
+                    >
+                      Next
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            )}
+          </View>
+        </KeyboardAwareScrollView>
+      </SafeAreaView>
+    </ProtectedRoute>
   );
 };
 //

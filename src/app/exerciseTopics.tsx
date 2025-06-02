@@ -21,6 +21,7 @@ import {
 } from "../components/services/userService";
 import { RootState } from "../components/redux/store";
 import { useSelector } from "react-redux";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const exerciseTopics = () => {
   const [open, setOpen] = useState(false);
@@ -76,80 +77,82 @@ const exerciseTopics = () => {
   ];
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
-    >
-      {/* <KeyboardAwareScrollView
+    <ProtectedRoute>
+      <SafeAreaView
+        style={{ flex: 1, backgroundColor: "#FFFFFF", paddingVertical: 50 }}
+      >
+        {/* <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
       > */}
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-      >
-        <View
-          style={{
-            paddingHorizontal: 20,
-            justifyContent: "flex-start",
-            flex: 1,
-          }}
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
         >
-          <View style={{ marginBottom: 70 }}>
-            <TouchableOpacity onPress={() => router.back()}>
-              <BackArrow />
-            </TouchableOpacity>
-          </View>
-          <Text style={[styles.firstText, { textAlign: "center" }]}>
-            {name} Topics
-          </Text>
-
-          <View style={styles.firstContainer}>
-            <DropDownPicker
-              open={open}
-              value={selectedYear}
-              items={topics.map((topic) => ({
-                label: topic.title,
-                value: String(topic.id),
-              }))}
-              setOpen={setOpen}
-              setValue={(value) => setSelectedYear(value)}
-              placeholder="Select Topic"
-              style={pickerSelectStyles.inputIOS}
-              dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
-            />
-          </View>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              if (!selectedYear) {
-                Toast.show({
-                  type: "error",
-                  text1: "Error",
-                  text2: "Please select a topic.",
-                });
-                return;
-              }
-              const selected = topics.find(
-                (topic) => String(topic.id) === selectedYear
-              );
-              if (selected) {
-                router.push({
-                  pathname: "/exercise",
-                  params: {
-                    id: subjectId,
-                    name: subjectname,
-                    topicId: String(selected?.id),
-                    topicName: selected?.title,
-                  },
-                });
-              }
+          <View
+            style={{
+              paddingHorizontal: 20,
+              justifyContent: "flex-start",
+              flex: 1,
             }}
           >
-            <Text style={styles.sixthText}>Begin</Text>
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+            <View style={{ marginBottom: 70 }}>
+              <TouchableOpacity onPress={() => router.back()}>
+                <BackArrow />
+              </TouchableOpacity>
+            </View>
+            <Text style={[styles.firstText, { textAlign: "center" }]}>
+              {name} Topics
+            </Text>
+
+            <View style={styles.firstContainer}>
+              <DropDownPicker
+                open={open}
+                value={selectedYear}
+                items={topics.map((topic) => ({
+                  label: topic.title,
+                  value: String(topic.id),
+                }))}
+                setOpen={setOpen}
+                setValue={(value) => setSelectedYear(value)}
+                placeholder="Select Topic"
+                style={pickerSelectStyles.inputIOS}
+                dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
+              />
+            </View>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                if (!selectedYear) {
+                  Toast.show({
+                    type: "error",
+                    text1: "Error",
+                    text2: "Please select a topic.",
+                  });
+                  return;
+                }
+                const selected = topics.find(
+                  (topic) => String(topic.id) === selectedYear
+                );
+                if (selected) {
+                  router.push({
+                    pathname: "/exercise",
+                    params: {
+                      id: subjectId,
+                      name: subjectname,
+                      topicId: String(selected?.id),
+                      topicName: selected?.title,
+                    },
+                  });
+                }
+              }}
+            >
+              <Text style={styles.sixthText}>Begin</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </ProtectedRoute>
   );
 };
 

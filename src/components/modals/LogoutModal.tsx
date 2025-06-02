@@ -12,14 +12,18 @@ import ModalIcon from "../../../assets/images/Modal Icon.png";
 import TouchableOutside from "./TouchableOutside";
 import { useRouter } from "expo-router";
 import { AlertIcon } from "../../../assets/svg";
+import { logoutUser } from "../redux/slices/authSlice";
+import { useAppDispatch } from "../redux/store";
 
 const { width, height } = Dimensions.get("window");
 interface LogoutModalProps {
   setModal: (value: boolean) => void;
   modal: boolean;
 }
+
 const LogoutModal = ({ setModal, modal }: LogoutModalProps) => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   return (
     <Modal
       animationType="slide"
@@ -73,6 +77,7 @@ const LogoutModal = ({ setModal, modal }: LogoutModalProps) => {
                 style={styles.button}
                 onPress={() => {
                   router.push("/signin");
+                  dispatch(logoutUser());
                   setModal(false);
                 }}
               >
