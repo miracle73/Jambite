@@ -84,7 +84,9 @@ const socials = () => {
               <TouchableOpacity
                 onPress={() => {
                   import("react-native").then(({ Linking }) => {
-                    Linking.openURL("https://www.tiktok.com/itedsoftwares/");
+                    Linking.openURL(
+                      "https://www.tiktok.com/@itedsoftwares?_t=ZM-8vkLwsxovSh&_r=1"
+                    );
                   });
                 }}
               >
