@@ -8,12 +8,13 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
-import { BackArrow, JambiteText, SecondJambiteText } from "../../assets/svg";
+import { BackArrow } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useGetAllInstitutionsQuery } from "../components/services/userService";
 import ProtectedRoute from "../components/ProtectedRoute";
+import Toast from "react-native-toast-message";
 
 const editProfile = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -23,14 +24,129 @@ const editProfile = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [showSecondStep, setShowSecondStep] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const [fullNameError, setFullNameError] = useState("");
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePhoneNumber = (phone: string) => {
+    const phoneRegex = /^(\+?234|0)?[789][01]\d{8}$/;
+    return phoneRegex.test(phone.replace(/\s/g, ""));
+  };
+
+  const handleFullNameChange = (text: string) => {
+    setFullName(text);
+    if (text.trim().length < 2) {
+      setFullNameError("Name must be at least 2 characters long");
+    } else {
+      setFullNameError("");
+    }
+  };
+
+  const handleEmailChange = (text: string) => {
+    setEmail(text);
+    if (text.trim() === "") {
+      setEmailError("Email is required");
+    } else if (!validateEmail(text)) {
+      setEmailError("Please enter a valid email address");
+    } else {
+      setEmailError("");
+    }
+  };
+
+  const handlePhoneChange = (text: string) => {
+    setPhoneNumber(text);
+    if (text.trim() === "") {
+      setPhoneError("Phone number is required");
+    } else if (!validatePhoneNumber(text)) {
+      setPhoneError("Please enter a valid Nigerian phone number");
+    } else {
+      setPhoneError("");
+    }
+  };
+  const handleContinue = () => {
+    let hasErrors = false;
+
+    // Validate full name
+    if (!fullName.trim() || fullName.trim().length < 2) {
+      setFullNameError("Name must be at least 2 characters long");
+      hasErrors = true;
+    }
+
+    // Validate email
+    if (!email.trim()) {
+      setEmailError("Email is required");
+      hasErrors = true;
+    } else if (!validateEmail(email)) {
+      setEmailError("Please enter a valid email address");
+      hasErrors = true;
+    }
+
+    if (hasErrors) {
+      Toast.show({
+        type: "error",
+        text1: "Validation Error",
+        text2: "Please fix the errors before continuing",
+      });
+      return;
+    }
+
+    setShowSecondStep(true);
+  };
 
   const handleSubmit = () => {
-    setLoading(true);
-    setFullName("");
-    setEmail("");
-    setPhoneNumber("");
-    setInstitution("");
-    setLoading(false);
+    let hasErrors = false;
+
+    if (!phoneNumber.trim()) {
+      setPhoneError("Phone number is required");
+      hasErrors = true;
+    } else if (!validatePhoneNumber(phoneNumber)) {
+      setPhoneError("Please enter a valid Nigerian phone number");
+      hasErrors = true;
+    }
+
+    if (!institution) {
+      Toast.show({
+        type: "error",
+        text1: "Validation Error",
+        text2: "Please select an institution",
+      });
+      return;
+    }
+
+    if (hasErrors) {
+      Toast.show({
+        type: "error",
+        text1: "Validation Error",
+        text2: "Please fix the errors before saving",
+      });
+      return;
+    }
+    setTimeout(() => {
+      Toast.show({
+        type: "success",
+        text1: "Success",
+        text2: "Profile updated successfully",
+      });
+
+      setFullName("");
+      setEmail("");
+      setPhoneNumber("");
+      setInstitution("");
+
+      setEmailError("");
+      setPhoneError("");
+      setFullNameError("");
+
+      setLoading(false);
+
+      router.back();
+    }, 1500);
   };
 
   const { data: institutionsData, isLoading: isInstitutionsLoading } =
@@ -69,66 +185,88 @@ const editProfile = () => {
               Update your details and get it saved
             </Text>
             <View style={{ marginTop: 20 }} />
-            <Text style={styles.fourthText}>FULL NAME</Text>
-            <View style={styles.secondContainer}>
-              <TextInput
-                style={{ color: "#000000" }}
-                placeholderTextColor="#000000"
-                placeholder={"Full Name"}
-                onChangeText={(text) => setFullName(text)}
-                value={fullName}
-              />
-            </View>
-            <Text style={[styles.fourthText, { marginTop: 25 }]}>
-              EMAIL ADDRESS
-            </Text>
-            <View style={styles.secondContainer}>
-              <TextInput
-                style={{ color: "#000000" }}
-                placeholderTextColor="#000000"
-                placeholder={"Email Address"}
-                onChangeText={(text) => setEmail(text)}
-                value={email}
-              />
-            </View>
+            {!showSecondStep ? (
+              <>
+                <Text style={styles.fourthText}>FULL NAME</Text>
+                <View style={styles.secondContainer}>
+                  <TextInput
+                    style={{ color: "#000000" }}
+                    placeholderTextColor="#000000"
+                    placeholder={"Full Name"}
+                    onChangeText={(text) => setFullName(text)}
+                    value={fullName}
+                  />
+                </View>
+                {fullNameError ? (
+                  <Text style={styles.errorText}>{fullNameError}</Text>
+                ) : null}
+                <Text style={[styles.fourthText, { marginTop: 25 }]}>
+                  EMAIL ADDRESS
+                </Text>
+                <View style={styles.secondContainer}>
+                  <TextInput
+                    style={{ color: "#000000" }}
+                    placeholderTextColor="#000000"
+                    placeholder={"Email Address"}
+                    onChangeText={(text) => setEmail(text)}
+                    value={email}
+                  />
+                </View>
+                {emailError ? (
+                  <Text style={styles.errorText}>{emailError}</Text>
+                ) : null}
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={handleContinue}
+                >
+                  <Text style={styles.thirdText}>CONTINUE</Text>
+                </TouchableOpacity>
+              </>
+            ) : (
+              <>
+                <Text style={[styles.fourthText, { marginTop: 25 }]}>
+                  PHONE NUMBER
+                </Text>
+                <View style={styles.secondContainer}>
+                  <TextInput
+                    style={{ color: "#000000" }}
+                    placeholderTextColor="#000000"
+                    placeholder={"Phone Number"}
+                    onChangeText={(text) => setPhoneNumber(text)}
+                    value={phoneNumber}
+                    keyboardType="numeric"
+                  />
+                </View>
+                {phoneError ? (
+                  <Text style={styles.errorText}>{phoneError}</Text>
+                ) : null}
+                <Text style={[styles.fourthText, { marginTop: 25 }]}>
+                  PREFFERD INSTITUTION
+                </Text>
+                <View style={styles.firstContainer}>
+                  <DropDownPicker
+                    open={open}
+                    value={institution}
+                    items={year}
+                    setOpen={setOpen}
+                    setValue={(value) => setInstitution(value)}
+                    placeholder="Select Institution"
+                    style={pickerSelectStyles.inputIOS}
+                    dropDownContainerStyle={
+                      pickerSelectStyles.dropDownContainer
+                    }
+                  />
+                </View>
 
-            <Text style={[styles.fourthText, { marginTop: 25 }]}>
-              PHONE NUMBER
-            </Text>
-            <View style={styles.secondContainer}>
-              <TextInput
-                style={{ color: "#000000" }}
-                placeholderTextColor="#000000"
-                placeholder={"Phone Number"}
-                onChangeText={(text) => setPhoneNumber(text)}
-                value={phoneNumber}
-                keyboardType="numeric"
-              />
-            </View>
-
-            <Text style={[styles.fourthText, { marginTop: 25 }]}>
-              PREFFERD INSTITUTION
-            </Text>
-            <View style={styles.firstContainer}>
-              <DropDownPicker
-                open={open}
-                value={institution}
-                items={year}
-                setOpen={setOpen}
-                setValue={(value) => setInstitution(value)}
-                placeholder="Select Institution"
-                style={pickerSelectStyles.inputIOS}
-                dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
-              />
-            </View>
-
-            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-              {loading ? (
-                <ActivityIndicator color="#FFFFFF" size={14} />
-              ) : (
-                <Text style={styles.thirdText}>Save</Text>
-              )}
-            </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                  {loading ? (
+                    <ActivityIndicator color="#FFFFFF" size={14} />
+                  ) : (
+                    <Text style={styles.thirdText}>Save</Text>
+                  )}
+                </TouchableOpacity>
+              </>
+            )}
           </View>
         </View>
         {/* </KeyboardAwareScrollView> */}
@@ -139,6 +277,17 @@ const editProfile = () => {
 
 const styles = StyleSheet.create({
   firstContainer: {},
+  errorContainer: {
+    borderWidth: 1,
+    borderColor: "#FF6B6B",
+  },
+  errorText: {
+    color: "#FF6B6B",
+    fontSize: 10,
+    marginTop: 5,
+    fontWeight: "500",
+    textAlign: "center",
+  },
   transitionButton: {
     backgroundColor: "#0F065E",
     height: 30,

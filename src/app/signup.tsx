@@ -26,6 +26,7 @@ import { useGetAllInstitutionsQuery } from "../components/services/userService";
 import HidePassword from "../../assets/images/hidepassword.png";
 import VisiblePassword from "../../assets/images/visiblePassword.png";
 import { loginUser, updateExpires } from "../components/redux/slices/authSlice";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const signup = () => {
   const [email, setEmail] = useState("");
@@ -42,6 +43,124 @@ const signup = () => {
   const [requestOtp] = useRequestOtpMutation();
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [showSecondStep, setShowSecondStep] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [nameError, setNameError] = useState("");
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePhoneNumber = (phone: string) => {
+    const phoneRegex = /^(\+?234|0)?[789][01]\d{8}$/;
+    return phoneRegex.test(phone.replace(/\s/g, ""));
+  };
+
+  const validatePassword = (password: string) => {
+    const minLength = password.length >= 8;
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasNumber = /\d/.test(password);
+
+    return {
+      isValid: minLength && hasUppercase && hasLowercase && hasNumber,
+      errors: {
+        minLength,
+        hasUppercase,
+        hasLowercase,
+        hasNumber,
+      },
+    };
+  };
+
+  const getPasswordErrorMessage = (password: string) => {
+    const validation = validatePassword(password);
+    if (validation.isValid) return "";
+
+    const errors = [];
+    if (!validation.errors.minLength) errors.push("at least 8 characters");
+    if (!validation.errors.hasUppercase) errors.push("one uppercase letter");
+    if (!validation.errors.hasLowercase) errors.push("one lowercase letter");
+    if (!validation.errors.hasNumber) errors.push("one number");
+
+    return `Password must contain ${errors.join(", ")}`;
+  };
+
+  const handleNameChange = (text: string) => {
+    setName(text);
+    if (text.trim().length < 2) {
+      setNameError("Name must be at least 2 characters long");
+    } else {
+      setNameError("");
+    }
+  };
+
+  const handleEmailChange = (text: string) => {
+    setEmail(text);
+    if (text.trim() === "") {
+      setEmailError("Email is required");
+    } else if (!validateEmail(text)) {
+      setEmailError("Please enter a valid email address");
+    } else {
+      setEmailError("");
+    }
+  };
+
+  const handlePhoneChange = (text: string) => {
+    setNumber(text);
+    if (text.trim() === "") {
+      setPhoneError("Phone number is required");
+    } else if (!validatePhoneNumber(text)) {
+      setPhoneError("Please enter a valid Nigerian phone number");
+    } else {
+      setPhoneError("");
+    }
+  };
+
+  const handlePasswordChange = (text: string) => {
+    setPassword(text);
+    const errorMessage = getPasswordErrorMessage(text);
+    setPasswordError(errorMessage);
+  };
+
+  const handleContinue = () => {
+    let hasErrors = false;
+
+    if (!name.trim() || name.trim().length < 2) {
+      setNameError("Name must be at least 2 characters long");
+      hasErrors = true;
+    }
+
+    if (!email.trim()) {
+      setEmailError("Email is required");
+      hasErrors = true;
+    } else if (!validateEmail(email)) {
+      setEmailError("Please enter a valid email address");
+      hasErrors = true;
+    }
+
+    if (!number.trim()) {
+      setPhoneError("Phone number is required");
+      hasErrors = true;
+    } else if (!validatePhoneNumber(number)) {
+      setPhoneError("Please enter a valid Nigerian phone number");
+      hasErrors = true;
+    }
+
+    if (hasErrors) {
+      Toast.show({
+        type: "error",
+        text1: "Validation Error",
+        text2: "Please fix the errors before continuing",
+      });
+      return;
+    }
+
+    setShowSecondStep(true);
+  };
 
   const { data: institutionsData, isLoading: isInstitutionsLoading } =
     useGetAllInstitutionsQuery();
@@ -53,6 +172,36 @@ const signup = () => {
     })) || [];
 
   const handleSignUp = async () => {
+    if (!password.trim()) {
+      setPasswordError("Password is required");
+      Toast.show({
+        type: "error",
+        text1: "Validation Error",
+        text2: "Password is required",
+      });
+      return;
+    }
+
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.isValid) {
+      const errorMessage = getPasswordErrorMessage(password);
+      setPasswordError(errorMessage);
+      Toast.show({
+        type: "error",
+        text1: "Invalid Password",
+        text2: errorMessage,
+      });
+      return;
+    }
+
+    if (!institution) {
+      Toast.show({
+        type: "error",
+        text1: "Validation Error",
+        text2: "Please select an institution",
+      });
+      return;
+    }
     setIsLoading(true);
     try {
       const createUserResponse = await createUser({
@@ -100,6 +249,11 @@ const signup = () => {
       setInstitution("");
       setNumber("");
       setPassword(" ");
+      // Clear error states
+      setEmailError("");
+      setPhoneError("");
+      setPasswordError("");
+      setNameError("");
     }
   };
 
@@ -111,7 +265,7 @@ const signup = () => {
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       > */}
-      <View style={{ justifyContent: "center", flex: 1 }}>
+      <View style={{ justifyContent: "center", flex: 1, marginTop: 100 }}>
         {/* <ScrollView
             style={styles.container}
             showsVerticalScrollIndicator={false}
@@ -177,95 +331,127 @@ const signup = () => {
         <Text style={styles.firstText}>
           Get to know more about ITed Education Software
         </Text>
+        {!showSecondStep ? (
+          <>
+            <KeyboardAwareScrollView
+              style={{ flex: 1 }}
+              contentContainerStyle={{ flexGrow: 1 }}
+              showsVerticalScrollIndicator={false}
+              enableOnAndroid={true}
+              extraScrollHeight={20}
+            >
+              <Text style={styles.fifthText}>FULL NAME</Text>
+              <View style={styles.secondContainer}>
+                <TextInput
+                  style={{ color: "#000000" }}
+                  placeholderTextColor="#000000"
+                  placeholder={"Full Name"}
+                  onChangeText={(text) => setName(text)}
+                  value={name}
+                />
+              </View>
+              {nameError ? (
+                <Text style={styles.errorText}>{nameError}</Text>
+              ) : null}
+              <Text style={styles.fifthText}>EMAIL ADDRESS</Text>
+              <View style={styles.secondContainer}>
+                <TextInput
+                  style={{ color: "#000000" }}
+                  placeholderTextColor="#000000"
+                  placeholder={"Email address"}
+                  onChangeText={(text) => setEmail(text)}
+                  value={email}
+                  keyboardType="email-address"
+                />
+              </View>
+              {emailError ? (
+                <Text style={styles.errorText}>{emailError}</Text>
+              ) : null}
+              <Text style={styles.fifthText}>PHONE NUMBER</Text>
+              <View style={styles.secondContainer}>
+                <TextInput
+                  style={{ color: "#000000" }}
+                  placeholderTextColor="#000000"
+                  placeholder={"Your Phone number"}
+                  onChangeText={(text) => setNumber(text)}
+                  value={number}
+                  keyboardType="numeric"
+                />
+              </View>
+              {phoneError ? (
+                <Text style={styles.errorText}>{phoneError}</Text>
+              ) : null}
+              <TouchableOpacity style={styles.button} onPress={handleContinue}>
+                <Text style={styles.thirdText}>CONTINUE</Text>
+              </TouchableOpacity>
+            </KeyboardAwareScrollView>
+          </>
+        ) : (
+          <>
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.fifthText]}>PASSWORD</Text>
+              <View
+                style={[
+                  styles.secondContainer,
+                  {
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  },
+                ]}
+              >
+                <TextInput
+                  style={{ color: "#000000" }}
+                  placeholderTextColor="#000000"
+                  placeholder={"Password"}
+                  onChangeText={(text) => setPassword(text)}
+                  value={password}
+                  secureTextEntry={!isPasswordVisible}
+                />
+                <TouchableOpacity
+                  onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+                  style={{}}
+                >
+                  <Image
+                    source={isPasswordVisible ? VisiblePassword : HidePassword}
+                  />
+                </TouchableOpacity>
+              </View>
+              {passwordError ? (
+                <Text style={styles.errorText}>{passwordError}</Text>
+              ) : null}
+              <Text style={styles.fifthText}>PREFFERD INSTITUTION</Text>
+              <View style={styles.firstContainer}>
+                <DropDownPicker
+                  open={open}
+                  value={institution}
+                  items={year}
+                  setOpen={setOpen}
+                  setValue={(value) => setInstitution(value)}
+                  placeholder="Select Institution"
+                  style={pickerSelectStyles.inputIOS}
+                  dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
+                />
+              </View>
 
-        <Text style={styles.fifthText}>FULL NAME</Text>
-        <View style={styles.secondContainer}>
-          <TextInput
-            style={{ color: "#000000" }}
-            placeholderTextColor="#000000"
-            placeholder={"Full Name"}
-            onChangeText={(text) => setName(text)}
-            value={name}
-          />
-        </View>
-        <Text style={styles.fifthText}>EMAIL ADDRESS</Text>
-        <View style={styles.secondContainer}>
-          <TextInput
-            style={{ color: "#000000" }}
-            placeholderTextColor="#000000"
-            placeholder={"Email address"}
-            onChangeText={(text) => setEmail(text)}
-            value={email}
-            keyboardType="email-address"
-          />
-        </View>
-        <Text style={styles.fifthText}>PHONE NUMBER</Text>
-        <View style={styles.secondContainer}>
-          <TextInput
-            style={{ color: "#000000" }}
-            placeholderTextColor="#000000"
-            placeholder={"Your Phone number"}
-            onChangeText={(text) => setNumber(text)}
-            value={number}
-            keyboardType="numeric"
-          />
-        </View>
-        <Text style={styles.fifthText}>PREFFERD INSTITUTION</Text>
-        <View style={styles.firstContainer}>
-          <DropDownPicker
-            open={open}
-            value={institution}
-            items={year}
-            setOpen={setOpen}
-            setValue={(value) => setInstitution(value)}
-            placeholder="Select Institution"
-            style={pickerSelectStyles.inputIOS}
-            dropDownContainerStyle={pickerSelectStyles.dropDownContainer}
-          />
-        </View>
-        <Text style={[styles.fifthText, open && { zIndex: -20 }]}>
-          PASSWORD
-        </Text>
-        <View
-          style={[
-            styles.secondContainer,
-            {
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            },
-            open && { zIndex: -20 },
-          ]}
-        >
-          <TextInput
-            style={{ color: "#000000" }}
-            placeholderTextColor="#000000"
-            placeholder={"Password"}
-            onChangeText={(text) => setPassword(text)}
-            value={password}
-            secureTextEntry={!isPasswordVisible}
-          />
-          <TouchableOpacity
-            onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-            style={{}}
-          >
-            <Image
-              source={isPasswordVisible ? VisiblePassword : HidePassword}
-            />
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-          {isLoading ? (
-            <ActivityIndicator color="#FFFFFF" size={14} />
-          ) : (
-            <Text style={styles.thirdText}>SIGN UP</Text>
-          )}
-        </TouchableOpacity>
-        <Text
-          style={[styles.fourthText, { textAlign: "center", marginBottom: 30 }]}
-        >
-          Powered by Ited Softwares
-        </Text>
+              <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+                {isLoading ? (
+                  <ActivityIndicator color="#FFFFFF" size={14} />
+                ) : (
+                  <Text style={styles.thirdText}>SIGN UP</Text>
+                )}
+              </TouchableOpacity>
+              <Text
+                style={[
+                  styles.fourthText,
+                  { textAlign: "center", marginBottom: 30 },
+                ]}
+              >
+                Powered by Ited Softwares
+              </Text>
+            </View>
+          </>
+        )}
         {/* </ScrollView> */}
       </View>
       {/* </KeyboardAvoidingView> */}
@@ -276,6 +462,18 @@ const signup = () => {
 const styles = StyleSheet.create({
   firstContainer: {
     marginHorizontal: 20,
+  },
+  errorContainer: {
+    borderWidth: 1,
+    borderColor: "#FF6B6B",
+  },
+  errorText: {
+    color: "#FF6B6B",
+    fontSize: 10,
+    marginHorizontal: 20,
+    marginTop: 5,
+    fontWeight: "500",
+    textAlign: "center",
   },
   transitionButton: {
     backgroundColor: "#0F065E",
