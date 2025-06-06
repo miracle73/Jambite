@@ -48,65 +48,69 @@ const socials = () => {
               Follow us on our social media handles
             </Text>
 
-            <View style={[styles.fourthContainer, { marginTop: 50 }]}>
+            <TouchableOpacity
+              style={[styles.fourthContainer, { marginTop: 50 }]}
+              onPress={() => {
+                // Open Facebook profile in browser
+                import("react-native").then(({ Linking }) => {
+                  Linking.openURL(
+                    "https://www.facebook.com/profile.php?id=61566071536017"
+                  );
+                });
+              }}
+            >
               <FacebookSocials />
-              <TouchableOpacity
-                onPress={() => {
-                  // Open Facebook profile in browser
-                  import("react-native").then(({ Linking }) => {
-                    Linking.openURL(
-                      "https://www.facebook.com/profile.php?id=61566071536017"
-                    );
-                  });
-                }}
-              >
+              <TouchableOpacity>
                 <Text style={styles.thirdText}>
                   itededucationalsoftwares@facebook.com
                 </Text>
               </TouchableOpacity>
-            </View>
-            <View style={styles.fourthContainer}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.fourthContainer}
+              onPress={() => {
+                import("react-native").then(({ Linking }) => {
+                  Linking.openURL("https://www.instagram.com/itedsoftwares/");
+                });
+              }}
+            >
               <InstagramSocials />
-              <TouchableOpacity
-                onPress={() => {
-                  import("react-native").then(({ Linking }) => {
-                    Linking.openURL("https://www.instagram.com/itedsoftwares/");
-                  });
-                }}
-              >
+              <TouchableOpacity>
                 <Text style={styles.thirdText}>
                   itedsoftwares@instagram.com
                 </Text>
               </TouchableOpacity>
-            </View>
-            <View style={styles.fourthContainer}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.fourthContainer}
+              onPress={() => {
+                import("react-native").then(({ Linking }) => {
+                  Linking.openURL(
+                    "https://www.tiktok.com/@itedsoftwares?_t=ZM-8vkLwsxovSh&_r=1"
+                  );
+                });
+              }}
+            >
               <TiktokSocials />
-              <TouchableOpacity
-                onPress={() => {
-                  import("react-native").then(({ Linking }) => {
-                    Linking.openURL(
-                      "https://www.tiktok.com/@itedsoftwares?_t=ZM-8vkLwsxovSh&_r=1"
-                    );
-                  });
-                }}
-              >
+              <TouchableOpacity>
                 <Text style={styles.thirdText}>itedsoftwares@tiktok.com</Text>
               </TouchableOpacity>
-            </View>
-            <View style={styles.fourthContainer}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.fourthContainer}
+              onPress={() => {
+                import("react-native").then(({ Linking }) => {
+                  Linking.openURL("https://t.me/itedsoftwares");
+                });
+              }}
+            >
               <TelegramSocials />
-              <TouchableOpacity
-                onPress={() => {
-                  import("react-native").then(({ Linking }) => {
-                    Linking.openURL("https://t.me/itedsoftwares");
-                  });
-                }}
-              >
+              <TouchableOpacity>
                 <Text style={styles.thirdText}>
                   itedsoftwares@telegtram.com
                 </Text>
               </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
           </View>
         </KeyboardAwareScrollView>
       </SafeAreaView>

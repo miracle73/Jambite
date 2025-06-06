@@ -55,7 +55,7 @@ const index = () => {
             <JambiteText />
           </View>
           <Text style={styles.secondText}>
-            Where education is simplified to help our student get a smooh and
+            Where education is simplified to help our student get a smooth and
             succesful educational journey
           </Text>
         </View>
