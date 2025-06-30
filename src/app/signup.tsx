@@ -212,28 +212,28 @@ const signup = () => {
         phone_number: number,
         role: "user",
       }).unwrap();
+      console.log("Create User Response:", createUserResponse);
 
-      dispatch(
-        setUserInfo({
-          full_name: name,
-          email,
-          phone_number: number,
-          password,
-        })
-      );
-
-      console.log(createUserResponse);
+      console.log(67, createUserResponse.access_token);
       if (createUserResponse.access_token) {
-        const requestOtpResponse = await requestOtp({ email }).unwrap();
-        console.log("OTP Request Success:", requestOtpResponse);
-        Toast.show({
-          type: "success",
-          text1: "Success",
-          text2: requestOtpResponse.message,
-        });
+        // const requestOtpResponse = await requestOtp({ email }).unwrap();
+        // console.log("OTP Request Success:", requestOtpResponse);
+        // Toast.show({
+        //   type: "success",
+        //   text1: "Success",
+        //   text2: requestOtpResponse.message,
+        // });
         dispatch(loginUser(createUserResponse.access_token));
         dispatch(updateExpires(createUserResponse.token_expires));
-        router.push("/verification");
+        dispatch(
+          setUserInfo({
+            full_name: name,
+            email,
+            phone_number: number,
+            password,
+          })
+        );
+        router.push("/signin");
       }
     } catch (error) {
       console.error("Error during sign up:", error);
