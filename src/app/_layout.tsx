@@ -10,6 +10,8 @@ import * as SystemUI from "expo-system-ui";
 import * as SplashScreen from "expo-splash-screen";
 import ActivityTracker from "../components/redux/ActivityTracker";
 import AuthGuard from "../components/AuthGuard";
+import * as Updates from "expo-updates";
+import { LogBox } from "react-native";
 
 SystemUI.setBackgroundColorAsync("transparent");
 
@@ -29,6 +31,7 @@ const RootLayout = () => {
 
     prepare();
   }, []);
+
   const LoadingSpinner = () => {
     return (
       <View
