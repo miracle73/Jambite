@@ -21,11 +21,20 @@
         "foregroundImage": "./assets/Jambite-2.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.mirack.Jambite2"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-router"]
+    "plugins": [
+      "expo-router"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "db105d1a-7695-49d6-8a09-91745b9140ea"
+      }
+    }
   }
 }
