@@ -3,7 +3,7 @@
     "name": "Jambite",
     "slug": "Jambite-2",
     "scheme": "jambite",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -14,6 +14,7 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
+      "buildNumber": "2",
       "supportsTablet": true
     },
     "android": {
@@ -21,7 +22,8 @@
         "foregroundImage": "./assets/Jambite-2.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.mirack.Jambite2"
+      "versionCode": 2,
+      "package": "com.mirack.jambite"
     },
     "web": {
       "favicon": "./assets/favicon.png"
