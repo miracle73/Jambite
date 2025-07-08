@@ -1,5 +1,5 @@
 {
-  "name": "jambite-2",
+  "name": "jambite",
   "version": "1.0.0",
   "main": "expo-router/entry",
   "scripts": {
