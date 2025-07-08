@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { BackArrow } from "../../assets/svg";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { useRouter } from "expo-router";
 import {
@@ -61,9 +62,9 @@ const pastQuestion = () => {
       <SafeAreaView
         style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 50 }}
       >
-        <KeyboardAvoidingView
+        <KeyboardAwareScrollView
           contentContainerStyle={{ flexGrow: 1 }}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          showsVerticalScrollIndicator={false}
         >
           <View
             style={{
@@ -119,7 +120,7 @@ const pastQuestion = () => {
               ))}
             </ScrollView>
           </View>
-        </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     </ProtectedRoute>
   );

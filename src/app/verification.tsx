@@ -136,7 +136,9 @@ const Verification = () => {
               {code.map((digit, index) => (
                 <View key={index} style={styles.innerContainer}>
                   <TextInput
-                    ref={(ref) => (inputRefs.current[index] = ref)}
+                    ref={(ref) => {
+                      inputRefs.current[index] = ref;
+                    }}
                     style={{ flex: 1, color: "#000000" }}
                     placeholderTextColor="#000000"
                     placeholder={""}
