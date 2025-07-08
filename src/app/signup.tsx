@@ -178,21 +178,21 @@ const signup = () => {
 
       // const requestOtpResponse = await requestOtp({ email }).unwrap();
       // console.log("OTP Request Success:", requestOtpResponse);
-      Toast.show({
-        type: "success",
-        text1: "Success",
-        text2: "Signup successful",
-      });
-      dispatch(loginUser(createUserResponse.access_token));
-      dispatch(updateExpires(createUserResponse.token_expires));
-      dispatch(
-        setUserInfo({
-          full_name: name,
-          email,
-          phone_number: number,
-          password,
-        })
-      );
+      // Toast.show({
+      //   type: "success",
+      //   text1: "Success",
+      //   text2: "Signup successful",
+      // });
+      // dispatch(loginUser(createUserResponse.access_token));
+      // dispatch(updateExpires(createUserResponse.token_expires));
+      // dispatch(
+      //   setUserInfo({
+      //     full_name: name,
+      //     email,
+      //     phone_number: number,
+      //     password,
+      //   })
+      // );
       router.push("/signin");
     } catch (error) {
       console.error("Error during sign up:", error);

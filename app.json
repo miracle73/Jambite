@@ -2,7 +2,7 @@
   "expo": {
     "name": "Jambite",
     "slug": "Jambite-2",
-    "scheme": "Jambite",
+    "scheme": "jambite",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

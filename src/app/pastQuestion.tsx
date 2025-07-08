@@ -6,10 +6,12 @@ import {
   SafeAreaView,
   ScrollView,
   TextInput,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { BackArrow } from "../../assets/svg";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 import { useRouter } from "expo-router";
 import {
   useGetAllSubjectsQuery,
@@ -59,9 +61,9 @@ const pastQuestion = () => {
       <SafeAreaView
         style={{ flex: 1, backgroundColor: "#FFFFFF", paddingTop: 50 }}
       >
-        <KeyboardAwareScrollView
+        <KeyboardAvoidingView
           contentContainerStyle={{ flexGrow: 1 }}
-          showsVerticalScrollIndicator={false}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
           <View
             style={{
@@ -117,7 +119,7 @@ const pastQuestion = () => {
               ))}
             </ScrollView>
           </View>
-        </KeyboardAwareScrollView>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </ProtectedRoute>
   );
