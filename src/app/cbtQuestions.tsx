@@ -153,7 +153,7 @@ const cbtQuestion = () => {
             borderRadius: 10,
             backgroundColor: "#0F065E",
           }}
-          onPress={() => router.push("/activate")}
+          onPress={() => router.push("/activation")}
         >
           <Text style={{ color: "#FFFFFF", fontWeight: "700" }}>activate</Text>
         </TouchableOpacity>
