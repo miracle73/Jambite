@@ -7,12 +7,18 @@ import {
   Image,
 } from "react-native";
 import React from "react";
-import { JambiteText } from "../../assets/svg";
 import { useRouter } from "expo-router";
-import PIcon from "../../assets/Jambite-2.png";
+import PIcon from "../../assets/JAMBEE.png";
 
 const index = () => {
   const router = useRouter();
+    React.useEffect(() => {
+    const timer = setTimeout(() => {
+      router.push("/signin");
+    }, 5000);
+    
+    return () => clearTimeout(timer);
+  }, []);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
       <View
@@ -36,10 +42,10 @@ const index = () => {
               <Image
                 source={PIcon}
                 style={{
-                  width: "100%",
-                  height: "100%",
-                  borderRadius: 100,
-                  resizeMode: "cover",
+                  width: 150,
+                  height: 150,
+                  borderRadius: 90,
+                  resizeMode: "contain",
                 }}
               />
             </View>
@@ -52,7 +58,16 @@ const index = () => {
               flexDirection: "row",
             }}
           >
-            <JambiteText />
+            <View>
+
+              <Text style={[styles.firstText, { fontSize: 28, fontWeight: "700", color: "#0F065E" }]}>
+                Jambee: CBT practice 2026
+              </Text>
+              <Text style={styles.disclaimerText}>
+                DISCLAIMER: This is an independent educational app and is NOT officially affiliated with or endorsed by JAMB (Joint Admissions and Matriculation Board).
+              </Text>
+            </View>
+
           </View>
           <Text style={styles.secondText}>
             Where education is simplified to help our student get a smooth and
@@ -84,15 +99,25 @@ const styles = StyleSheet.create({
     marginBottom: 50,
     marginHorizontal: 50,
   },
+  disclaimerText: {
+    fontSize: 10,
+    color: "#FF0000",
+    fontWeight: "600",
+    marginTop: 10,
+    marginBottom: 5,
+    textAlign: "center",
+    fontStyle: "italic",
+  },
   container: {},
   roundedContainer: {
     height: 200,
+    padding: 25,
     width: 200,
     borderRadius: 100,
     backgroundColor: "#D9D9D9",
   },
   firstText: {
-    fontSize: 10,
+    fontSize: 14,
     color: "#000000",
     fontWeight: "600",
     marginBottom: 10,
@@ -100,7 +125,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   secondText: {
-    fontSize: 10,
+    fontSize: 14,
     color: "#000000",
     fontWeight: "600",
     marginTop: 10,

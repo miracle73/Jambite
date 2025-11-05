@@ -18,11 +18,9 @@ import {
   LaptopWithCursor,
   OpenBookIcon,
   ProfileIcon,
-  Scholarship,
   SecondJambiteText,
-  SmallerJambiteText,
   Telegram,
-  ThirdJambiteText,
+  Istudy,
   Tiktok,
   UniversityCampus,
 } from "../../../assets/svg";
@@ -59,7 +57,7 @@ const home = () => {
                 flexDirection: "row",
               }}
             >
-              <SmallerJambiteText />
+              <Istudy />
               <View
                 style={{
                   justifyContent: "flex-end",
@@ -165,9 +163,10 @@ const home = () => {
                   paddingHorizontal: 10,
                 }}
               >
-                <Text style={styles.fourthText}>ITED</Text>
+                
 
-                <ThirdJambiteText />
+                <SecondJambiteText />
+                <Text style={styles.fourthText}>UTME CBT PRACTICE</Text>
               </View>
             </View>
             <View
@@ -306,7 +305,7 @@ const home = () => {
                     If you are proud of yourself give it a try.
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   style={[
                     styles.smallContainer,
                     { backgroundColor: "#0F065E" },
@@ -329,7 +328,7 @@ const home = () => {
                   <Text style={styles.sixthText}>
                     IRegister and Stand the chance to become our best student.
                   </Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             </View>
             <View style={styles.fifthContainer}>
@@ -337,7 +336,7 @@ const home = () => {
                 <View style={{ width: "80%" }}>
                   <Text style={styles.seventhText}>App Update Available </Text>
                   <Text style={styles.eighthText}>
-                    Ited Jambite latest software version available .{" "}
+                    Ited Jambee latest software version available .{" "}
                   </Text>
                 </View>
                 <View style={{ width: "20%" }}>

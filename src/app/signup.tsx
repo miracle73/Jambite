@@ -12,7 +12,7 @@ import {
   Image,
 } from "react-native";
 import React, { useState } from "react";
-import { JambiteText, SecondJambiteText } from "../../assets/svg";
+import {  SecondJambiteText } from "../../assets/svg";
 import { useRouter } from "expo-router";
 import {
   useCreateUserMutation,

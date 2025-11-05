@@ -9,7 +9,7 @@ import {
   Image,
 } from "react-native";
 import React, { useState } from "react";
-import { JambiteText, SecondJambiteText } from "../../assets/svg";
+import { SecondJambiteText } from "../../assets/svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
 import {

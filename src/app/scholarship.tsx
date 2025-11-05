@@ -51,7 +51,7 @@ const scholarship = () => {
               </TouchableOpacity>
             </View>
             <Text style={[styles.firstText, { textAlign: "center" }]}>
-              Jambite Scholarship
+               Jambee: CBT practice 2026
             </Text>
             <Text style={[styles.secondText, { textAlign: "center" }]}>
               Get registered today and stand a chance to be among our lucky
